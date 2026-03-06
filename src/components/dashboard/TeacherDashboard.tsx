@@ -33,12 +33,16 @@ export default function TeacherDashboard({ user }: { user: any }) {
             <p className="text-muted-foreground">{user.subject || "Academic"} Department • Senior Faculty</p>
           </div>
           <div className="flex gap-3">
-            <Button variant="outline" className="rounded-full shadow-sm">
-              <Settings size={18} />
-            </Button>
-            <Button className="rounded-full gap-2 shadow-lg bg-primary">
-              <PlusCircle size={18} /> Quick Action
-            </Button>
+            <Link href="/admin/website">
+              <Button variant="outline" className="rounded-full shadow-sm h-10 w-10 p-0 hover:bg-primary hover:text-white transition-colors">
+                <Settings size={18} />
+              </Button>
+            </Link>
+            <Link href="/admin/academics/notices">
+              <Button className="rounded-full gap-2 shadow-lg bg-primary px-6 active:scale-95 transition-transform">
+                <PlusCircle size={18} /> Quick Action
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -47,8 +51,8 @@ export default function TeacherDashboard({ user }: { user: any }) {
           {/* Daily Operations */}
           <div className="md:col-span-2 space-y-8">
             <div className="grid sm:grid-cols-2 gap-6">
-              <Link href="/attendance" className="block">
-                <Card className="glass-card hover:border-accent transition-all h-full group">
+              <Link href="/attendance" className="block group">
+                <Card className="glass-card hover:border-accent transition-all h-full group active:scale-95">
                   <CardHeader>
                     <div className="w-12 h-12 bg-primary/5 text-primary rounded-xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
                       <ClipboardCheck size={24} />
@@ -58,8 +62,8 @@ export default function TeacherDashboard({ user }: { user: any }) {
                   </CardHeader>
                 </Card>
               </Link>
-              <Link href="/homework" className="block">
-                <Card className="glass-card hover:border-accent transition-all h-full group">
+              <Link href="/dashboard" className="block group">
+                <Card className="glass-card hover:border-accent transition-all h-full group active:scale-95">
                   <CardHeader>
                     <div className="w-12 h-12 bg-primary/5 text-primary rounded-xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
                       <PlusCircle size={24} />
@@ -69,8 +73,8 @@ export default function TeacherDashboard({ user }: { user: any }) {
                   </CardHeader>
                 </Card>
               </Link>
-              <Link href="/quiz" className="block">
-                <Card className="glass-card hover:border-accent transition-all h-full group">
+              <Link href="/dashboard" className="block group">
+                <Card className="glass-card hover:border-accent transition-all h-full group active:scale-95">
                   <CardHeader>
                     <div className="w-12 h-12 bg-primary/5 text-primary rounded-xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
                       <BookOpen size={24} />
@@ -80,8 +84,8 @@ export default function TeacherDashboard({ user }: { user: any }) {
                   </CardHeader>
                 </Card>
               </Link>
-              <Link href="/ratings" className="block">
-                <Card className="glass-card hover:border-accent transition-all h-full group">
+              <Link href="/leaderboard" className="block group">
+                <Card className="glass-card hover:border-accent transition-all h-full group active:scale-95">
                   <CardHeader>
                     <div className="w-12 h-12 bg-primary/5 text-primary rounded-xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
                       <BarChart3 size={24} />
@@ -136,17 +140,22 @@ export default function TeacherDashboard({ user }: { user: any }) {
               </CardContent>
             </Card>
 
-            <Card className="glass-card bg-primary text-white">
-              <CardHeader>
+            <Card className="glass-card bg-primary text-white border-none shadow-2xl relative overflow-hidden">
+              <div className="absolute -bottom-12 -right-12 opacity-10">
+                <ShieldCheck size={150} />
+              </div>
+              <CardHeader className="relative z-10">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <ShieldCheck className="text-accent" /> Administration
+                  <ShieldCheck size={20} className="text-accent" /> Administration
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-xs opacity-80 italic">You have permission to manage student achievement requests for your department.</p>
-                <Button variant="secondary" className="w-full rounded-xl text-primary font-bold">
-                  Admin Dashboard
-                </Button>
+              <CardContent className="space-y-6 relative z-10">
+                <p className="text-sm opacity-90 italic font-medium leading-relaxed">You have permission to manage student achievement requests and academic records.</p>
+                <Link href="/admin" className="block w-full">
+                  <Button variant="secondary" className="w-full h-12 rounded-xl text-primary font-black shadow-xl hover:bg-accent hover:text-white transition-all active:scale-95">
+                    Admin Dashboard
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>

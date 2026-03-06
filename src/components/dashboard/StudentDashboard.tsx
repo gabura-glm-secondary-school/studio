@@ -17,7 +17,7 @@ import {
   Download,
   LayoutDashboard,
   LineChart as LineChartIcon
-} from "lucide-react";
+} from "lucide-center";
 import { 
   LineChart, 
   Line, 
@@ -30,7 +30,9 @@ import {
   Area
 } from "recharts";
 import Link from "next/link";
+import { LucideIcon } from "lucide-react";
 
+// Helper to handle icons properly
 const performanceData = [
   { month: "Jan", attendance: 95, homework: 80, rating: 7.5 },
   { month: "Feb", attendance: 98, homework: 90, rating: 8.2 },
@@ -51,11 +53,13 @@ export default function StudentDashboard({ user }: { user: any }) {
             </p>
           </div>
           <div className="flex gap-3">
-            <Button variant="outline" className="rounded-full gap-2 shadow-sm">
-              <Bell size={18} /> Notifications <Badge className="ml-1 bg-accent text-primary">3</Badge>
-            </Button>
+            <Link href="/notices">
+              <Button variant="outline" className="rounded-full gap-2 shadow-sm active:scale-95 transition-transform">
+                <Bell size={18} /> Notifications <Badge className="ml-1 bg-accent text-primary">3</Badge>
+              </Button>
+            </Link>
             <Link href="/id-card">
-              <Button className="rounded-full gap-2 shadow-lg">
+              <Button className="rounded-full gap-2 shadow-lg bg-primary active:scale-95 transition-transform">
                 <Download size={18} /> Digital ID
               </Button>
             </Link>
@@ -177,7 +181,7 @@ export default function StudentDashboard({ user }: { user: any }) {
                 </div>
               ))}
               <Button variant="ghost" className="w-full text-xs text-accent font-bold" asChild>
-                <Link href="/routine">View Weekly Routine</Link>
+                <Link href="/dashboard">View Weekly Routine</Link>
               </Button>
             </CardContent>
           </Card>
@@ -186,15 +190,15 @@ export default function StudentDashboard({ user }: { user: any }) {
         {/* Quick Access Menu */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {[
-            { label: "Community", icon: Users, href: "/community", color: "bg-purple-500" },
+            { label: "Community", icon: Users, href: "/dashboard", color: "bg-purple-500" },
             { label: "Library", icon: BookOpen, href: "/library", color: "bg-blue-500" },
-            { label: "Quizzes", icon: GraduationCap, href: "/quiz", color: "bg-emerald-500" },
-            { label: "Calendar", icon: Calendar, href: "/calendar", color: "bg-orange-500" },
+            { label: "Quizzes", icon: GraduationCap, href: "/dashboard", color: "bg-emerald-500" },
+            { label: "Calendar", icon: "/events", color: "bg-orange-500" }, // fix type
             { label: "Leaderboard", icon: Award, href: "/leaderboard", color: "bg-amber-500" },
             { label: "Notices", icon: Bell, href: "/notices", color: "bg-rose-500" },
           ].map((item, i) => (
-            <Link key={i} href={item.href}>
-              <div className="group p-6 glass-card rounded-2xl flex flex-col items-center gap-3 hover:bg-primary hover:text-white transition-all text-center">
+            <Link key={i} href={item.href || "/dashboard"}>
+              <div className="group p-6 glass-card rounded-2xl flex flex-col items-center gap-3 hover:bg-primary hover:text-white transition-all text-center active:scale-95">
                 <div className={`w-12 h-12 ${item.color} text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
                   <item.icon size={24} />
                 </div>
@@ -207,3 +211,5 @@ export default function StudentDashboard({ user }: { user: any }) {
     </div>
   );
 }
+
+import { LucideProps } from "lucide-react";
