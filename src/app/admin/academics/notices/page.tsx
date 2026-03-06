@@ -41,16 +41,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
-const mockMainNotices = [
-  { id: "1", title: "SSC 2025 Test Exam Schedule", date: "Oct 12, 2024", type: "exam", status: "Active", isPinned: true },
-  { id: "2", title: "Admission Open 2025", date: "Oct 10, 2024", type: "admission", status: "Active", isPinned: false },
-  { id: "3", title: "Half-yearly Vacation", date: "Oct 05, 2024", type: "holiday", status: "Inactive", isPinned: false },
-];
-
-const mockTeacherNotices = [
-  { id: "t1", title: "Physics Lab Submission", teacher: "Asaduzzaman", classes: ["9", "10"], date: "Oct 11, 2024", status: "Active" },
-  { id: "t2", title: "Math Special Class", teacher: "Sushanta Mondal", classes: ["10"], date: "Oct 09, 2024", status: "Active" },
-];
+const mockMainNotices: any[] = [];
+const mockTeacherNotices: any[] = [];
 
 export default function AdminNoticeManagement() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -121,7 +113,7 @@ export default function AdminNoticeManagement() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase text-emerald-600 tracking-widest">Active Notices</p>
-              <p className="text-2xl font-black text-emerald-700">12</p>
+              <p className="text-2xl font-black text-emerald-700">0</p>
             </div>
           </CardContent>
         </Card>
@@ -132,7 +124,7 @@ export default function AdminNoticeManagement() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase text-blue-600 tracking-widest">Scheduled</p>
-              <p className="text-2xl font-black text-blue-700">04</p>
+              <p className="text-2xl font-black text-blue-700">0</p>
             </div>
           </CardContent>
         </Card>
@@ -143,7 +135,7 @@ export default function AdminNoticeManagement() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase text-amber-600 tracking-widest">Awaiting Review</p>
-              <p className="text-2xl font-black text-amber-700">02</p>
+              <p className="text-2xl font-black text-amber-700">0</p>
             </div>
           </CardContent>
         </Card>
@@ -153,6 +145,15 @@ export default function AdminNoticeManagement() {
 }
 
 function NoticeTable({ data, isTeacherTab = false }: { data: any[], isTeacherTab?: boolean }) {
+  if (data.length === 0) {
+    return (
+      <div className="py-20 text-center space-y-4">
+        <Megaphone size={48} className="mx-auto text-muted-foreground/20" />
+        <p className="text-muted-foreground font-bold uppercase tracking-widest text-xs">কোনো নোটিশ পাওয়া যায়নি।</p>
+      </div>
+    );
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -198,7 +199,7 @@ function NoticeTable({ data, isTeacherTab = false }: { data: any[], isTeacherTab
             <TableCell className="text-right pr-6">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button variant="ghost" size="icon" className="rounded-full group-hover:opacity-100 transition-opacity">
                     <MoreVertical size={18} />
                   </Button>
                 </DropdownMenuTrigger>

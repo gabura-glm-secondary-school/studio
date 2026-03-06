@@ -26,7 +26,8 @@ import {
   Download,
   UserPlus,
   Loader2,
-  Plus
+  Plus,
+  Users
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -38,13 +39,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
-const mockStudents = [
-  { id: "STU2024001", name: "Abdur Rahman", class: "9", section: "A", roll: "101", status: "Active" },
-  { id: "STU2024002", name: "Fatima Khatun", class: "9", section: "A", roll: "102", status: "Active" },
-  { id: "STU2024003", name: "Siddiqur Ahmed", class: "10", section: "B", roll: "205", status: "Locked" },
-  { id: "STU2024004", name: "Nusrat Jahan", class: "8", section: "A", roll: "112", status: "Inactive" },
-  { id: "STU2024005", name: "Imran Hossain", class: "9", section: "B", roll: "301", status: "Active" },
-];
+const mockStudents: any[] = [];
 
 export default function StudentManagement() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,6 +60,8 @@ export default function StudentManagement() {
   const handleExport = () => {
     toast({ title: "Exporting Data", description: "Preparing student list for download..." });
   };
+
+  const filteredStudents = mockStudents.filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()) || s.id.includes(searchTerm));
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 relative z-10">
@@ -103,78 +100,85 @@ export default function StudentManagement() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/30">
-                  <TableHead className="w-32 font-black uppercase text-[10px] tracking-widest pl-6">Student ID</TableHead>
-                  <TableHead className="font-black uppercase text-[10px] tracking-widest">Full Name</TableHead>
-                  <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">Class</TableHead>
-                  <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">Roll</TableHead>
-                  <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">Status</TableHead>
-                  <TableHead className="w-20 text-right pr-6"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {mockStudents.filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()) || s.id.includes(searchTerm)).map((student) => (
-                  <TableRow key={student.id} className="group hover:bg-secondary/5 transition-colors">
-                    <TableCell className="font-mono text-xs font-bold pl-6 text-primary">{student.id}</TableCell>
-                    <TableCell>
-                      <div className="font-bold text-primary">{student.name}</div>
-                      <div className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">Verified Profile</div>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant="outline" className="rounded-lg font-black">{student.class}-{student.section}</Badge>
-                    </TableCell>
-                    <TableCell className="text-center font-black text-muted-foreground">{student.roll}</TableCell>
-                    <TableCell className="text-center">
-                      <Badge className={cn(
-                        "rounded-lg text-[10px] uppercase font-black px-2 py-0.5 shadow-sm",
-                        student.status === "Active" ? "bg-emerald-500 text-white" : 
-                        student.status === "Locked" ? "bg-destructive text-white" : "bg-muted text-muted-foreground"
-                      )}>
-                        {student.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right pr-6">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="rounded-full bg-white sm:bg-transparent shadow-sm sm:shadow-none border sm:border-none active:scale-90 transition-all">
-                            <MoreVertical size={18} />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="rounded-xl p-2 w-48 shadow-xl z-[80]">
-                          <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer">
-                            <Edit3 size={16} /> Edit Details
-                          </DropdownMenuItem>
-                          {student.status === "Locked" ? (
-                            <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer text-emerald-600 font-bold">
-                              <Unlock size={16} /> Unlock Account
-                            </DropdownMenuItem>
-                          ) : (
-                            <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer text-amber-600 font-bold">
-                              <Lock size={16} /> Force Lock
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer text-destructive font-bold">
-                            <Trash2 size={16} /> Delete Record
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
+          {filteredStudents.length === 0 ? (
+            <div className="py-24 text-center space-y-4">
+              <Users size={48} className="mx-auto text-muted-foreground/20" />
+              <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">কোনো শিক্ষার্থীর তথ্য পাওয়া যায়নি।</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="w-32 font-black uppercase text-[10px] tracking-widest pl-6">Student ID</TableHead>
+                    <TableHead className="font-black uppercase text-[10px] tracking-widest">Full Name</TableHead>
+                    <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">Class</TableHead>
+                    <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">Roll</TableHead>
+                    <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">Status</TableHead>
+                    <TableHead className="w-20 text-right pr-6"></TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                </TableHeader>
+                <TableBody>
+                  {filteredStudents.map((student) => (
+                    <TableRow key={student.id} className="group hover:bg-secondary/5 transition-colors">
+                      <TableCell className="font-mono text-xs font-bold pl-6 text-primary">{student.id}</TableCell>
+                      <TableCell>
+                        <div className="font-bold text-primary">{student.name}</div>
+                        <div className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">Verified Profile</div>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Badge variant="outline" className="rounded-lg font-black">{student.class}-{student.section}</Badge>
+                      </TableCell>
+                      <TableCell className="text-center font-black text-muted-foreground">{student.roll}</TableCell>
+                      <TableCell className="text-center">
+                        <Badge className={cn(
+                          "rounded-lg text-[10px] uppercase font-black px-2 py-0.5 shadow-sm",
+                          student.status === "Active" ? "bg-emerald-500 text-white" : 
+                          student.status === "Locked" ? "bg-destructive text-white" : "bg-muted text-muted-foreground"
+                        )}>
+                          {student.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right pr-6">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="rounded-full bg-white shadow-sm border active:scale-90 transition-all">
+                              <MoreVertical size={18} />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="rounded-xl p-2 w-48 shadow-xl z-[80]">
+                            <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer">
+                              <Edit3 size={16} /> Edit Details
+                            </DropdownMenuItem>
+                            {student.status === "Locked" ? (
+                              <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer text-emerald-600 font-bold">
+                                <Unlock size={16} /> Unlock Account
+                              </DropdownMenuItem>
+                            ) : (
+                              <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer text-amber-600 font-bold">
+                                <Lock size={16} /> Force Lock
+                              </DropdownMenuItem>
+                            )}
+                            <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer text-destructive font-bold">
+                              <Trash2 size={16} /> Delete Record
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
         </CardContent>
       </Card>
 
       <div className="flex flex-col sm:flex-row items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-border/50 gap-4">
-        <p className="text-xs font-bold text-muted-foreground">Showing {mockStudents.length} of 1,240 students</p>
+        <p className="text-xs font-bold text-muted-foreground">Showing {filteredStudents.length} students</p>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" disabled className="rounded-xl h-9">Previous</Button>
-          <Button variant="outline" size="sm" className="rounded-xl h-9">Next</Button>
+          <Button variant="outline" size="sm" disabled className="rounded-xl h-9">Next</Button>
         </div>
       </div>
 

@@ -27,28 +27,14 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const mockBatchDetails: Record<string, any> = {
-  "ssc-2025": { year: 2025, total: 145, gpa5: 32, passRate: "TBD" },
-  "ssc-2024": { year: 2024, total: 138, gpa5: 28, passRate: "100%" },
-  "ssc-2023": { year: 2023, total: 152, gpa5: 35, passRate: "99.3%" },
-  "ssc-2022": { year: 2022, total: 130, gpa5: 24, passRate: "100%" },
-};
-
-const mockStudents = [
-  { name: "Abdur Rahman", roll: "101", gpa: "5.00", status: "Verified" },
-  { name: "Fatima Khatun", roll: "102", gpa: "5.00", status: "Verified" },
-  { name: "Siddiqur Ahmed", roll: "103", gpa: "4.85", status: "Verified" },
-  { name: "Nusrat Jahan", roll: "104", gpa: "5.00", status: "Verified" },
-  { name: "Imran Hossain", roll: "105", gpa: "4.50", status: "Verified" },
-  { name: "Sumaiya Akter", roll: "106", gpa: "4.90", status: "Verified" },
-  { name: "Rafiqul Islam", roll: "107", gpa: "4.75", status: "Verified" },
-];
+const mockBatchDetails: Record<string, any> = {};
+const mockStudents: any[] = [];
 
 export default function SscBatchDetailPage({ params }: { params: Promise<{ batchId: string }> }) {
   const { batchId } = use(params);
   const [searchTerm, setSearchTerm] = useState("");
   
-  const batch = mockBatchDetails[batchId] || { year: batchId.split("-")[1], total: 0, gpa5: 0, passRate: "N/A" };
+  const batch = mockBatchDetails[batchId] || { year: batchId.split("-")[1] || "N/A", total: 0, gpa5: 0, passRate: "N/A" };
 
   return (
     <div className="pt-32 pb-24 min-h-screen bg-secondary/5">
@@ -121,7 +107,7 @@ export default function SscBatchDetailPage({ params }: { params: Promise<{ batch
               <div className="flex justify-between items-start">
                 <div className="space-y-1">
                   <p className="text-[10px] font-black uppercase text-primary/60">Verified Records</p>
-                  <p className="text-3xl font-black text-primary">100%</p>
+                  <p className="text-3xl font-black text-primary">0%</p>
                 </div>
                 <div className="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
                   <User size={20} />
@@ -149,44 +135,51 @@ export default function SscBatchDetailPage({ params }: { params: Promise<{ batch
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/30">
-                  <TableHead className="w-16 text-center font-black uppercase text-[10px] tracking-widest">Roll</TableHead>
-                  <TableHead className="font-black uppercase text-[10px] tracking-widest pl-6">Student Name</TableHead>
-                  <TableHead className="text-center font-black uppercase text-[10px] tracking-widest">Result (GPA)</TableHead>
-                  <TableHead className="text-center font-black uppercase text-[10px] tracking-widest">Profile Status</TableHead>
-                  <TableHead className="w-24"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {mockStudents.map((student, idx) => (
-                  <TableRow key={idx} className="group hover:bg-secondary/5 transition-colors">
-                    <TableCell className="text-center font-black text-primary">{student.roll}</TableCell>
-                    <TableCell className="pl-6">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
-                          <AvatarImage src={`https://picsum.photos/seed/${student.name}/100/100`} />
-                          <AvatarFallback>{student.name[0]}</AvatarFallback>
-                        </Avatar>
-                        <div className="font-bold text-primary">{student.name}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-center font-black text-accent">{student.gpa}</TableCell>
-                    <TableCell className="text-center">
-                      <Badge className="bg-emerald-500 rounded-lg text-[10px] uppercase font-black px-2 py-0.5">
-                        {student.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right pr-6">
-                      <Button variant="ghost" size="sm" className="rounded-lg text-[10px] font-black uppercase opacity-0 group-hover:opacity-100 transition-opacity">
-                        Details
-                      </Button>
-                    </TableCell>
+            {mockStudents.length === 0 ? (
+              <div className="py-20 text-center space-y-4">
+                <Users size={48} className="mx-auto text-muted-foreground/20" />
+                <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">এই ব্যাচের কোনো শিক্ষার্থী তথ্য পাওয়া যায়নি।</p>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="w-16 text-center font-black uppercase text-[10px] tracking-widest">Roll</TableHead>
+                    <TableHead className="font-black uppercase text-[10px] tracking-widest pl-6">Student Name</TableHead>
+                    <TableHead className="text-center font-black uppercase text-[10px] tracking-widest">Result (GPA)</TableHead>
+                    <TableHead className="text-center font-black uppercase text-[10px] tracking-widest">Profile Status</TableHead>
+                    <TableHead className="w-24"></TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {mockStudents.map((student, idx) => (
+                    <TableRow key={idx} className="group hover:bg-secondary/5 transition-colors">
+                      <TableCell className="text-center font-black text-primary">{student.roll}</TableCell>
+                      <TableCell className="pl-6">
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
+                            <AvatarImage src={`https://picsum.photos/seed/${student.name}/100/100`} />
+                            <AvatarFallback>{student.name[0]}</AvatarFallback>
+                          </Avatar>
+                          <div className="font-bold text-primary">{student.name}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center font-black text-accent">{student.gpa}</TableCell>
+                      <TableCell className="text-center">
+                        <Badge className="bg-emerald-500 rounded-lg text-[10px] uppercase font-black px-2 py-0.5">
+                          {student.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right pr-6">
+                        <Button variant="ghost" size="sm" className="rounded-lg text-[10px] font-black uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                          Details
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
       </div>

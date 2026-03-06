@@ -25,11 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const mockEvents = [
-  { id: "1", title: "Annual School Picnic", date: "Dec 15, 2024", location: "Sundarbans Eco Park", registrations: 450, status: "Open" },
-  { id: "2", title: "Cultural Program", date: "Jan 20, 2025", location: "Main Stage", registrations: 120, status: "Upcoming" },
-  { id: "3", title: "Sports Day", date: "Feb 10, 2025", location: "School Ground", registrations: 0, status: "Scheduled" },
-];
+const mockEvents: any[] = [];
 
 export default function AdminEventsPage() {
   return (
@@ -46,47 +42,54 @@ export default function AdminEventsPage() {
         </Button>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockEvents.map((event) => (
-          <Card key={event.id} className="border-none shadow-sm group hover:shadow-md transition-all overflow-hidden bg-white">
-            <CardHeader className="bg-primary/5 pb-4">
-              <div className="flex justify-between items-start">
-                <Badge className="bg-accent text-primary font-black text-[9px] uppercase">{event.status}</Badge>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
-                      <MoreVertical size={16} />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="rounded-xl">
-                    <DropdownMenuItem className="gap-2"><Edit3 size={14} /> Edit Event</DropdownMenuItem>
-                    <DropdownMenuItem className="gap-2 text-destructive"><Trash2 size={14} /> Cancel Event</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              <CardTitle className="text-xl font-headline font-black text-primary group-hover:text-accent transition-colors pt-2">
-                {event.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-6 space-y-4">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase">
-                  <Calendar size={14} className="text-primary" /> {event.date}
+      {mockEvents.length === 0 ? (
+        <div className="py-32 text-center space-y-6 bg-white/30 rounded-[3rem] border-2 border-dashed border-muted-foreground/20">
+          <Calendar size={56} className="text-primary/20 mx-auto" />
+          <p className="text-muted-foreground font-black uppercase tracking-[0.2em] text-xs">কোনো ইভেন্ট তালিকাভুক্ত নেই।</p>
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {mockEvents.map((event) => (
+            <Card key={event.id} className="border-none shadow-sm group hover:shadow-md transition-all overflow-hidden bg-white">
+              <CardHeader className="bg-primary/5 pb-4">
+                <div className="flex justify-between items-start">
+                  <Badge className="bg-accent text-primary font-black text-[9px] uppercase">{event.status}</Badge>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+                        <MoreVertical size={16} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="rounded-xl">
+                      <DropdownMenuItem className="gap-2"><Edit3 size={14} /> Edit Event</DropdownMenuItem>
+                      <DropdownMenuItem className="gap-2 text-destructive"><Trash2 size={14} /> Cancel Event</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase">
-                  <MapPin size={14} className="text-primary" /> {event.location}
+                <CardTitle className="text-xl font-headline font-black text-primary group-hover:text-accent transition-colors pt-2">
+                  {event.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-6 space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase">
+                    <Calendar size={14} className="text-primary" /> {event.date}
+                  </div>
+                  <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase">
+                    <MapPin size={14} className="text-primary" /> {event.location}
+                  </div>
+                  <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase">
+                    <Users size={14} className="text-primary" /> {event.registrations} Registrations
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase">
-                  <Users size={14} className="text-primary" /> {event.registrations} Registrations
-                </div>
-              </div>
-              <Button variant="secondary" className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest h-10">
-                Manage Registrations
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                <Button variant="secondary" className="w-full rounded-xl text-[10px] font-black uppercase tracking-widest h-10">
+                  Manage Registrations
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

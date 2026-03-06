@@ -24,138 +24,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-// Expanded personnel data for a fuller list
-const personnel = [
-  {
-    id: "HT001",
-    name: "S. M. Easminur Rahman",
-    bnName: "এস. এম. ইয়াসমিনুর রহমান",
-    role: "Head Teacher",
-    bnRole: "প্রধান শিক্ষক",
-    image: "https://i.postimg.cc/NFZ1xd04/images-(1)-(13).jpg",
-    category: "Teacher",
-    dept: "Administration",
-    subject: "Management",
-    ein: "10293",
-    joiningYear: "2010",
-    bio: "প্রতিষ্ঠানের সার্বিক উন্নয়ন এবং শিক্ষার্থীদের মেধা বিকাশে নিরলসভাবে কাজ করে যাচ্ছেন।"
-  },
-  {
-    id: "AHT001",
-    name: "Md. Mamunul Hassan",
-    bnName: "মোঃ মামুনুল হাসান",
-    role: "Assistant Head Teacher",
-    bnRole: "সহকারী প্রধান শিক্ষক",
-    image: "https://i.postimg.cc/K4XMT49J/FB-IMG-1772769776462.jpg",
-    category: "Teacher",
-    dept: "Academic Oversight",
-    subject: "Social Science",
-    ein: "10294",
-    joiningYear: "2012",
-    bio: "একাডেমিক শৃঙ্খলা এবং পাঠদান পদ্ধতি তদারকির দায়িত্বে নিয়োজিত।"
-  },
-  {
-    id: "T001",
-    name: "Sushanta Kumar Mondal",
-    bnName: "সুষান্ত কুমার মন্ডল",
-    role: "Assistant Teacher",
-    bnRole: "সহকারী শিক্ষক",
-    image: "https://picsum.photos/seed/teacher1/400/500",
-    category: "Teacher",
-    dept: "Science",
-    subject: "Mathematics",
-    ein: "10299",
-    joiningYear: "2008"
-  },
-  {
-    id: "T002",
-    name: "Md. Abdul Hannan",
-    bnName: "মোঃ আব্দুল হান্নান",
-    role: "Assistant Teacher",
-    bnRole: "সহকারী শিক্ষক",
-    image: "https://i.postimg.cc/cCG3grkh/FB-IMG-1772770012569.jpg",
-    category: "Teacher",
-    dept: "Arts",
-    subject: "Social Science",
-    ein: "10296",
-    joiningYear: "2014"
-  },
-  {
-    id: "T003",
-    name: "Muhammad Sirajul Islam",
-    bnName: "মুহাম্মদ সিরাজুল ইসলাম",
-    role: "Assistant Teacher",
-    bnRole: "সহকারী শিক্ষক",
-    image: "https://picsum.photos/seed/teacher3/400/500",
-    category: "Teacher",
-    dept: "Arts",
-    subject: "Islamic Studies",
-    ein: "10295",
-    joiningYear: "2015"
-  },
-  {
-    id: "T004",
-    name: "Asaduzzaman",
-    bnName: "মোঃ আসাদুজ্জামান",
-    role: "Assistant Teacher",
-    bnRole: "সহকারী শিক্ষক",
-    image: "https://picsum.photos/seed/teacher4/400/500",
-    category: "Teacher",
-    dept: "Science",
-    subject: "ICT & Physics",
-    ein: "10305",
-    joiningYear: "2018"
-  },
-  {
-    id: "T005",
-    name: "Nasrin Akter",
-    bnName: "নাসরিন আক্তার",
-    role: "Assistant Teacher",
-    bnRole: "সহকারী শিক্ষিকা",
-    image: "https://picsum.photos/seed/teacher5/400/500",
-    category: "Teacher",
-    dept: "Arts",
-    subject: "English",
-    ein: "10310",
-    joiningYear: "2016"
-  }
-];
-
-const staff = [
-  {
-    id: "S001",
-    name: "Ariful Islam",
-    bnName: "আরিফুল ইসলাম",
-    role: "Office Assistant",
-    bnRole: "অফিস সহায়ক",
-    image: "https://i.postimg.cc/44qmL7Js/FB-IMG-1772773482000.jpg",
-    category: "Staff",
-    dept: "Office",
-    ein: "5001"
-  },
-  {
-    id: "S002",
-    name: "Abdur Rahim",
-    bnName: "মোঃ আব্দুর রহিম",
-    role: "Lab Assistant",
-    bnRole: "ল্যাব সহকারী",
-    image: "https://picsum.photos/seed/staff2/400/500",
-    category: "Staff",
-    dept: "Science Lab",
-    ein: "5002"
-  },
-  {
-    id: "S004",
-    name: "Rokibul Islam",
-    bnName: "রকিবুল ইসলাম",
-    role: "Night Guard",
-    bnRole: "নৈশ প্রহরী",
-    image: "https://i.postimg.cc/Xq4nZCdV/FB-IMG-1772773975677.jpg",
-    category: "Staff",
-    dept: "Security",
-    ein: "5004"
-  }
-];
+const personnel: any[] = [];
+const staff: any[] = [];
 
 export default function MeetOurTeachersPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -219,7 +89,7 @@ export default function MeetOurTeachersPage() {
           </div>
         </div>
 
-        {/* Smaller Cards Grid */}
+        {/* Card Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
           {filteredFaculty.map((teacher) => (
             <div 
@@ -266,13 +136,13 @@ export default function MeetOurTeachersPage() {
 
         {filteredFaculty.length === 0 && (
           <div className="py-24 text-center space-y-4 bg-white/30 rounded-[3rem] border-2 border-dashed border-primary/10">
-            <User size={48} className="text-primary/20 mx-auto" />
+            <Users2 size={48} className="text-primary/20 mx-auto" />
             <p className="text-primary font-black uppercase tracking-widest text-xs">আপনার খোঁজা অনুযায়ী কাউকে পাওয়া যায়নি।</p>
           </div>
         )}
       </div>
 
-      {/* Teacher Profile Dialog */}
+      {/* Profile Dialog */}
       {selectedTeacher && (
         <Dialog open={!!selectedTeacher} onOpenChange={() => setSelectedTeacher(null)}>
           <DialogContent className="max-w-3xl bg-white border-none shadow-2xl p-0 overflow-hidden !rounded-[2.5rem]">

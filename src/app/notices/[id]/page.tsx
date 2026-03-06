@@ -21,63 +21,21 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-const mockNotices = [
-  { 
-    id: "1", 
-    title: "SSC 2025 Test Examination Schedule published", 
-    date: "Oct 12, 2024", 
-    type: "exam",
-    category: "Academic",
-    content: `This is to inform all students of Class 10 that the SSC 2025 Test Examination schedule has been officially published by the academic committee. 
-
-Key Instructions:
-1. Exams will begin from November 5th, 2024.
-2. Students must arrive at the examination hall at least 30 minutes before the start time.
-3. Admit cards will be distributed from the office starting October 25th.
-4. No electronic devices (mobiles, smartwatches) are allowed in the hall.
-
-Detailed routine is attached below in the PDF version. Please ensure all dues are cleared before collecting admit cards.`,
-    author: "Academic Coordinator",
-    authorRole: "School Administration",
-    files: [{ name: "SSC_Test_Routine_2025.pdf", size: "1.2 MB" }]
-  },
-  {
-    id: "t1",
-    title: "Physics Assignment Submission Reminder",
-    teacher: "Md. Asaduzzaman",
-    classes: ["9", "10"],
-    date: "Oct 11, 2024",
-    type: "important",
-    category: "Academic Update",
-    content: `Dear students of Class 9 and 10,
-
-Please be reminded that the final submission date for your Physics Lab Reports (Chapter 4 & 5) is this Thursday, October 14th. 
-
-Reports should be neatly presented in the standard school practical notebook. Late submissions will result in a 20% mark deduction.
-
-- Topic: Work, Power and Energy Practical
-- Submission Venue: Physics Lab 1
-- Time: Before 2:00 PM`,
-    author: "Md. Asaduzzaman",
-    authorRole: "Assistant Teacher (ICT & Physics)",
-    files: []
-  }
-];
+const mockNotices: any[] = [];
 
 export default function NoticeDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [isSaved, setIsSaved] = useState(false);
 
-  // For MVP, find or fallback
   const notice = mockNotices.find(n => n.id === id) || {
     id: id,
-    title: "Notice Not Found",
+    title: "নোটিশ পাওয়া যায়নি (Not Found)",
     date: new Date().toLocaleDateString(),
     type: "general",
     category: "General",
-    content: "The requested notice could not be found or has been removed from the directory.",
-    author: "System Administrator",
-    authorRole: "IT Department",
+    content: "দুঃখিত, আপনার অনুরোধকৃত নোটিশটি এই মুহূর্তে ডিরেক্টরিতে পাওয়া যাচ্ছে না। দয়া করে পুনরায় চেক করুন অথবা স্কুল অফিসের সাথে যোগাযোগ করুন।",
+    author: "সিস্টেম অ্যাডমিনিস্ট্রেটর",
+    authorRole: "আইটি বিভাগ",
     files: []
   };
 
@@ -145,7 +103,7 @@ export default function NoticeDetailPage({ params }: { params: Promise<{ id: str
                   <FileText size={20} className="text-accent" /> Attachments & Downloads
                 </h3>
                 <div className="grid gap-3">
-                  {notice.files.map((file, idx) => (
+                  {notice.files.map((file: any, idx: number) => (
                     <div key={idx} className="flex items-center justify-between p-4 bg-secondary/10 rounded-2xl border border-primary/10 group hover:border-accent transition-colors">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm">
@@ -196,6 +154,9 @@ export default function NoticeDetailPage({ params }: { params: Promise<{ id: str
                 </div>
               </Link>
             ))}
+            {mockNotices.length <= 1 && (
+              <p className="text-xs font-bold text-muted-foreground">কোনো সাম্প্রতিক নোটিশ নেই।</p>
+            )}
           </div>
         </div>
       </div>

@@ -19,25 +19,17 @@ import {
   LineChart as LineChartIcon
 } from "lucide-react";
 import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
   CartesianGrid, 
   Tooltip, 
   ResponsiveContainer,
+  XAxis,
+  YAxis,
   AreaChart,
   Area
 } from "recharts";
 import Link from "next/link";
 
-// Helper to handle icons properly
-const performanceData = [
-  { month: "Jan", attendance: 95, homework: 80, rating: 7.5 },
-  { month: "Feb", attendance: 98, homework: 90, rating: 8.2 },
-  { month: "Mar", attendance: 92, homework: 85, rating: 8.0 },
-  { month: "Apr", attendance: 100, homework: 95, rating: 9.1 },
-];
+const performanceData: any[] = [];
 
 export default function StudentDashboard({ user }: { user: any }) {
   return (
@@ -48,13 +40,13 @@ export default function StudentDashboard({ user }: { user: any }) {
           <div className="space-y-1">
             <h1 className="text-3xl font-headline font-black text-primary">Welcome Back, {user.displayName || "Student"}!</h1>
             <p className="text-muted-foreground flex items-center gap-2">
-              <GraduationCap size={18} /> Class {user.class || "N/A"} • Section {user.section || "A"} • Roll {user.rollNumber || "00"}
+              <GraduationCap size={18} /> Class {user.classId || "N/A"} • Section {user.section || "A"} • Roll {user.rollNumber || "00"}
             </p>
           </div>
           <div className="flex gap-3">
             <Link href="/notices">
               <Button variant="outline" className="rounded-full gap-2 shadow-sm active:scale-95 transition-transform">
-                <Bell size={18} /> Notifications <Badge className="ml-1 bg-accent text-primary">3</Badge>
+                <Bell size={18} /> Notifications <Badge className="ml-1 bg-accent text-primary">0</Badge>
               </Button>
             </Link>
             <Link href="/id-card">
@@ -72,13 +64,13 @@ export default function StudentDashboard({ user }: { user: any }) {
               <div className="flex justify-between items-start">
                 <div className="space-y-1">
                   <p className="text-xs font-bold uppercase text-muted-foreground">Attendance</p>
-                  <p className="text-3xl font-black text-primary">94%</p>
+                  <p className="text-3xl font-black text-primary">0%</p>
                 </div>
                 <div className="p-2 bg-emerald-500/10 text-emerald-600 rounded-lg">
                   <CheckCircle2 size={20} />
                 </div>
               </div>
-              <Progress value={94} className="h-1.5 mt-4" />
+              <Progress value={0} className="h-1.5 mt-4" />
             </CardContent>
           </Card>
           <Card className="glass-card">
@@ -86,13 +78,13 @@ export default function StudentDashboard({ user }: { user: any }) {
               <div className="flex justify-between items-start">
                 <div className="space-y-1">
                   <p className="text-xs font-bold uppercase text-muted-foreground">Homework</p>
-                  <p className="text-3xl font-black text-primary">18/20</p>
+                  <p className="text-3xl font-black text-primary">0/0</p>
                 </div>
                 <div className="p-2 bg-blue-500/10 text-blue-600 rounded-lg">
                   <BookOpen size={20} />
                 </div>
               </div>
-              <Progress value={90} className="h-1.5 mt-4" />
+              <Progress value={0} className="h-1.5 mt-4" />
             </CardContent>
           </Card>
           <Card className="glass-card">
@@ -100,13 +92,13 @@ export default function StudentDashboard({ user }: { user: any }) {
               <div className="flex justify-between items-start">
                 <div className="space-y-1">
                   <p className="text-xs font-bold uppercase text-muted-foreground">Final Rating</p>
-                  <p className="text-3xl font-black text-accent">8.9</p>
+                  <p className="text-3xl font-black text-accent">0.0</p>
                 </div>
                 <div className="p-2 bg-accent/10 text-accent-foreground rounded-lg">
                   <Award size={20} />
                 </div>
               </div>
-              <p className="text-[10px] mt-2 text-muted-foreground font-medium">Top 5% of your class</p>
+              <p className="text-[10px] mt-2 text-muted-foreground font-medium">Monthly Assessment</p>
             </CardContent>
           </Card>
           <Card className="glass-card border-accent/20 bg-accent/5">
@@ -114,13 +106,13 @@ export default function StudentDashboard({ user }: { user: any }) {
               <div className="flex justify-between items-start">
                 <div className="space-y-1">
                   <p className="text-xs font-bold uppercase text-primary/60">Teacher Rating</p>
-                  <p className="text-3xl font-black text-primary">9.2</p>
+                  <p className="text-3xl font-black text-primary">0.0</p>
                 </div>
                 <div className="p-2 bg-primary/10 text-primary rounded-lg">
                   <Users size={20} />
                 </div>
               </div>
-              <p className="text-[10px] mt-2 text-muted-foreground font-medium">Avg. from 6 teachers</p>
+              <p className="text-[10px] mt-2 text-muted-foreground font-medium">Performance Feedback</p>
             </CardContent>
           </Card>
         </div>
@@ -132,28 +124,35 @@ export default function StudentDashboard({ user }: { user: any }) {
               <CardTitle className="text-lg flex items-center gap-2">
                 <LineChartIcon className="text-accent" /> Performance Trends
               </CardTitle>
-              <Badge variant="outline">Last 4 Months</Badge>
+              <Badge variant="outline">Current Session</Badge>
             </CardHeader>
             <CardContent className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={performanceData}>
-                  <defs>
-                    <linearGradient id="colorRating" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(var(--accent))" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="hsl(var(--accent))" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
-                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fontSize: 12}} />
-                  <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12}} />
-                  <Tooltip 
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
-                  />
-                  <Area type="monotone" dataKey="attendance" stroke="hsl(var(--primary))" fillOpacity={0} strokeWidth={3} name="Attendance %" />
-                  <Area type="monotone" dataKey="homework" stroke="#3b82f6" fillOpacity={0} strokeWidth={3} name="Homework %" />
-                  <Area type="monotone" dataKey="rating" stroke="hsl(var(--accent))" fillOpacity={1} fill="url(#colorRating)" strokeWidth={3} name="Final Rating" />
-                </AreaChart>
-              </ResponsiveContainer>
+              {performanceData.length === 0 ? (
+                <div className="h-full flex items-center justify-center flex-col gap-3 text-muted-foreground">
+                  <LineChartIcon size={40} className="opacity-20" />
+                  <p className="text-xs font-black uppercase tracking-widest">ডাটা আপডেট করা হচ্ছে...</p>
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={performanceData}>
+                    <defs>
+                      <linearGradient id="colorRating" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="hsl(var(--accent))" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="hsl(var(--accent))" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+                    <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fontSize: 12}} />
+                    <YAxis axisLine={false} tickLine={false} tick={{fontSize: 12}} />
+                    <Tooltip 
+                      contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
+                    />
+                    <Area type="monotone" dataKey="attendance" stroke="hsl(var(--primary))" fillOpacity={0} strokeWidth={3} name="Attendance %" />
+                    <Area type="monotone" dataKey="homework" stroke="#3b82f6" fillOpacity={0} strokeWidth={3} name="Homework %" />
+                    <Area type="monotone" dataKey="rating" stroke="hsl(var(--accent))" fillOpacity={1} fill="url(#colorRating)" strokeWidth={3} name="Final Rating" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              )}
             </CardContent>
           </Card>
 
@@ -164,21 +163,10 @@ export default function StudentDashboard({ user }: { user: any }) {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {[
-                { time: "09:00 AM", sub: "Mathematics", teacher: "Teacher A" },
-                { time: "10:00 AM", sub: "English", teacher: "Teacher B" },
-                { time: "11:00 AM", sub: "Physics", teacher: "Teacher C" },
-                { time: "12:00 PM", sub: "Lunch Break", type: "break" },
-                { time: "01:00 PM", sub: "Biology", teacher: "Teacher D" },
-              ].map((item, i) => (
-                <div key={i} className={`flex items-center gap-4 p-3 rounded-xl border ${item.type === 'break' ? 'bg-muted/30 border-dashed' : 'bg-white shadow-sm border-border'}`}>
-                  <div className="text-[10px] font-bold text-muted-foreground w-16 uppercase tracking-tighter">{item.time}</div>
-                  <div className="flex-1">
-                    <p className="font-bold text-sm text-primary">{item.sub}</p>
-                    {item.teacher && <p className="text-[10px] text-muted-foreground">{item.teacher}</p>}
-                  </div>
-                </div>
-              ))}
+              <div className="py-10 text-center space-y-3">
+                <Calendar size={32} className="mx-auto text-muted-foreground/20" />
+                <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">রুটিন এখনো দেওয়া হয়নি।</p>
+              </div>
               <Button variant="ghost" className="w-full text-xs text-accent font-bold" asChild>
                 <Link href="/dashboard">View Weekly Routine</Link>
               </Button>

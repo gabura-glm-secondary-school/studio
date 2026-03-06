@@ -33,60 +33,8 @@ import {
 import { cn } from "@/lib/utils";
 import { useUser } from "@/firebase";
 
-const mockMainNotices = [
-  { 
-    id: "1", 
-    title: "SSC 2025 Test Examination Schedule Published", 
-    date: "Oct 12, 2024", 
-    type: "exam", 
-    category: "main",
-    isPinned: true,
-    description: "The schedule for the upcoming SSC 2025 Test Examination has been finalized. All students are requested to collect their admit cards from the office.",
-    hasAttachment: true,
-    attachmentName: "SSC_Routine_2025.pdf"
-  },
-  { 
-    id: "2", 
-    title: "Annual Sports Day Registration Starts Tomorrow", 
-    date: "Oct 10, 2024", 
-    type: "important", 
-    category: "main",
-    isPinned: false,
-    description: "Registration for the Annual Sports Day 2024 will begin from tomorrow. Students can sign up for various events including 100m sprint and long jump."
-  },
-  { 
-    id: "3", 
-    title: "Class 6 Admission Process 2025", 
-    date: "Oct 08, 2024", 
-    type: "admission", 
-    category: "main",
-    isPinned: false,
-    description: "Admission for the academic year 2025 for Class 6 is now open. Please check the detailed requirements and collect forms."
-  },
-];
-
-const mockTeacherNotices = [
-  {
-    id: "t1",
-    title: "Physics Assignment Submission Reminder",
-    teacher: "Md. Asaduzzaman",
-    classes: ["9", "10"],
-    date: "Oct 11, 2024",
-    type: "important",
-    category: "teacher",
-    description: "Students of class 9 and 10 are reminded to submit their Physics lab reports by this Thursday. Late submissions will not be accepted."
-  },
-  {
-    id: "t2",
-    title: "Math Special Class for Class 10-A",
-    teacher: "Sushanta Kumar Mondal",
-    classes: ["10"],
-    date: "Oct 09, 2024",
-    type: "general",
-    category: "teacher",
-    description: "A special mathematics remedial class will be held on Saturday at 10:00 AM in Room 204. Attendance is mandatory for group A."
-  }
-];
+const mockMainNotices: any[] = [];
+const mockTeacherNotices: any[] = [];
 
 export default function NoticeBoardPage() {
   const { user } = useUser();
@@ -105,8 +53,8 @@ export default function NoticeBoardPage() {
     const matchesClass = selectedClass === "all" || n.classes.includes(selectedClass);
     const matchesType = selectedType === "all" || n.type === selectedType;
     
-    if (user?.role === 'student' && user?.class) {
-      return matchesSearch && matchesType && n.classes.includes(user.class);
+    if (user?.role === 'student' && user?.classId) {
+      return matchesSearch && matchesType && n.classes.includes(user.classId);
     }
     
     return matchesSearch && matchesType && matchesClass;
@@ -192,11 +140,6 @@ export default function NoticeBoardPage() {
                   <Button asChild className="bg-white text-primary hover:bg-accent hover:text-white font-black rounded-2xl px-10 h-14 text-base shadow-xl transition-all active:scale-95">
                     <Link href={`/notices/${pinnedNotice.id}`}>Read Full Notice</Link>
                   </Button>
-                  {pinnedNotice.hasAttachment && (
-                    <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-2xl px-8 h-14 text-base transition-all">
-                      <Download size={20} className="mr-2" /> Download Routine
-                    </Button>
-                  )}
                 </div>
               </div>
             </CardContent>
@@ -225,7 +168,7 @@ export default function NoticeBoardPage() {
           <TabsContent value="teacher" className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
             <div className="flex items-center justify-between px-4">
               <p className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em]">
-                {user?.role === 'student' ? `Academic updates for Class ${user.class}` : "Class-specific announcements"}
+                {user?.role === 'student' ? `Academic updates for Class ${user.classId || 'N/A'}` : "Class-specific announcements"}
               </p>
               {user?.role !== 'student' && (
                 <Select value={selectedClass} onValueChange={setSelectedClass}>
@@ -285,11 +228,6 @@ function NoticeCard({ notice, isTeacher = false }: { notice: any, isTeacher?: bo
                     </div>
                   )}
                 </div>
-                {notice.hasAttachment && (
-                  <Badge variant="outline" className="border-dashed border-accent text-accent font-black text-[10px] px-3">
-                    <FileText size={12} className="mr-1.5" /> PDF Attached
-                  </Badge>
-                )}
               </div>
               
               <div className="space-y-2">
@@ -311,11 +249,6 @@ function NoticeCard({ notice, isTeacher = false }: { notice: any, isTeacher?: bo
                 <div className="flex items-center gap-2 text-primary font-black text-[11px] uppercase tracking-[0.2em] transition-all transform group-hover:translate-x-2">
                   View Full Notice <ChevronRight size={16} className="text-accent" />
                 </div>
-                {notice.hasAttachment && (
-                  <Button variant="ghost" size="sm" className="h-10 rounded-xl text-xs font-black text-accent hover:bg-accent/10 uppercase tracking-widest">
-                    <Download size={16} className="mr-2" /> Download
-                  </Button>
-                )}
               </div>
             </div>
           </div>

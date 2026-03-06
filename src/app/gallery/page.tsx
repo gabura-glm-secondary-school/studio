@@ -11,17 +11,7 @@ import { cn } from "@/lib/utils";
 
 const categories = ["All", "Events", "Campus", "Academic", "Sports"];
 
-const galleryImages = [
-  { id: 1, category: "Events", title: "Annual Sports 2024", url: "https://picsum.photos/seed/sch1/800/600", hint: "school sports" },
-  { id: 2, category: "Campus", title: "Main Building", url: "https://picsum.photos/seed/sch2/800/600", hint: "school building" },
-  { id: 3, category: "Academic", title: "Science Lab", url: "https://picsum.photos/seed/sch3/800/600", hint: "science laboratory" },
-  { id: 4, category: "Events", title: "Cultural Program", url: "https://picsum.photos/seed/sch4/800/600", hint: "cultural dance" },
-  { id: 5, category: "Sports", title: "Football Team", url: "https://picsum.photos/seed/sch5/800/600", hint: "football match" },
-  { id: 6, category: "Campus", title: "School Garden", url: "https://picsum.photos/seed/sch6/800/600", hint: "school garden" },
-  { id: 7, category: "Academic", title: "Computer Lab", url: "https://picsum.photos/seed/sch7/800/600", hint: "computer class" },
-  { id: 8, category: "Events", title: "Prize Giving Ceremony", url: "https://picsum.photos/seed/sch8/800/600", hint: "award ceremony" },
-  { id: 9, category: "Sports", title: "Cricket Tournament", url: "https://picsum.photos/seed/sch9/800/600", hint: "cricket game" },
-];
+const galleryImages: any[] = [];
 
 export default function GalleryPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");

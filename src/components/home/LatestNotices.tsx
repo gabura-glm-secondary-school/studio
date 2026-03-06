@@ -1,14 +1,19 @@
-import { FileText, Calendar, ArrowRight } from "lucide-react";
+
+import { FileText, Calendar, ArrowRight, Bell } from "lucide-react";
 import Link from "next/link";
 
-const mockNotices = [
-  { id: 1, title: "SSC 2025 Test Examination Schedule published", date: "Oct 12, 2024", category: "Academic" },
-  { id: 2, title: "Annual Sports Day Registration starts tomorrow", date: "Oct 10, 2024", category: "Events" },
-  { id: 3, title: "Class 6 Admission process and requirements", date: "Oct 08, 2024", category: "Admission" },
-  { id: 4, title: "Half-yearly holiday announcement for students", date: "Oct 05, 2024", category: "Holiday" },
-];
+const mockNotices: any[] = [];
 
 export function LatestNotices() {
+  if (mockNotices.length === 0) {
+    return (
+      <div className="py-20 text-center glass-card bg-white/50 border-dashed border-primary/10 w-full">
+        <Bell size={48} className="text-primary/20 mx-auto mb-4" />
+        <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">নোটিশ বোর্ডে কোনো সাম্প্রতিক তথ্য নেই।</p>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-12">
       {mockNotices.map((notice) => (

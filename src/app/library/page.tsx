@@ -8,13 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Search, Download, FileText, Filter, Loader2, Bookmark } from "lucide-react";
 
-const mockLibrary = [
-  { id: "1", title: "Class 9 Mathematics Notes - Chapter 1", cat: "Academic Notes", type: "PDF", size: "2.4 MB" },
-  { id: "2", title: "SSC 2024 Physics Question Paper", cat: "Question Bank", type: "PDF", size: "1.8 MB" },
-  { id: "3", title: "Bangla Grammar Complete Guide", cat: "Textbooks", type: "PDF", size: "15 MB" },
-  { id: "4", title: "History of the Sundarbans - Digital Edition", cat: "General", type: "EPUB", size: "5.6 MB" },
-  { id: "5", title: "Class 10 Biology Lab Manual", cat: "Academic Notes", type: "PDF", size: "3.1 MB" },
-];
+const mockLibrary: any[] = [];
 
 export default function LibraryPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -84,9 +78,6 @@ export default function LibraryPage() {
                   <Button className="flex-1 rounded-xl gap-2 shadow-lg h-10 text-xs uppercase font-black tracking-widest">
                     <Download size={14} /> Download
                   </Button>
-                  <Button variant="outline" size="icon" className="rounded-xl h-10 w-10">
-                    <Filter size={14} />
-                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -94,9 +85,9 @@ export default function LibraryPage() {
         </div>
 
         {filtered.length === 0 && (
-          <div className="py-20 text-center space-y-4">
-            <Search size={48} className="mx-auto text-muted-foreground/30" />
-            <p className="text-muted-foreground font-medium">No results found for "{searchTerm}"</p>
+          <div className="py-32 text-center space-y-6 bg-white/30 rounded-[4rem] border-2 border-dashed border-muted-foreground/20">
+            <BookOpen size={56} className="text-primary/20 mx-auto" />
+            <p className="text-muted-foreground font-black uppercase tracking-[0.2em] text-xs">লাইব্রেরিতে কোনো রিসোর্স খুঁজে পাওয়া যায়নি</p>
             <Button variant="link" onClick={() => {setSearchTerm(""); setSelectedCat("All");}}>Clear Filters</Button>
           </div>
         )}

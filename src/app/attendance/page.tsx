@@ -6,16 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Check, X, Loader2, Save, Calendar as CalendarIcon, Users } from "lucide-react";
+import { Check, X, Loader2, Save, Calendar as CalendarIcon, Users, ClipboardCheck } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 
-const mockStudents = [
-  { id: "1", roll: "101", name: "Abdur Rahman" },
-  { id: "2", roll: "102", name: "Fatima Khatun" },
-  { id: "3", roll: "103", name: "Siddiqur Ahmed" },
-  { id: "4", roll: "104", name: "Nusrat Jahan" },
-  { id: "5", roll: "105", name: "Imran Hossain" },
-];
+const mockStudents: any[] = [];
 
 export default function AttendancePage() {
   const { toast } = useToast();
@@ -102,47 +97,56 @@ export default function AttendancePage() {
               <Badge className="bg-emerald-500">{mockStudents.length} Students</Badge>
             </CardHeader>
             <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/30">
-                    <TableHead className="w-20">Roll</TableHead>
-                    <TableHead>Student Name</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {mockStudents.map((s) => (
-                    <TableRow key={s.id} className="hover:bg-muted/20">
-                      <TableCell className="font-bold">{s.roll}</TableCell>
-                      <TableCell className="font-medium">{s.name}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button 
-                            size="sm" 
-                            variant={attendance[s.id] === true ? "default" : "outline"}
-                            className={attendance[s.id] === true ? "bg-emerald-600" : ""}
-                            onClick={() => toggleAttendance(s.id, true)}
-                          >
-                            <Check size={16} />
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant={attendance[s.id] === false ? "destructive" : "outline"}
-                            onClick={() => toggleAttendance(s.id, false)}
-                          >
-                            <X size={16} />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              <div className="p-6 bg-muted/10 border-t">
-                <Button onClick={handleSave} disabled={loading} className="w-full h-12 rounded-xl text-lg gap-2 bg-primary shadow-xl">
-                  {loading ? <Loader2 className="animate-spin" /> : <Save size={20} />} Submit Attendance
-                </Button>
-              </div>
+              {mockStudents.length === 0 ? (
+                <div className="py-20 text-center space-y-4">
+                  <Users size={48} className="mx-auto text-muted-foreground/20" />
+                  <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">এই ক্লাসে কোনো শিক্ষার্থী খুঁজে পাওয়া যায়নি।</p>
+                </div>
+              ) : (
+                <>
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-muted/30">
+                        <TableHead className="w-20">Roll</TableHead>
+                        <TableHead>Student Name</TableHead>
+                        <TableHead className="text-right">Action</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {mockStudents.map((s) => (
+                        <TableRow key={s.id} className="hover:bg-muted/20">
+                          <TableCell className="font-bold">{s.roll}</TableCell>
+                          <TableCell className="font-medium">{s.name}</TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex justify-end gap-2">
+                              <Button 
+                                size="sm" 
+                                variant={attendance[s.id] === true ? "default" : "outline"}
+                                className={attendance[s.id] === true ? "bg-emerald-600" : ""}
+                                onClick={() => toggleAttendance(s.id, true)}
+                              >
+                                <Check size={16} />
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant={attendance[s.id] === false ? "destructive" : "outline"}
+                                onClick={() => toggleAttendance(s.id, false)}
+                              >
+                                <X size={16} />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                  <div className="p-6 bg-muted/10 border-t">
+                    <Button onClick={handleSave} disabled={loading} className="w-full h-12 rounded-xl text-lg gap-2 bg-primary shadow-xl">
+                      {loading ? <Loader2 className="animate-spin" /> : <Save size={20} />} Submit Attendance
+                    </Button>
+                  </div>
+                </>
+              )}
             </CardContent>
           </Card>
         )}
@@ -150,5 +154,3 @@ export default function AttendancePage() {
     </div>
   );
 }
-
-import { ClipboardCheck } from "lucide-react";

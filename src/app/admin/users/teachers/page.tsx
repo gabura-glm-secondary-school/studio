@@ -26,7 +26,8 @@ import {
   UserPlus,
   Image as ImageIcon,
   Loader2,
-  X
+  X,
+  Briefcase
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -39,12 +40,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
-const mockTeachers = [
-  { id: "T001", name: "S. M. Easminur Rahman", subject: "Management", role: "Head Teacher", ein: "10293", status: "Active" },
-  { id: "T002", name: "Md. Mamunul Hassan", subject: "Social Science", role: "Assistant Head Teacher", ein: "10294", status: "Active" },
-  { id: "T003", name: "Muhammad Sirajul Islam", subject: "Islamic Studies", role: "Assistant Teacher", ein: "10295", status: "Active" },
-  { id: "T004", name: "Sushanta Kumar Mondal", subject: "Mathematics", role: "Assistant Teacher", ein: "10299", status: "Active" },
-];
+const mockTeachers: any[] = [];
 
 export default function FacultyManagement() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -61,6 +57,8 @@ export default function FacultyManagement() {
       toast({ title: "Teacher Added", description: "The new faculty member has been recorded successfully." });
     }, 1500);
   };
+
+  const filteredTeachers = mockTeachers.filter(t => t.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -99,55 +97,62 @@ export default function FacultyManagement() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/30">
-                <TableHead className="w-24 font-black uppercase text-[10px] tracking-widest pl-6">EIN</TableHead>
-                <TableHead className="font-black uppercase text-[10px] tracking-widest">Teacher Name</TableHead>
-                <TableHead className="font-black uppercase text-[10px] tracking-widest">Role / Designation</TableHead>
-                <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">Subject</TableHead>
-                <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">Status</TableHead>
-                <TableHead className="w-20 text-right pr-6"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {mockTeachers.map((teacher) => (
-                <TableRow key={teacher.id} className="group hover:bg-secondary/5 transition-colors">
-                  <TableCell className="font-mono text-xs font-bold pl-6 text-accent">{teacher.ein}</TableCell>
-                  <TableCell>
-                    <div className="font-bold text-primary">{teacher.name}</div>
-                    <div className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">Verified Faculty</div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-xs font-bold text-muted-foreground">{teacher.role}</div>
-                  </TableCell>
-                  <TableCell className="text-center font-black text-xs uppercase text-primary/60">{teacher.subject}</TableCell>
-                  <TableCell className="text-center">
-                    <Badge className="rounded-lg text-[10px] uppercase font-black px-2 py-0.5 bg-emerald-500 shadow-sm">
-                      {teacher.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right pr-6">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                          <MoreVertical size={18} />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="rounded-xl p-2 w-48 shadow-xl">
-                        <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer">
-                          <Edit3 size={16} /> Edit Profile
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer text-destructive font-bold">
-                          <Trash2 size={16} /> Remove Teacher
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+          {filteredTeachers.length === 0 ? (
+            <div className="py-24 text-center space-y-4">
+              <Briefcase size={48} className="mx-auto text-muted-foreground/20" />
+              <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">কোনো শিক্ষকের তথ্য পাওয়া যায়নি।</p>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/30">
+                  <TableHead className="w-24 font-black uppercase text-[10px] tracking-widest pl-6">EIN</TableHead>
+                  <TableHead className="font-black uppercase text-[10px] tracking-widest">Teacher Name</TableHead>
+                  <TableHead className="font-black uppercase text-[10px] tracking-widest">Role / Designation</TableHead>
+                  <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">Subject</TableHead>
+                  <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">Status</TableHead>
+                  <TableHead className="w-20 text-right pr-6"></TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredTeachers.map((teacher) => (
+                  <TableRow key={teacher.id} className="group hover:bg-secondary/5 transition-colors">
+                    <TableCell className="font-mono text-xs font-bold pl-6 text-accent">{teacher.ein}</TableCell>
+                    <TableCell>
+                      <div className="font-bold text-primary">{teacher.name}</div>
+                      <div className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">Verified Faculty</div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-xs font-bold text-muted-foreground">{teacher.role}</div>
+                    </TableCell>
+                    <TableCell className="text-center font-black text-xs uppercase text-primary/60">{teacher.subject}</TableCell>
+                    <TableCell className="text-center">
+                      <Badge className="rounded-lg text-[10px] uppercase font-black px-2 py-0.5 bg-emerald-500 shadow-sm">
+                        {teacher.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right pr-6">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="rounded-full bg-white shadow-sm border active:scale-90 transition-all">
+                            <MoreVertical size={18} />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="rounded-xl p-2 w-48 shadow-xl">
+                          <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer">
+                            <Edit3 size={16} /> Edit Profile
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer text-destructive font-bold">
+                            <Trash2 size={16} /> Remove Teacher
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 

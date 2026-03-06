@@ -1,30 +1,9 @@
+
 import Link from "next/link";
 import { Calendar, MapPin, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const upcomingEvents = [
-  {
-    title: "Annual School Picnic",
-    date: "Dec 15, 2024",
-    location: "Sundarbans Eco Park",
-    description: "A fun-filled day at the world's largest mangrove forest for students and staff.",
-    category: "Recreation"
-  },
-  {
-    title: "Annual Cultural Program",
-    date: "Jan 20, 2025",
-    location: "School Main Stage",
-    description: "Showcasing the diverse talents of our students in music, dance, and drama.",
-    category: "Culture"
-  },
-  {
-    title: "School Sports Day",
-    date: "Feb 10, 2025",
-    location: "School Grounds",
-    description: "A day of athletic competition and sportsmanship for all classes.",
-    category: "Sports"
-  }
-];
+const upcomingEvents: any[] = [];
 
 export function EventHighlights() {
   return (
@@ -44,36 +23,43 @@ export function EventHighlights() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {upcomingEvents.map((event, idx) => (
-            <div key={idx} className="glass-card p-8 space-y-6 hover-lift bg-white/80 group">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-widest bg-accent/10 text-accent px-3 py-1 rounded-full">
-                  {event.category}
-                </span>
-                <Calendar className="text-primary/30" size={20} />
-              </div>
-              
-              <div className="space-y-3">
-                <h3 className="text-2xl font-headline font-black text-primary group-hover:text-accent transition-colors leading-tight">
-                  {event.title}
-                </h3>
-                <div className="flex flex-col gap-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                  <span className="flex items-center gap-2"><Calendar size={12} className="text-primary" /> {event.date}</span>
-                  <span className="flex items-center gap-2"><MapPin size={12} className="text-primary" /> {event.location}</span>
+        {upcomingEvents.length === 0 ? (
+          <div className="py-20 text-center glass-card bg-white/50 border-dashed border-primary/10">
+            <Calendar size={48} className="text-primary/20 mx-auto mb-4" />
+            <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">কোনো সাম্প্রতিক ইভেন্ট নেই।</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {upcomingEvents.map((event, idx) => (
+              <div key={idx} className="glass-card p-8 space-y-6 hover-lift bg-white/80 group">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-black uppercase tracking-widest bg-accent/10 text-accent px-3 py-1 rounded-full">
+                    {event.category}
+                  </span>
+                  <Calendar className="text-primary/30" size={20} />
                 </div>
+                
+                <div className="space-y-3">
+                  <h3 className="text-2xl font-headline font-black text-primary group-hover:text-accent transition-colors leading-tight">
+                    {event.title}
+                  </h3>
+                  <div className="flex flex-col gap-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                    <span className="flex items-center gap-2"><Calendar size={12} className="text-primary" /> {event.date}</span>
+                    <span className="flex items-center gap-2"><MapPin size={12} className="text-primary" /> {event.location}</span>
+                  </div>
+                </div>
+
+                <p className="text-sm text-muted-foreground font-medium leading-relaxed line-clamp-3">
+                  {event.description}
+                </p>
+
+                <Button className="w-full h-12 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-[10px] shadow-lg group-hover:bg-accent transition-colors">
+                  Register Now
+                </Button>
               </div>
-
-              <p className="text-sm text-muted-foreground font-medium leading-relaxed line-clamp-3">
-                {event.description}
-              </p>
-
-              <Button className="w-full h-12 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-[10px] shadow-lg group-hover:bg-accent transition-colors">
-                Register Now
-              </Button>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

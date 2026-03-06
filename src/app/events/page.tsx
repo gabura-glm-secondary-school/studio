@@ -19,48 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-const upcomingEvents = [
-  {
-    id: "e1",
-    title: "Annual School Picnic 2024",
-    date: "Dec 15, 2024",
-    time: "08:00 AM",
-    location: "Sundarbans Eco Park",
-    description: "A fun-filled day at the world's largest mangrove forest for students and staff. Activities include boat rides, forest tours, and cultural games.",
-    category: "Recreation",
-    status: "Registration Open"
-  },
-  {
-    id: "e2",
-    title: "Annual Cultural Program",
-    date: "Jan 20, 2025",
-    time: "10:30 AM",
-    location: "School Main Stage",
-    description: "Showcasing the diverse talents of our students in music, dance, and drama. Special guest appearance by local artists.",
-    category: "Culture",
-    status: "Upcoming"
-  },
-  {
-    id: "e3",
-    title: "School Sports Day",
-    date: "Feb 10, 2025",
-    time: "09:00 AM",
-    location: "School Grounds",
-    description: "A day of athletic competition and sportsmanship for all classes. Multiple track and field events for boys and girls.",
-    category: "Sports",
-    status: "Upcoming"
-  },
-  {
-    id: "e4",
-    title: "Science Fair 2025",
-    date: "Mar 05, 2025",
-    time: "11:00 AM",
-    location: "Science Lab & Corridors",
-    description: "Students from all classes will present their innovative science projects and experiments.",
-    category: "Academic",
-    status: "Upcoming"
-  }
-];
+const upcomingEvents: any[] = [];
 
 export default function EventsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -125,50 +84,46 @@ export default function EventsPage() {
         </div>
 
         {/* Featured Event Card */}
-        <Card className="border-none bg-primary shadow-2xl rounded-[3rem] overflow-hidden relative group">
-          <div className="absolute top-0 right-0 p-12 opacity-10 rotate-12 scale-150 group-hover:rotate-0 transition-transform duration-1000 pointer-events-none">
-            <Calendar size={180} className="text-white" />
-          </div>
-          
-          <CardContent className="p-10 md:p-16 flex flex-col md:flex-row items-center gap-10 relative z-10">
-            <div className="w-24 h-24 bg-accent text-primary rounded-[2.5rem] flex items-center justify-center shrink-0 shadow-2xl group-hover:scale-110 transition-transform duration-500">
-              <Calendar size={40} fill="currentColor" />
+        {upcomingEvents.length > 0 && (
+          <Card className="border-none bg-primary shadow-2xl rounded-[3rem] overflow-hidden relative group">
+            <div className="absolute top-0 right-0 p-12 opacity-10 rotate-12 scale-150 group-hover:rotate-0 transition-transform duration-1000 pointer-events-none">
+              <Calendar size={180} className="text-white" />
             </div>
             
-            <div className="flex-1 text-center md:text-left space-y-6">
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-                <Badge className="bg-emerald-500 text-white font-black uppercase text-[11px] px-4 py-1.5 rounded-full tracking-widest shadow-lg">
-                  Next Featured Event
-                </Badge>
-                <span className="text-[11px] font-black text-white/80 uppercase tracking-[0.2em] flex items-center gap-2">
-                  <Clock size={14} className="text-accent" /> Starts in 45 Days
-                </span>
+            <CardContent className="p-10 md:p-16 flex flex-col md:flex-row items-center gap-10 relative z-10">
+              <div className="w-24 h-24 bg-accent text-primary rounded-[2.5rem] flex items-center justify-center shrink-0 shadow-2xl group-hover:scale-110 transition-transform duration-500">
+                <Calendar size={40} fill="currentColor" />
               </div>
               
-              <h2 className="text-3xl md:text-5xl font-headline font-black text-white leading-tight">
-                {upcomingEvents[0].title}
-              </h2>
-              
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-white/90 text-sm font-bold">
-                <span className="flex items-center gap-2"><Calendar size={16} className="text-accent" /> {upcomingEvents[0].date}</span>
-                <span className="flex items-center gap-2"><MapPin size={16} className="text-accent" /> {upcomingEvents[0].location}</span>
+              <div className="flex-1 text-center md:text-left space-y-6">
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                  <Badge className="bg-emerald-500 text-white font-black uppercase text-[11px] px-4 py-1.5 rounded-full tracking-widest shadow-lg">
+                    Next Featured Event
+                  </Badge>
+                </div>
+                
+                <h2 className="text-3xl md:text-5xl font-headline font-black text-white leading-tight">
+                  {upcomingEvents[0].title}
+                </h2>
+                
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-white/90 text-sm font-bold">
+                  <span className="flex items-center gap-2"><Calendar size={16} className="text-accent" /> {upcomingEvents[0].date}</span>
+                  <span className="flex items-center gap-2"><MapPin size={16} className="text-accent" /> {upcomingEvents[0].location}</span>
+                </div>
+                
+                <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
+                  <Button className="bg-white text-primary hover:bg-accent hover:text-white font-black rounded-2xl px-10 h-14 text-base shadow-xl transition-all active:scale-95">
+                    Register Now
+                  </Button>
+                </div>
               </div>
-              
-              <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
-                <Button className="bg-white text-primary hover:bg-accent hover:text-white font-black rounded-2xl px-10 h-14 text-base shadow-xl transition-all active:scale-95">
-                  Register for Picnic
-                </Button>
-                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-2xl px-8 h-14 text-base transition-all">
-                  Event Details
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Events Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredEvents.slice(1).map((event) => (
+          {filteredEvents.slice(upcomingEvents.length > 0 ? 1 : 0).map((event) => (
             <div 
               key={event.id} 
               className="glass-card p-8 space-y-6 hover-lift bg-white/80 group flex flex-col justify-between"

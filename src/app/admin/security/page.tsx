@@ -28,16 +28,15 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const mockLogs = [
-  { id: "1", user: "Abdur Rahman (STU2024001)", action: "Login Success", ip: "192.168.1.1", time: "2 mins ago", status: "Success" },
-  { id: "2", user: "Unknown", action: "Failed Login Attempt", ip: "45.12.90.11", time: "1 hour ago", status: "Alert" },
-  { id: "3", user: "S.M Easminur Rahman", action: "Profile Updated", ip: "103.23.44.1", time: "3 hours ago", status: "Info" },
-  { id: "4", user: "System", action: "Auto Backup Complete", ip: "Server", time: "5 hours ago", status: "Success" },
-  { id: "5", user: "STU2024003", action: "Account Locked", ip: "192.168.1.45", time: "12 hours ago", status: "Danger" },
-];
+const mockLogs: any[] = [];
 
 export default function SecurityLogsPage() {
   const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredLogs = mockLogs.filter(log => 
+    log.user.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    log.ip.includes(searchTerm)
+  );
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -66,7 +65,7 @@ export default function SecurityLogsPage() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase text-emerald-600 tracking-widest">Successful Logins</p>
-              <p className="text-2xl font-black text-emerald-700">1,204</p>
+              <p className="text-2xl font-black text-emerald-700">0</p>
             </div>
           </CardContent>
         </Card>
@@ -77,7 +76,7 @@ export default function SecurityLogsPage() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase text-amber-600 tracking-widest">Failed Attempts</p>
-              <p className="text-2xl font-black text-amber-700">42</p>
+              <p className="text-2xl font-black text-amber-700">0</p>
             </div>
           </CardContent>
         </Card>
@@ -88,7 +87,7 @@ export default function SecurityLogsPage() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase text-rose-600 tracking-widest">Account Locks</p>
-              <p className="text-2xl font-black text-rose-700">03</p>
+              <p className="text-2xl font-black text-rose-700">0</p>
             </div>
           </CardContent>
         </Card>
@@ -112,41 +111,48 @@ export default function SecurityLogsPage() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/30">
-                  <TableHead className="w-48 font-black uppercase text-[10px] tracking-widest pl-6">Time</TableHead>
-                  <TableHead className="font-black uppercase text-[10px] tracking-widest">User Identity</TableHead>
-                  <TableHead className="font-black uppercase text-[10px] tracking-widest">Action Performed</TableHead>
-                  <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">IP Address</TableHead>
-                  <TableHead className="w-32 text-center font-black uppercase text-[10px] tracking-widest pr-6">Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {mockLogs.map((log) => (
-                  <TableRow key={log.id} className="group hover:bg-secondary/5 transition-colors">
-                    <TableCell className="font-medium text-xs pl-6 text-muted-foreground flex items-center gap-2">
-                      <Clock size={12} className="text-accent" /> {log.time}
-                    </TableCell>
-                    <TableCell className="font-bold text-primary">{log.user}</TableCell>
-                    <TableCell className="text-sm font-medium">{log.action}</TableCell>
-                    <TableCell className="text-center font-mono text-[10px] text-muted-foreground">{log.ip}</TableCell>
-                    <TableCell className="text-center pr-6">
-                      <Badge className={cn(
-                        "rounded-lg text-[10px] uppercase font-black px-2 py-0.5 shadow-sm",
-                        log.status === "Success" ? "bg-emerald-500" : 
-                        log.status === "Alert" ? "bg-amber-500" : 
-                        log.status === "Danger" ? "bg-rose-500" : "bg-blue-500"
-                      )}>
-                        {log.status}
-                      </Badge>
-                    </TableCell>
+          {filteredLogs.length === 0 ? (
+            <div className="py-24 text-center space-y-4">
+              <Clock size={48} className="mx-auto text-muted-foreground/20" />
+              <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">কোনো অ্যাক্টিভিটি লগ পাওয়া যায়নি।</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="w-48 font-black uppercase text-[10px] tracking-widest pl-6">Time</TableHead>
+                    <TableHead className="font-black uppercase text-[10px] tracking-widest">User Identity</TableHead>
+                    <TableHead className="font-black uppercase text-[10px] tracking-widest">Action Performed</TableHead>
+                    <TableHead className="font-black uppercase text-[10px] tracking-widest text-center">IP Address</TableHead>
+                    <TableHead className="w-32 text-center font-black uppercase text-[10px] tracking-widest pr-6">Status</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                </TableHeader>
+                <TableBody>
+                  {filteredLogs.map((log) => (
+                    <TableRow key={log.id} className="group hover:bg-secondary/5 transition-colors">
+                      <TableCell className="font-medium text-xs pl-6 text-muted-foreground flex items-center gap-2">
+                        <Clock size={12} className="text-accent" /> {log.time}
+                      </TableCell>
+                      <TableCell className="font-bold text-primary">{log.user}</TableCell>
+                      <TableCell className="text-sm font-medium">{log.action}</TableCell>
+                      <TableCell className="text-center font-mono text-[10px] text-muted-foreground">{log.ip}</TableCell>
+                      <TableCell className="text-center pr-6">
+                        <Badge className={cn(
+                          "rounded-lg text-[10px] uppercase font-black px-2 py-0.5 shadow-sm",
+                          log.status === "Success" ? "bg-emerald-500" : 
+                          log.status === "Alert" ? "bg-amber-500" : 
+                          log.status === "Danger" ? "bg-rose-500" : "bg-blue-500"
+                        )}>
+                          {log.status}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

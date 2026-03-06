@@ -37,11 +37,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 
-const mockLibraryItems = [
-  { id: "1", title: "Class 9 Mathematics Notes", category: "Notes", type: "PDF", downloads: 124 },
-  { id: "2", title: "SSC 2024 Physics Questions", category: "Question Bank", type: "PDF", downloads: 89 },
-  { id: "3", title: "Bangla Grammar Guide", category: "Textbook", type: "PDF", downloads: 56 },
-];
+const mockLibraryItems: any[] = [];
 
 export default function AdminLibraryPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -63,6 +59,8 @@ export default function AdminLibraryPage() {
       });
     }, 1500);
   };
+
+  const filteredItems = mockLibraryItems.filter(item => item.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 relative z-10">
@@ -100,7 +98,7 @@ export default function AdminLibraryPage() {
         </CardHeader>
         <CardContent className="p-4 sm:p-6">
           <div className="grid gap-4">
-            {mockLibraryItems.filter(item => item.title.toLowerCase().includes(searchTerm.toLowerCase())).map((item) => (
+            {filteredItems.map((item) => (
               <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-secondary/5 rounded-2xl border border-border/50 group hover:border-accent transition-all gap-4">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm border border-primary/10">
@@ -127,10 +125,10 @@ export default function AdminLibraryPage() {
                 </div>
               </div>
             ))}
-            {mockLibraryItems.filter(item => item.title.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 && (
-              <div className="py-12 text-center space-y-3">
-                <Search className="mx-auto text-muted-foreground/20" size={40} />
-                <p className="text-muted-foreground font-bold">আপনার খোঁজা অনুযায়ী কোনো ফাইল পাওয়া যায়নি।</p>
+            {filteredItems.length === 0 && (
+              <div className="py-20 text-center space-y-3">
+                <BookOpen className="mx-auto text-muted-foreground/20" size={48} />
+                <p className="text-muted-foreground font-black uppercase tracking-widest text-xs">লাইব্রেরিতে কোনো ফাইল নেই।</p>
               </div>
             )}
           </div>
