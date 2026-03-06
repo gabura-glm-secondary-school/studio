@@ -56,9 +56,9 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
     setLoading(true);
     try {
-      // Logic for specific Admin EIN: 26200920
+      // Logic for Master Admin EIN
       if (verifyData.idNumber === '26200920') {
-        toast({ title: "Admin Record Found", description: "Identity verified as Master Staff." });
+        toast({ title: "Master Record Found", description: "Identity verified as Priority Staff." });
         setStep(2);
         return;
       }
@@ -112,7 +112,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
       await setDoc(doc(db, "users", userCredential.user.uid), userProfile);
 
       toast({ title: "Registration Successful", description: `Welcome to GGLMSS ${role} portal!` });
-      router.push(isMasterAdmin ? "/admin" : "/dashboard");
+      router.push(isMasterAdmin || userProfile.adminApproved ? "/admin" : "/dashboard");
     } catch (error: any) {
       toast({ title: "Registration Failed", description: error.message, variant: "destructive" });
     } finally {
