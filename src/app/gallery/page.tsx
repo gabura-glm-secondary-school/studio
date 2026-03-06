@@ -32,7 +32,7 @@ export default function GalleryPage() {
   );
 
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-secondary/5">
+    <div className="pt-48 pb-24 min-h-screen bg-secondary/5">
       <div className="max-w-7xl mx-auto px-4 space-y-12">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -127,7 +127,7 @@ export default function GalleryPage() {
 
         {/* Empty State */}
         {filteredImages.length === 0 && (
-          <div className="py-32 text-center space-y-6 bg-white/30 rounded-[3rem] border-2 border-dashed border-primary/20">
+          <div className="py-32 text-center space-y-6 bg-white/30 rounded-[4rem] border-2 border-dashed border-muted-foreground/20">
             <div className="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center mx-auto">
               <ImageIcon size={48} className="text-primary/20" />
             </div>

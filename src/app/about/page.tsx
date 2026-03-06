@@ -52,7 +52,7 @@ const aboutSections = [
 
 export default function AboutPortalPage() {
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-secondary/5">
+    <div className="pt-48 pb-24 min-h-screen bg-secondary/5">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-16 space-y-4 animate-in fade-in duration-700">
           <span className="text-accent font-black uppercase tracking-[0.2em] text-[10px]">Institutional Profile</span>

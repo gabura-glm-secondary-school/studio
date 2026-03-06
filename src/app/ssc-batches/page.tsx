@@ -13,7 +13,7 @@ const mockBatches = [
 
 export default function SscBatchesPage() {
   return (
-    <div className="pt-32 pb-24 min-h-screen">
+    <div className="pt-48 pb-24 min-h-screen">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16 space-y-4">
           <span className="text-accent font-bold uppercase tracking-[0.2em] text-sm">Our Pride</span>

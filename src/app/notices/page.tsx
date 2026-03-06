@@ -115,7 +115,7 @@ export default function NoticeBoardPage() {
   const pinnedNotice = mockMainNotices.find(n => n.isPinned);
 
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-secondary/5">
+    <div className="pt-48 pb-24 min-h-screen bg-secondary/5">
       <div className="max-w-6xl mx-auto px-4 space-y-12">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -158,10 +158,9 @@ export default function NoticeBoardPage() {
           </div>
         </div>
 
-        {/* Latest Important Notice Highlight - Fixed Contrast */}
+        {/* Latest Important Notice Highlight */}
         {pinnedNotice && (
           <Card className="border-none bg-primary shadow-2xl rounded-[3rem] overflow-hidden relative group">
-            {/* Background pattern */}
             <div className="absolute top-0 right-0 p-12 opacity-10 rotate-12 scale-150 group-hover:rotate-0 transition-transform duration-1000 pointer-events-none">
               <Sparkles size={180} className="text-white" />
             </div>

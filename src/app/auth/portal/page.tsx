@@ -47,7 +47,7 @@ export default function PortalPage() {
   const [activeTab, setActiveTab] = useState("login");
 
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-secondary/5 flex flex-col items-center">
+    <div className="pt-48 pb-24 min-h-screen bg-secondary/5 flex flex-col items-center">
       <div className="max-w-4xl w-full px-4 space-y-12">
         <div className="text-center space-y-4">
           <span className="text-accent font-black uppercase tracking-[0.2em] text-[10px]">GGLMSS Identity Platform</span>
