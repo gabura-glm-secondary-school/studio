@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { useAuth, useFirestore } from '../provider';
 
@@ -12,7 +12,10 @@ export function useUser() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!auth) return;
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
 
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
@@ -30,6 +33,10 @@ export function useUser() {
           } else {
             setUser(firebaseUser);
           }
+          setLoading(false);
+        }, (err) => {
+          console.error("Firestore access error:", err);
+          setUser(firebaseUser); // Fallback to auth user if doc inaccessible
           setLoading(false);
         });
 

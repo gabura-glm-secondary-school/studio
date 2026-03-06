@@ -1,7 +1,6 @@
-
 "use client";
 
-import { useState, use } from "react";
+import { useState, use, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,7 +11,7 @@ import { Eye, EyeOff, Loader2, Lock, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { useAuth, useFirestore } from "@/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 export default function LoginPage({ params }: { params: Promise<{ role: string }> }) {
@@ -26,6 +25,17 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Clear loading if session already exists
+  useEffect(() => {
+    if (!auth) return;
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Already logged in, redirect might be handled by middleware/layout
+      }
+    });
+    return () => unsub();
+  }, [auth]);
 
   const roleConfig: Record<string, any> = {
     student: { title: "Student Login", label: "Student ID", placeholder: "e.g. STU12345" },
@@ -42,32 +52,51 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
 
     setLoading(true);
     try {
-      const virtualEmail = `${idNumber.toLowerCase()}@gglmss.edu.bd`;
-      const userCredential = await signInWithEmailAndPassword(auth, virtualEmail, password);
+      const virtualEmail = `${idNumber.trim().toLowerCase()}@gglmss.edu.bd`;
+      const userCredential = await signInWithEmailAndPassword(auth, virtualEmail, password.trim());
       
-      const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
+      const userDocRef = doc(db, "users", userCredential.user.uid);
+      const userDoc = await getDoc(userDocRef);
       const userData = userDoc.data();
 
-      if (userData?.role !== role && !userData?.isSuperAdmin) {
-        throw new Error("Invalid portal for this account.");
+      if (!userData) {
+        throw new Error("User record not found in database. Please register first.");
+      }
+
+      // Admin check logic
+      const isUserAdmin = userData.role === 'admin' || userData.role === 'superadmin' || userData.adminApproved === true;
+
+      if (userData.role !== role && !isUserAdmin) {
+        throw new Error(`This account is not authorized for the ${role} portal.`);
       }
 
       toast({ title: "Login Successful", description: "Redirecting to your dashboard..." });
-      router.push(userData?.isAdmin ? "/admin" : "/dashboard");
+      
+      // Navigate based on role
+      if (isUserAdmin) {
+        router.push("/admin");
+      } else {
+        router.push("/dashboard");
+      }
     } catch (error: any) {
+      console.error("Login error:", error);
+      let message = "Invalid credentials. Please try again.";
+      if (error.code === 'auth/user-not-found') message = "No account found with this ID.";
+      if (error.code === 'auth/wrong-password') message = "Incorrect password.";
+      if (error.code === 'auth/network-request-failed') message = "Network error. Please check your connection.";
+      
       toast({ 
         title: "Login Failed", 
-        description: error.message || "Invalid credentials. Please try again.", 
+        description: error.message || message, 
         variant: "destructive" 
       });
-    } finally {
-      setLoading(false);
+      setLoading(false); // Ensure loading is stopped on error
     }
   };
 
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-secondary/5 flex flex-col items-center justify-center px-4">
-      <Link href="/auth/portal" className="mb-8 group flex items-center gap-2 text-muted-foreground hover:text-primary font-black uppercase text-xs tracking-widest transition-all">
+    <div className="pt-48 pb-24 min-h-screen bg-secondary/5 flex flex-col items-center justify-center px-4">
+      <Link href="/auth/portal" className="mb-8 group flex items-center gap-2 text-primary font-black uppercase text-xs tracking-widest transition-all">
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Portals
       </Link>
 
@@ -108,7 +137,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
                 required 
                 value={idNumber}
                 onChange={(e) => setIdNumber(e.target.value)}
-                className="h-12 rounded-xl border-primary/10 bg-white/50"
+                className="h-12 rounded-xl border-primary/20 bg-white/50 font-bold"
               />
             </div>
             <div className="space-y-2">
@@ -125,7 +154,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
                   required 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 pr-12 rounded-xl border-primary/10 bg-white/50"
+                  className="h-12 pr-12 rounded-xl border-primary/20 bg-white/50 font-bold"
                 />
                 <button
                   type="button"
@@ -137,7 +166,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
               </div>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 rounded-2xl shadow-xl bg-primary hover:bg-primary/90">
+            <Button type="submit" disabled={loading} className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 rounded-2xl shadow-xl bg-primary hover:bg-primary/90 text-white">
               {loading ? <Loader2 className="animate-spin" /> : "Sign In"}
             </Button>
           </form>

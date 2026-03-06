@@ -90,7 +90,8 @@
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 20s linear infinite;
+  /* Duration increased from 20s to 60s for slower motion */
+  animation: marquee 60s linear infinite;
 }
 
 @keyframes marquee {

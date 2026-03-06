@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, use } from "react";
@@ -56,14 +55,14 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
     setLoading(true);
     try {
-      // Logic for Master Admin EIN
-      if (verifyData.idNumber === '26200920') {
+      // Logic for Master Admin EIN: 26200920
+      if (verifyData.idNumber.trim() === '26200920') {
         toast({ title: "Master Record Found", description: "Identity verified as Priority Staff." });
         setStep(2);
         return;
       }
 
-      const masterRef = doc(db, config.masterList, verifyData.idNumber);
+      const masterRef = doc(db, config.masterList, verifyData.idNumber.trim());
       const masterSnap = await getDoc(masterRef);
 
       if (!masterSnap.exists()) {
@@ -90,20 +89,20 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
     setLoading(true);
     try {
-      const virtualEmail = `${verifyData.idNumber.toLowerCase()}@gglmss.edu.bd`;
-      const userCredential = await createUserWithEmailAndPassword(auth, virtualEmail, accountData.password);
+      const virtualEmail = `${verifyData.idNumber.trim().toLowerCase()}@gglmss.edu.bd`;
+      const userCredential = await createUserWithEmailAndPassword(auth, virtualEmail, accountData.password.trim());
       
-      const isMasterAdmin = verifyData.idNumber === '26200920';
+      const isMasterAdmin = verifyData.idNumber.trim() === '26200920';
 
       const userProfile = {
         uid: userCredential.user.uid,
-        role: role,
+        role: isMasterAdmin ? 'admin' : role, // Set role to admin if master EIN
         disabled: false,
         adminApproved: isMasterAdmin ? true : false, 
-        ein: verifyData.idNumber,
-        idNumber: verifyData.idNumber,
-        displayName: verifyData.displayName,
-        mobile: accountData.mobile,
+        ein: verifyData.idNumber.trim(),
+        idNumber: verifyData.idNumber.trim(),
+        displayName: verifyData.displayName.trim(),
+        mobile: accountData.mobile.trim(),
         createdAt: new Date().toISOString(),
         ...(role === 'student' && { classId: verifyData.classId }),
         ...(role === 'teacher' && { assignedClasses: [] })
@@ -112,10 +111,9 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
       await setDoc(doc(db, "users", userCredential.user.uid), userProfile);
 
       toast({ title: "Registration Successful", description: `Welcome to GGLMSS ${role} portal!` });
-      router.push(isMasterAdmin || userProfile.adminApproved ? "/admin" : "/dashboard");
+      router.push(isMasterAdmin ? "/admin" : "/dashboard");
     } catch (error: any) {
       toast({ title: "Registration Failed", description: error.message, variant: "destructive" });
-    } finally {
       setLoading(false);
     }
   };
