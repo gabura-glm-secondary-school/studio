@@ -55,7 +55,7 @@ export default function PortalPage() {
   const { user, loading } = useUser();
   const router = useRouter();
 
-  // Redirect if already logged in - Total blockage of Portal page for authenticated users
+  // Redirect if already logged in - Non-blocking
   useEffect(() => {
     if (!loading && user) {
       const isAdmin = user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true || user.idNumber === '71209026';
@@ -63,18 +63,8 @@ export default function PortalPage() {
     }
   }, [user, loading, router]);
 
-  // Only show verifying screen while loading. Once loading is false, either show portal or null (if redirecting)
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-secondary/5">
-      <div className="flex flex-col items-center gap-4">
-        <Sparkles className="animate-spin text-primary" size={48} />
-        <p className="font-black text-primary uppercase text-xs tracking-widest">Verifying Session...</p>
-      </div>
-    </div>
-  );
-
-  // If user is already found after loading, return null to avoid flash of portal before redirect
-  if (user) return null;
+  // If user is already found after loading, return null while redirecting to avoid flickering
+  if (!loading && user) return null;
 
   return (
     <div className="pt-40 pb-24 min-h-screen bg-secondary/5 flex flex-col items-center">

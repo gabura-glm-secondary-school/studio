@@ -30,7 +30,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Redirect if already logged in - Immediate effect
+  // Redirect if already logged in - Silent redirect
   useEffect(() => {
     if (!userLoading && user) {
       const isAdmin = user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true || user.idNumber === '71209026';
@@ -48,16 +48,8 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
     }
   }, [role]);
 
-  if (userLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-secondary/5">
-        <Sparkles className="animate-spin text-primary" size={48} />
-      </div>
-    );
-  }
-
-  // If already logged in, don't render the form while redirecting
-  if (user) return null;
+  // If already logged in, hide content while redirecting
+  if (!userLoading && user) return null;
 
   const roleConfig: Record<string, any> = {
     student: { title: "Student Login", label: "Student ID", placeholder: "e.g. STU12345" },

@@ -44,7 +44,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
     confirmPassword: ""
   });
 
-  // Redirect if already logged in - Auth Guard
+  // Redirect if already logged in - Silent auth guard
   useEffect(() => {
     if (!userLoading && user) {
       const isAdmin = user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true || user.idNumber === '71209026';
@@ -52,16 +52,8 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
     }
   }, [user, userLoading, router]);
 
-  if (userLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-secondary/5">
-        <Sparkles className="animate-bounce text-primary" size={48} />
-      </div>
-    );
-  }
-
-  // If already logged in, don't render content
-  if (user) return null;
+  // If already logged in, hide content while redirecting
+  if (!userLoading && user) return null;
 
   const roleLabels: Record<string, any> = {
     student: { title: "Student Registration", idLabel: "Student ID", idPlaceholder: "STUXXXXX", masterList: "studentMasterList" },
