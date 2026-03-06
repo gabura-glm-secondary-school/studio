@@ -32,7 +32,7 @@ export function NewsTicker() {
     <div 
       className={cn(
         "fixed left-0 right-0 z-40 transition-all duration-300 flex justify-center px-4 pointer-events-none",
-        isScrolled ? "top-20 lg:top-24" : "top-24 lg:top-28"
+        isScrolled ? "top-[68px]" : "top-[84px]"
       )}
     >
       <div className="w-full max-w-7xl pointer-events-auto">
