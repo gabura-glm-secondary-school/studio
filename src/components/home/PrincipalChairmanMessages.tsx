@@ -14,7 +14,7 @@ export function PrincipalChairmanMessages() {
             <div className="absolute inset-0 bg-primary/10 rounded-[3rem] -rotate-3 scale-105"></div>
             <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/60">
               <Image 
-                src="https://i.postimg.cc/44LFrGMs/images-(1)-(13).jpg" 
+                src="https://i.postimg.cc/wxyG8ZdS/images-(1)-(13).jpg" 
                 alt="Principal" 
                 fill 
                 className="object-cover" 
