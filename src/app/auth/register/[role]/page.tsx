@@ -128,7 +128,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
       toast({ title: "রেজিস্ট্রেশন সফল (Success)", description: "স্বাগতম! আপনার অ্যাকাউন্টটি তৈরি হয়েছে। ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...", variant: "success" });
       
-      // Navigate immediately
+      // Navigate and ensure loader stops
       router.push(isMasterAdmin ? "/admin" : "/dashboard");
     } catch (error: any) {
       let message = "রেজিস্ট্রেশন ব্যর্থ হয়েছে।";
@@ -141,6 +141,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
       }
       
       toast({ title: "রেজিস্ট্রেশন ত্রুটি (Unsuccess)", description: message, variant: "destructive" });
+    } finally {
       setLoading(false);
     }
   };

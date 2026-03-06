@@ -87,6 +87,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
 
       toast({ title: "লগইন সফল (Success)", description: "স্বাগতম! ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...", variant: "success" });
       
+      // Navigate and stop loader
       router.push(isUserAdmin ? "/admin" : "/dashboard");
     } catch (error: any) {
       let message = "লগইন ব্যর্থ হয়েছে।";
@@ -97,6 +98,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
       }
       
       toast({ title: "লগইন ব্যর্থ (Unsuccess)", description: message, variant: "destructive" });
+    } finally {
       setLoading(false);
     }
   };
