@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Loader2, Lock, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
@@ -24,8 +25,20 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
 
   const [idNumber, setIdNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Load saved credentials on mount
+  useEffect(() => {
+    const savedId = localStorage.getItem(`gglmss_id_${role}`);
+    const savedPass = localStorage.getItem(`gglmss_pass_${role}`);
+    if (savedId && savedPass) {
+      setIdNumber(savedId);
+      setPassword(savedPass);
+      setRememberMe(true);
+    }
+  }, [role]);
 
   useEffect(() => {
     if (!auth) return;
@@ -74,6 +87,15 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
         throw new Error(`This account is registered as ${userData.role}, not authorized for ${role} portal.`);
       }
 
+      // Handle Password Reminder
+      if (rememberMe) {
+        localStorage.setItem(`gglmss_id_${role}`, idNumber);
+        localStorage.setItem(`gglmss_pass_${role}`, password);
+      } else {
+        localStorage.removeItem(`gglmss_id_${role}`);
+        localStorage.removeItem(`gglmss_pass_${role}`);
+      }
+
       toast({ title: "Login Successful", description: "Redirecting to your dashboard..." });
       
       if (isUserAdmin) {
@@ -84,9 +106,17 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
     } catch (error: any) {
       setLoading(false);
       console.error("Login error:", error);
-      let message = error.message || "Invalid credentials. Please try again.";
-      if (error.code === 'auth/user-not-found') message = "No account found with this ID.";
-      if (error.code === 'auth/wrong-password') message = "Incorrect password.";
+      let message = "Invalid credentials. Please try again.";
+      
+      if (error.code === 'auth/invalid-credential') {
+        message = "Incorrect ID or Password. If you haven't registered yet, please go to the Register tab.";
+      } else if (error.code === 'auth/user-not-found') {
+        message = "No account found with this ID.";
+      } else if (error.code === 'auth/wrong-password') {
+        message = "Incorrect password.";
+      } else {
+        message = error.message;
+      }
       
       toast({ 
         title: "Login Failed", 
@@ -166,6 +196,21 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox 
+                id="remember" 
+                checked={rememberMe} 
+                onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                className="border-primary/20 data-[state=checked]:bg-primary"
+              />
+              <label
+                htmlFor="remember"
+                className="text-xs font-black uppercase tracking-widest text-muted-foreground cursor-pointer select-none"
+              >
+                Password Reminder / তথ্য মনে রাখুন
+              </label>
             </div>
 
             <Button type="submit" disabled={loading} className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 rounded-2xl shadow-xl bg-primary hover:bg-primary/90 text-white">
