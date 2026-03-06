@@ -19,24 +19,27 @@ export function useUser() {
 
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
+        // Set basic auth info immediately to avoid delays
+        setUser(firebaseUser);
+
         if (!db) {
-          setUser(firebaseUser);
           setLoading(false);
           return;
         }
 
-        // Listen to User Profile in Firestore
+        // Listen to User Profile in Firestore for roles and additional data
         const userDocRef = doc(db, 'users', firebaseUser.uid);
         const unsubscribeDoc = onSnapshot(userDocRef, (docSnap) => {
           if (docSnap.exists()) {
             setUser({ ...firebaseUser, ...docSnap.data() });
           } else {
+            // If document doesn't exist yet, keep basic auth user
             setUser(firebaseUser);
           }
           setLoading(false);
         }, (err) => {
-          console.error("Firestore access error:", err);
-          setUser(firebaseUser); // Fallback to auth user if doc inaccessible
+          // Handle access errors silently for better UX
+          setUser(firebaseUser);
           setLoading(false);
         });
 

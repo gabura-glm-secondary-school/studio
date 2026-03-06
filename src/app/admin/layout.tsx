@@ -14,12 +14,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  // Master Admin Identification
+  // Master Admin Identification (Using Email for fastest possible detection)
   const isMasterAdmin = 
     user?.email?.includes('71209026') || 
     user?.ein === '71209026' || 
-    user?.idNumber === '71209026' ||
-    user?.uid?.length > 5; // Extra fallback check
+    user?.idNumber === '71209026';
 
   const canAccess = user && !user.disabled && (
     user.role === 'admin' || 
@@ -34,56 +33,39 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }, [user, loading, router]);
 
-  if (loading) {
+  // Bypass heavy loading screen if it's the Master Admin
+  if (loading && !isMasterAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-4">
-          <div className="relative">
-            <div className="w-16 h-16 border-4 border-primary/10 border-t-primary rounded-full animate-spin"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <ShieldAlert className="text-primary/20" size={24} />
-            </div>
-          </div>
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/40 animate-pulse">Initializing Control...</p>
+          <div className="w-12 h-12 border-4 border-primary/10 border-t-primary rounded-full animate-spin"></div>
+          <p className="text-[10px] font-black uppercase tracking-widest text-primary/40 animate-pulse">Entering System...</p>
         </div>
       </div>
     );
   }
 
-  if (!user) return null;
+  if (!user && !isMasterAdmin) return null;
 
-  // Master Bypass: If it's the specific ID, don't show "Denied" even if role isn't loaded yet
+  // Master Bypass: If it's the specific ID, show dashboard directly
   if (!canAccess && !isMasterAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#EEF3F5] p-6">
         <div className="glass-card max-w-lg w-full p-12 text-center space-y-8 !rounded-[3rem] shadow-2xl border-white relative overflow-hidden">
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-destructive/5 rounded-full blur-3xl"></div>
-          
           <div className="relative z-10">
-            <div className="w-24 h-24 bg-destructive/10 text-destructive rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 shadow-inner animate-bounce">
+            <div className="w-24 h-24 bg-destructive/10 text-destructive rounded-[2.5rem] flex items-center justify-center mx-auto mb-8">
               <ShieldAlert size={48} />
             </div>
-            
             <div className="space-y-3">
               <h1 className="text-4xl font-headline font-black text-primary tracking-tighter">অনুমতি নেই (DENIED)</h1>
               <p className="text-slate-600 font-bold leading-relaxed">
-                আপনার অ্যাকাউন্টটি অ্যাডমিন প্যানেল ব্যবহারের জন্য অনুমোদিত নয়। এটি শুধুমাত্র অনুমোদিত কর্মকর্তা ও কর্মচারীদের জন্য সংরক্ষিত।
+                আপনার অ্যাকাউন্টটি অ্যাডমিন প্যানেল ব্যবহারের জন্য অনুমোদিত নয়।
               </p>
             </div>
-
             <div className="pt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                onClick={() => router.push("/")} 
-                className="h-14 rounded-2xl px-8 bg-primary font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 transition-all gap-2"
-              >
-                <Home size={18} /> প্রচ্ছদ পাতায় ফিরে যান
-              </Button>
-              <Button 
-                variant="outline"
-                onClick={() => router.push("/auth/portal")} 
-                className="h-14 rounded-2xl px-8 border-2 border-primary/10 font-black uppercase text-xs tracking-widest hover:bg-white transition-all gap-2"
-              >
-                <ArrowLeft size={18} /> পোর্টাল লগইন
+              <Button onClick={() => router.push("/")} className="h-14 rounded-2xl px-8 bg-primary font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 transition-all">
+                <Home size={18} className="mr-2" /> প্রচ্ছদ পাতা
               </Button>
             </div>
           </div>
