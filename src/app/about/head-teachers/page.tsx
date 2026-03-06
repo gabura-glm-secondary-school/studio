@@ -24,6 +24,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
+// Personnel data simplified to only Teachers and Staff in serial order
 const personnel = [
   {
     id: "HT001",
@@ -32,12 +33,12 @@ const personnel = [
     role: "Head Teacher",
     bnRole: "প্রধান শিক্ষক",
     image: "https://i.postimg.cc/NFZ1xd04/images-(1)-(13).jpg",
-    category: "Leadership",
+    category: "Teacher",
     dept: "Administration",
     subject: "Management",
     ein: "10293",
     joiningYear: "2010",
-    bio: "A dedicated visionary leader committed to excellence in education and institutional development."
+    bio: "প্রতিষ্ঠানের সার্বিক উন্নয়ন এবং শিক্ষার্থীদের মেধা বিকাশে নিরলসভাবে কাজ করে যাচ্ছেন।"
   },
   {
     id: "AHT001",
@@ -46,19 +47,19 @@ const personnel = [
     role: "Assistant Head Teacher",
     bnRole: "সহকারী প্রধান শিক্ষক",
     image: "https://i.postimg.cc/K4XMT49J/FB-IMG-1772769776462.jpg",
-    category: "Leadership",
+    category: "Teacher",
     dept: "Academic Oversight",
     subject: "Social Science",
     ein: "10294",
     joiningYear: "2012",
-    bio: "Focusing on academic excellence and student discipline across all classes."
+    bio: "একাডেমিক শৃঙ্খলা এবং পাঠদান পদ্ধতি তদারকির দায়িত্বে নিয়োজিত।"
   },
   {
     id: "T001",
     name: "Muhammad Sirajul Islam",
     bnName: "মুহাম্মদ সিরাজুল ইসলাম",
     role: "Assistant Teacher",
-    bnRole: "সহকারী शिक्षक",
+    bnRole: "সহকারী শিক্ষক",
     image: "https://picsum.photos/seed/teacher3/400/500",
     category: "Teacher",
     dept: "Arts",
@@ -78,19 +79,6 @@ const personnel = [
     subject: "Social Science",
     ein: "10296",
     joiningYear: "2014"
-  },
-  {
-    id: "MC001",
-    name: "Gazi Nazrul Islam",
-    bnName: "গাজী নজরুল ইসলাম",
-    role: "Chairman",
-    bnRole: "সভাপতি, ম্যানেজিং কমিটি",
-    image: "https://i.postimg.cc/HsrPmKDM/FB-IMG-1772767240131.jpg",
-    category: "Committee",
-    dept: "Board",
-    subject: "Governance",
-    ein: "MP-04",
-    joiningYear: "2024"
   }
 ];
 
@@ -124,7 +112,7 @@ export default function MeetOurTeachersPage() {
   const [selectedCat, setSelectedCat] = useState("All");
   const [selectedTeacher, setSelectedTeacher] = useState<any>(null);
 
-  const categories = ["All", "Leadership", "Teacher", "Committee", "Staff"];
+  const categories = ["All", "Teacher", "Staff"];
 
   const filteredFaculty = useMemo(() => {
     const combined = [...personnel, ...staff];
@@ -144,7 +132,7 @@ export default function MeetOurTeachersPage() {
           <div className="space-y-4">
             <Link href="/about">
               <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-primary px-0 active:scale-95 transition-transform">
-                <ArrowLeft size={18} /> Back to About
+                <ArrowLeft size={18} /> সম্পর্কে ফিরে যান
               </Button>
             </Link>
             <div className="space-y-1">
@@ -170,11 +158,11 @@ export default function MeetOurTeachersPage() {
                   variant={selectedCat === cat ? "default" : "outline"}
                   onClick={() => setSelectedCat(cat)}
                   className={cn(
-                    "rounded-full h-10 px-4 text-[10px] font-black uppercase tracking-widest whitespace-nowrap",
-                    selectedCat === cat ? "bg-primary text-white" : "bg-white/50"
+                    "rounded-full h-10 px-4 text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all",
+                    selectedCat === cat ? "bg-primary text-white shadow-lg" : "bg-white/50"
                   )}
                 >
-                  {cat === 'Leadership' ? 'নেতৃত্ব' : cat === 'Teacher' ? 'শিক্ষক' : cat === 'Committee' ? 'কমিটি' : cat === 'Staff' ? 'কর্মচারী' : 'সব'}
+                  {cat === 'Teacher' ? 'শিক্ষক' : cat === 'Staff' ? 'কর্মচারী' : 'সব'}
                 </Button>
               ))}
             </div>
@@ -185,7 +173,7 @@ export default function MeetOurTeachersPage() {
           {filteredFaculty.map((teacher) => (
             <div 
               key={teacher.id} 
-              className="glass-card group hover:border-accent transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-2 hover:shadow-2xl"
+              className="glass-card group hover:border-accent transition-all duration-500 cursor-pointer overflow-hidden hover:-translate-y-2 hover:shadow-2xl bg-white/80"
               onClick={() => setSelectedTeacher(teacher)}
             >
               <div className="relative aspect-[4/5] overflow-hidden">
@@ -198,11 +186,14 @@ export default function MeetOurTeachersPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
                   <Button variant="secondary" className="w-full rounded-xl font-black uppercase tracking-widest text-[10px]">
-                    View Profile <ArrowRight size={14} className="ml-2" />
+                    প্রোফাইল দেখুন <ArrowRight size={14} className="ml-2" />
                   </Button>
                 </div>
-                <Badge className="absolute top-4 right-4 bg-white/90 text-primary font-black uppercase text-[9px] px-2 py-0.5 shadow-sm">
-                  {teacher.category}
+                <Badge className={cn(
+                  "absolute top-4 right-4 text-white font-black uppercase text-[9px] px-3 py-1 shadow-sm rounded-full",
+                  teacher.category === 'Teacher' ? 'bg-primary' : 'bg-accent text-primary'
+                )}>
+                  {teacher.category === 'Teacher' ? 'শিক্ষক' : 'কর্মচারী'}
                 </Badge>
               </div>
               <div className="p-6 space-y-4">
@@ -215,10 +206,10 @@ export default function MeetOurTeachersPage() {
                 
                 <div className="pt-4 border-t border-dashed space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase text-accent tracking-widest">{teacher.subject || 'Staff'}</span>
-                    <Badge variant="outline" className="text-[8px] font-black uppercase border-primary/20">{teacher.dept}</Badge>
+                    <span className="text-[10px] font-black uppercase text-accent tracking-widest">{teacher.subject || 'Administrative'}</span>
+                    <Badge variant="outline" className="text-[8px] font-black uppercase border-primary/20 text-primary">{teacher.dept}</Badge>
                   </div>
-                  <p className="text-[10px] font-bold text-muted-foreground italic">{teacher.bnRole}</p>
+                  <p className="text-[11px] font-bold text-primary italic leading-tight">{teacher.bnRole}</p>
                 </div>
               </div>
             </div>
@@ -230,14 +221,14 @@ export default function MeetOurTeachersPage() {
             <div className="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center mx-auto">
               <User size={48} className="text-primary/20" />
             </div>
-            <p className="text-muted-foreground font-bold uppercase tracking-widest text-xs">No records found matching your search.</p>
+            <p className="text-muted-foreground font-bold uppercase tracking-widest text-xs">আপনার খোঁজা অনুযায়ী কাউকে পাওয়া যায়নি।</p>
           </div>
         )}
       </div>
 
       {selectedTeacher && (
         <Dialog open={!!selectedTeacher} onOpenChange={() => setSelectedTeacher(null)}>
-          <DialogContent className="max-w-3xl glass-card border-none shadow-2xl p-0 overflow-hidden">
+          <DialogContent className="max-w-3xl glass-card border-none shadow-2xl p-0 overflow-hidden !rounded-[2.5rem]">
             <div className="grid md:grid-cols-2">
               <div className="relative h-80 md:h-full bg-secondary/10">
                 <Image 
@@ -254,10 +245,10 @@ export default function MeetOurTeachersPage() {
                   <X size={20} />
                 </button>
               </div>
-              <div className="p-8 md:p-12 space-y-8 max-h-[80vh] overflow-y-auto scrollbar-hide">
+              <div className="p-8 md:p-12 space-y-8 max-h-[80vh] overflow-y-auto scrollbar-hide bg-white">
                 <div className="space-y-4">
-                  <Badge className="bg-accent text-primary font-black uppercase text-[10px]">
-                    {selectedTeacher.category} Section
+                  <Badge className="bg-accent text-primary font-black uppercase text-[10px] rounded-full">
+                    {selectedTeacher.category === 'Teacher' ? 'Faculty Member' : 'Staff Member'}
                   </Badge>
                   <div className="space-y-1">
                     <h2 className="text-3xl font-headline font-black text-primary leading-tight">
@@ -269,7 +260,7 @@ export default function MeetOurTeachersPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-6 pt-4 border-t">
                   <div className="space-y-1">
                     <p className="text-[10px] font-black uppercase text-muted-foreground flex items-center gap-1">
                       <ShieldCheck size={10} className="text-accent" /> ID / EIN
@@ -286,29 +277,29 @@ export default function MeetOurTeachersPage() {
                     <p className="text-[10px] font-black uppercase text-muted-foreground flex items-center gap-1">
                       <Briefcase size={10} className="text-accent" /> Role
                     </p>
-                    <p className="font-bold text-primary">{selectedTeacher.role}</p>
+                    <p className="font-bold text-primary leading-tight">{selectedTeacher.bnRole}</p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-[10px] font-black uppercase text-muted-foreground flex items-center gap-1">
                       <GraduationCap size={10} className="text-accent" /> Specialist
                     </p>
-                    <p className="font-bold text-primary">{selectedTeacher.subject || "Academic"}</p>
+                    <p className="font-bold text-primary">{selectedTeacher.subject || "General"}</p>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-black uppercase text-[10px] text-primary tracking-widest">Biography</h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {selectedTeacher.bio || `${selectedTeacher.name} is a dedicated member of our institution serving as ${selectedTeacher.role}.`}
+                  <h4 className="font-black uppercase text-[10px] text-primary tracking-widest">Biography / মিশন</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed font-medium">
+                    {selectedTeacher.bio || `${selectedTeacher.bnName} প্রতিষ্ঠানের একজন নিবেদিতপ্রাণ সদস্য যিনি ${selectedTeacher.bnRole} হিসেবে দায়িত্ব পালন করছেন।`}
                   </p>
                 </div>
 
                 <div className="pt-6 flex gap-3">
-                  <Button className="flex-1 rounded-xl h-12 shadow-lg gap-2">
-                    <Mail size={16} /> Send Email
+                  <Button className="flex-1 rounded-2xl h-12 shadow-lg gap-2 bg-primary">
+                    <Mail size={16} /> ইমেইল পাঠান
                   </Button>
-                  <Button variant="outline" className="flex-1 rounded-xl h-12 border-2 gap-2">
-                    <Phone size={16} /> Call
+                  <Button variant="outline" className="flex-1 rounded-2xl h-12 border-2 gap-2 text-primary">
+                    <Phone size={16} /> কল করুন
                   </Button>
                 </div>
               </div>
