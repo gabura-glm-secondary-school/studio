@@ -1,0 +1,21 @@
+# **App Name**: Sundarbans Scholars
+
+## Core Features:
+
+- Dynamic Public Content Display: Serve all public-facing pages, including an interactive home page with a Sundarbans-inspired aesthetic, animated statistics, a sliding news ticker, latest notices, events, highlights, gallery preview, messages, quick links, and comprehensive contact information.
+- Comprehensive Admin Content Management: A secure, intuitive admin interface for school staff to manage dynamic content such as statistics (Total Students, Teachers, SSC Pass Rate, Years of Excellence), news ticker messages, notices, upcoming events, gallery albums and images, head teacher profiles, SSC batch details (photos, student lists, statistics), and all public-facing contact information.
+- AI-Assisted Content Creation Tool: An administrative tool leveraging generative AI to assist staff in drafting engaging announcements, school highlights, or event descriptions for the public website. This tool will ensure consistent tone and quality based on key inputs.
+- SSC Batch Directory & Detail Management: A dedicated system for visitors to browse SSC batches and view detailed pages for each, including a batch photo, student roll numbers, names, and key statistics like GPA-5 count and overall pass rate, all editable via the admin panel.
+- Anonymous Complaint Submission & Admin Review: A user-friendly front-end form for anyone (students, teachers, visitors) to submit complaints with an optional anonymity feature, coupled with a secure admin dashboard to efficiently review, categorize, update the status, and manage all submitted complaints.
+- SSC Board Result Checker: A front-end tool allowing students to check their SSC examination results by securely inputting their roll number, board, and year. The results data will be manageable and updatable by administrators in the backend.
+- Premium Responsive & Interactive UI: Implementation of a modern, mobile-first design language featuring smooth, elegant animations, contemporary glassmorphism cards for content, subtle soft gradients, responsive layouts, and sophisticated hover effects to create a visually stunning and highly professional user experience.
+
+## Style Guidelines:
+
+- Primary color: A sophisticated deep green-blue (#2D5A69) reminiscent of tranquil Sundarbans waters and lush foliage, selected to evoke a sense of professionalism and serenity within a light scheme. This color ensures clear contrast against lighter backgrounds while maintaining a premium feel.
+- Background color: A heavily desaturated, very light cool gray (#EEF3F5), subtly reflecting the primary hue. This creates a clean, airy, and professional canvas that enhances readability and accentuates UI elements, aligning with the light color scheme.
+- Accent color: A vibrant yet elegant aqua (#20DFD4). This analogous hue, distinct from the primary in saturation and brightness, serves to highlight calls to action and important interactive elements, adding a fresh, energetic touch, much like dappled light on water.
+- Headline font: 'Poppins', a geometric sans-serif, chosen for its contemporary, precise, and stylish aesthetic, ideal for making headlines stand out while maintaining a premium feel. Body font: 'Inter', a grotesque-style sans-serif, providing excellent readability and a modern, objective look for longer texts.
+- Crisp, minimalist line-based icons for clarity and modernity. Where appropriate, subtle abstract elements inspired by Sundarbans nature (e.g., stylized waves, leaves) can be integrated to reinforce the theme without compromising professionalism or visual cleanliness.
+- A mobile-first, grid-based layout emphasizing ample whitespace to ensure a clean, uncluttered interface. Content will be presented within elegant glassmorphism cards featuring soft gradients and rounded corners, ensuring responsiveness across all device sizes and promoting ease of navigation.
+- Smooth, subtle animations will enhance user interaction and provide visual delight. This includes scroll-triggered animations for elements like the statistics section, a continuously sliding news ticker, and delicate hover effects on interactive components such as buttons and cards, creating a fluid and engaging user experience.

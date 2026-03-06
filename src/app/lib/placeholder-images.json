@@ -1,0 +1,46 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "Sundarbans landscape with lush green trees and water",
+      "imageUrl": "https://picsum.photos/seed/sundar1/1920/1080",
+      "imageHint": "sundarbans forest"
+    },
+    {
+      "id": "school-building",
+      "description": "A modern school building exterior",
+      "imageUrl": "https://picsum.photos/seed/school1/800/600",
+      "imageHint": "school building"
+    },
+    {
+      "id": "principal",
+      "description": "Portrait of a distinguished academic professional",
+      "imageUrl": "https://picsum.photos/seed/principal1/400/500",
+      "imageHint": "professor portrait"
+    },
+    {
+      "id": "chairman",
+      "description": "Portrait of a professional community leader",
+      "imageUrl": "https://picsum.photos/seed/chairman1/400/500",
+      "imageHint": "professional man"
+    },
+    {
+      "id": "gallery-1",
+      "description": "Students celebrating at a school event",
+      "imageUrl": "https://picsum.photos/seed/event1/600/400",
+      "imageHint": "school event"
+    },
+    {
+      "id": "gallery-2",
+      "description": "School sports competition",
+      "imageUrl": "https://picsum.photos/seed/event2/600/400",
+      "imageHint": "school sports"
+    },
+    {
+      "id": "gallery-3",
+      "description": "Classroom environment",
+      "imageUrl": "https://picsum.photos/seed/event3/600/400",
+      "imageHint": "classroom"
+    }
+  ]
+}
