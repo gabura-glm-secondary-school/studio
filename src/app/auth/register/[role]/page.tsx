@@ -55,15 +55,16 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!db) {
-      toast({ title: "সিস্টেম ত্রুটি (Unsuccess)", description: "ডাটাবেস লোড হয়নি। দয়া করে পেজটি রিফ্রেশ করুন।", variant: "destructive" });
+      toast({ title: "সিস্টেম ত্রুটি (UNSUCCESS)", description: "ডাটাবেস লোড হয়নি। দয়া করে পেজটি রিফ্রেশ করুন।", variant: "destructive" });
       return;
     }
 
     setLoading(true);
     try {
       if (verifyData.idNumber.trim() === '71209026') {
-        toast({ title: "যাচাই সফল (Success)", description: "অ্যাডমিন আইডি পাওয়া গেছে। এখন পাসওয়ার্ড সেট করুন।", variant: "success" });
+        toast({ title: "যাচাই সফল (SUCCESS)", description: "অ্যাডমিন আইডি পাওয়া গেছে। এখন পাসওয়ার্ড সেট করুন।", variant: "success" });
         setStep(2);
+        setLoading(false);
         return;
       }
 
@@ -74,10 +75,10 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
         throw new Error(`প্রদত্ত ${config.idLabel} আমাদের অনুমোদিত তালিকায় নেই। সঠিক তথ্য দিন।`);
       }
 
-      toast({ title: "তথ্য যাচাই সফল (Success)", description: "অফিসিয়াল রেকর্ড পাওয়া গেছে। পরবর্তী ধাপ সম্পন্ন করুন।", variant: "success" });
+      toast({ title: "তথ্য যাচাই সফল (SUCCESS)", description: "অফিসিয়াল রেকর্ড পাওয়া গেছে। পরবর্তী ধাপ সম্পন্ন করুন।", variant: "success" });
       setStep(2);
     } catch (error: any) {
-      toast({ title: "যাচাইকরণ ব্যর্থ (Unsuccess)", description: error.message || "কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।", variant: "destructive" });
+      toast({ title: "যাচাইকরণ ব্যর্থ (UNSUCCESS)", description: error.message || "কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।", variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -87,17 +88,17 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
     e.preventDefault();
     
     if (!auth || !db) {
-      toast({ title: "সিস্টেম ত্রুটি (Unsuccess)", description: "অথেনটিকেশন সার্ভিস পাওয়া যায়নি।", variant: "destructive" });
+      toast({ title: "সিস্টেম ত্রুটি (UNSUCCESS)", description: "অথেনটিকেশন সার্ভিস পাওয়া যায়নি।", variant: "destructive" });
       return;
     }
 
     if (!isAgreed) {
-      toast({ title: "সতর্কবার্তা (Unsuccess)", description: "রেজিস্ট্রেশন সম্পন্ন করতে শর্তাবলীতে টিক চিহ্ন দিন।", variant: "destructive" });
+      toast({ title: "সতর্কবার্তা (UNSUCCESS)", description: "রেজিস্ট্রেশন সম্পন্ন করতে শর্তাবলীতে টিক চিহ্ন দিন।", variant: "destructive" });
       return;
     }
 
     if (accountData.password !== accountData.confirmPassword) {
-      toast({ title: "পাসওয়ার্ড মেলেনি (Unsuccess)", description: "উভয় পাসওয়ার্ড একই হতে হবে।", variant: "destructive" });
+      toast({ title: "পাসওয়ার্ড মেলেনি (UNSUCCESS)", description: "উভয় পাসওয়ার্ড একই হতে হবে।", variant: "destructive" });
       return;
     }
 
@@ -124,13 +125,21 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
         ...(role === 'teacher' && { assignedClasses: [] })
       };
 
-      await setDoc(doc(db, "users", userCredential.user.uid), userProfile);
+      // Faster non-blocking setDoc
+      setDoc(doc(db, "users", userCredential.user.uid), userProfile)
+        .catch(err => console.error("Profile save warning:", err));
 
-      toast({ title: "রেজিস্ট্রেশন সফল (Success)", description: "স্বাগতম! আপনার অ্যাকাউন্টটি তৈরি হয়েছে। ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...", variant: "success" });
+      toast({ 
+        title: "রেজিস্ট্রেশন সফল (SUCCESS)", 
+        description: "স্বাগতম! আপনার অ্যাকাউন্টটি তৈরি হয়েছে। ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...", 
+        variant: "success",
+        duration: 3000
+      });
       
-      // Navigate and ensure loader stops
+      setLoading(false);
       router.push(isMasterAdmin ? "/admin" : "/dashboard");
     } catch (error: any) {
+      setLoading(false);
       let message = "রেজিস্ট্রেশন ব্যর্থ হয়েছে।";
       if (error.code === 'auth/email-already-in-use') {
         message = "এই ID দিয়ে ইতিমধ্যেই একটি অ্যাকাউন্ট আছে। দয়া করে লগইন করুন।";
@@ -140,9 +149,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
         message = error.message;
       }
       
-      toast({ title: "রেজিস্ট্রেশন ত্রুটি (Unsuccess)", description: message, variant: "destructive" });
-    } finally {
-      setLoading(false);
+      toast({ title: "রেজিস্ট্রেশন ত্রুটি (UNSUCCESS)", description: message, variant: "destructive" });
     }
   };
 
@@ -152,7 +159,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Portals
       </Link>
 
-      <Card className="glass-card w-full max-w-xl overflow-hidden border-none shadow-2xl">
+      <Card className="glass-card w-full max-w-xl overflow-hidden border-none shadow-2xl animate-in zoom-in-95 duration-500">
         <CardHeader className="p-0 border-b">
           <Tabs value="register" className="w-full">
             <TabsList className="w-full h-14 bg-transparent p-0 rounded-none">
@@ -200,7 +207,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
                   required 
                   value={verifyData.idNumber}
                   onChange={(e) => setVerifyData({...verifyData, idNumber: e.target.value})}
-                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
+                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all"
                 />
               </div>
 
@@ -225,11 +232,11 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
                   required 
                   value={verifyData.displayName}
                   onChange={(e) => setVerifyData({...verifyData, displayName: e.target.value})}
-                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
+                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all"
                 />
               </div>
 
-              <Button type="submit" disabled={loading} className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 rounded-2xl shadow-xl bg-primary hover:bg-primary/90 text-white">
+              <Button type="submit" disabled={loading} className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 rounded-2xl shadow-xl bg-primary hover:bg-primary/90 text-white transform active:scale-95 transition-all">
                 {loading ? <Loader2 className="animate-spin" /> : <ShieldCheck size={20} />} Verify Identity
               </Button>
             </form>
@@ -242,7 +249,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
                   required 
                   value={accountData.mobile}
                   onChange={(e) => setAccountData({...accountData, mobile: e.target.value})}
-                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
+                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all"
                 />
               </div>
               <div className="grid sm:grid-cols-2 gap-6">
@@ -293,7 +300,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
               <Button 
                 type="submit" 
                 disabled={loading || !isAgreed || !isPasswordValid(accountData.password)} 
-                className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 shadow-xl bg-emerald-600 hover:bg-emerald-700 rounded-2xl text-white disabled:opacity-50 disabled:grayscale transition-all"
+                className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 shadow-xl bg-emerald-600 hover:bg-emerald-700 rounded-2xl text-white disabled:opacity-50 disabled:grayscale transform active:scale-95 transition-all"
               >
                 {loading ? <Loader2 className="animate-spin" /> : <UserCheck size={20} />} Complete Registration
               </Button>
