@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, use } from "react";
@@ -56,7 +57,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
     setLoading(true);
     try {
       // Special check for master admin EIN
-      if (verifyData.idNumber.trim() === '26200920') {
+      if (verifyData.idNumber.trim() === '71209026') {
         toast({ 
           title: "যাচাই সফল (Success)", 
           description: "অ্যাডমিন আইডি পাওয়া গেছে। এখন পাসওয়ার্ড সেট করুন।",
@@ -108,7 +109,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
       const virtualEmail = `${verifyData.idNumber.trim().toLowerCase()}@gglmss.edu.bd`;
       const userCredential = await createUserWithEmailAndPassword(auth, virtualEmail, accountData.password.trim());
       
-      const isMasterAdmin = verifyData.idNumber.trim() === '26200920';
+      const isMasterAdmin = verifyData.idNumber.trim() === '71209026';
 
       const userProfile = {
         uid: userCredential.user.uid,

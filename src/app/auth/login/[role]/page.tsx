@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, use } from "react";
@@ -41,7 +42,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const roleConfig: Record<string, any> = {
     student: { title: "Student Login", label: "Student ID", placeholder: "e.g. STU12345" },
     teacher: { title: "Teacher Login", label: "EIN Number", placeholder: "e.g. EIN98765" },
-    staff: { title: "Staff Login", label: "EIN Number", placeholder: "e.g. 26200920" },
+    staff: { title: "Staff Login", label: "EIN Number", placeholder: "e.g. 71209026" },
     external: { title: "External Login", label: "Identification", placeholder: "Mobile/NID" },
   };
 
@@ -51,7 +52,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
     e.preventDefault();
     if (!auth || !db) {
       toast({ 
-        title: "সিস্টেম ত্রুটি", 
+        title: "সিস্টেম ত্রুটি (Unsuccess)", 
         description: "ফায়ারবেস লোড হতে ব্যর্থ হয়েছে। পেজটি রিফ্রেশ করুন।", 
         variant: "destructive" 
       });
@@ -105,7 +106,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
     } catch (error: any) {
       let message = "লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।";
       
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/invalid-email' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
         message = "আপনার ID অথবা পাসওয়ার্ড ভুল। আপনি যদি আগে একাউন্ট তৈরি না করে থাকেন, তবে REGISTER ট্যাবে গিয়ে রেজিস্ট্রেশন করুন।";
       } else if (error.message) {
         message = error.message;
