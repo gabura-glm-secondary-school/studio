@@ -24,6 +24,28 @@
       },
       "required": ["uid", "role", "status"]
     },
+    "SchoolNotice": {
+      "title": "School Notice",
+      "description": "Notices for students and staff.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "content": { "type": "string" },
+        "type": { "type": "string", "enum": ["important", "exam", "holiday", "admission", "general"] },
+        "category": { "type": "string", "enum": ["main", "teacher"] },
+        "publishedAt": { "type": "string", "format": "date-time" },
+        "isPinned": { "type": "boolean" },
+        "isActive": { "type": "boolean" },
+        "attachmentUrl": { "type": "string" },
+        "attachmentName": { "type": "string" },
+        "attachmentSize": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorId": { "type": "string" },
+        "targetClasses": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["title", "type", "category", "publishedAt"]
+    },
     "AttendanceRecord": {
       "title": "Attendance Record",
       "type": "object",
@@ -56,111 +78,6 @@
         "status": { "type": "string", "enum": ["done", "not_done"] },
         "updatedAt": { "type": "string", "format": "date-time" }
       }
-    },
-    "TeacherRating": {
-      "title": "Teacher Rating of Student",
-      "type": "object",
-      "properties": {
-        "teacherId": { "type": "string" },
-        "studentId": { "type": "string" },
-        "rating": { "type": "number" },
-        "month": { "type": "string" },
-        "year": { "type": "string" }
-      }
-    },
-    "ClassRoutine": {
-      "title": "Class Routine",
-      "type": "object",
-      "properties": {
-        "class": { "type": "string" },
-        "day": { "type": "string" },
-        "slots": { 
-          "type": "array", 
-          "items": { 
-            "type": "object",
-            "properties": {
-              "time": { "type": "string" },
-              "subject": { "type": "string" },
-              "teacher": { "type": "string" }
-            }
-          }
-        }
-      }
-    },
-    "CalendarEvent": {
-      "title": "Calendar Event / Holiday",
-      "type": "object",
-      "properties": {
-        "title": { "type": "string" },
-        "date": { "type": "string", "format": "date" },
-        "type": { "type": "string", "enum": ["govt_holiday", "school_holiday", "event"] }
-      }
-    },
-    "LibraryMaterial": {
-      "title": "Library Material",
-      "type": "object",
-      "properties": {
-        "title": { "type": "string" },
-        "category": { "type": "string" },
-        "fileUrl": { "type": "string" },
-        "description": { "type": "string" }
-      }
-    },
-    "Quiz": {
-      "title": "Online Quiz",
-      "type": "object",
-      "properties": {
-        "title": { "type": "string" },
-        "subject": { "type": "string" },
-        "questions": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "q": { "type": "string" },
-              "options": { "type": "array", "items": { "type": "string" } },
-              "correct": { "type": "number" }
-            }
-          }
-        }
-      }
-    },
-    "StudentRecord": {
-      "title": "Pre-verified Student Record",
-      "type": "object",
-      "properties": {
-        "studentId": { "type": "string" },
-        "rollNumber": { "type": "string" },
-        "class": { "type": "string" },
-        "section": { "type": "string" },
-        "name": { "type": "string" },
-        "guardianPhone": { "type": "string" },
-        "isRegistered": { "type": "boolean" }
-      }
-    },
-    "TeacherRecord": {
-      "title": "Pre-verified Teacher Record",
-      "type": "object",
-      "properties": {
-        "teacherId": { "type": "string" },
-        "ein": { "type": "string" },
-        "name": { "type": "string" },
-        "subject": { "type": "string" },
-        "designation": { "type": "string" },
-        "tempPassword": { "type": "string" },
-        "isRegistered": { "type": "boolean" }
-      }
-    },
-    "RecoveryRequest": {
-      "title": "Account Recovery Request",
-      "type": "object",
-      "properties": {
-        "idNumber": { "type": "string" },
-        "role": { "type": "string" },
-        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
-        "tempPassword": { "type": "string" },
-        "requestedAt": { "type": "string", "format": "date-time" }
-      }
     }
   },
   "auth": {
@@ -171,49 +88,13 @@
       "schema": { "$ref": "#/backend/entities/UserProfile" },
       "description": "User profile data."
     },
+    "/notices/{noticeId}": {
+      "schema": { "$ref": "#/backend/entities/SchoolNotice" },
+      "description": "Official school and teacher notices."
+    },
     "/attendance/{recordId}": {
       "schema": { "$ref": "#/backend/entities/AttendanceRecord" },
       "description": "Daily attendance logs."
-    },
-    "/homework/{homeworkId}": {
-      "schema": { "$ref": "#/backend/entities/Homework" },
-      "description": "Homework assignments."
-    },
-    "/homework_status/{statusId}": {
-      "schema": { "$ref": "#/backend/entities/HomeworkStatus" },
-      "description": "Individual student homework completion status."
-    },
-    "/teacher_ratings/{ratingId}": {
-      "schema": { "$ref": "#/backend/entities/TeacherRating" },
-      "description": "Monthly student ratings by teachers."
-    },
-    "/routines/{routineId}": {
-      "schema": { "$ref": "#/backend/entities/ClassRoutine" },
-      "description": "Class schedules."
-    },
-    "/calendar/{entryId}": {
-      "schema": { "$ref": "#/backend/entities/CalendarEvent" },
-      "description": "Holidays and events."
-    },
-    "/library/{itemId}": {
-      "schema": { "$ref": "#/backend/entities/LibraryMaterial" },
-      "description": "Digital library resources."
-    },
-    "/quizzes/{quizId}": {
-      "schema": { "$ref": "#/backend/entities/Quiz" },
-      "description": "Online MCQ quizzes."
-    },
-    "/student_records/{recordId}": {
-      "schema": { "$ref": "#/backend/entities/StudentRecord" },
-      "description": "Pre-verification student data."
-    },
-    "/teacher_records/{recordId}": {
-      "schema": { "$ref": "#/backend/entities/TeacherRecord" },
-      "description": "Pre-verification teacher data."
-    },
-    "/recovery_requests/{requestId}": {
-      "schema": { "$ref": "#/backend/entities/RecoveryRequest" },
-      "description": "Account recovery requests."
     }
   }
 }

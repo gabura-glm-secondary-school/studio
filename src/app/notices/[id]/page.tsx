@@ -1,3 +1,4 @@
+
 "use client";
 
 import { use, useState } from "react";
@@ -11,17 +12,21 @@ import {
   Printer, 
   FileText,
   Bookmark,
-  ChevronRight
+  ChevronRight,
+  User,
+  ShieldCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const mockNotices = [
   { 
     id: "1", 
     title: "SSC 2025 Test Examination Schedule published", 
     date: "Oct 12, 2024", 
+    type: "exam",
     category: "Academic",
     content: `This is to inform all students of Class 10 that the SSC 2025 Test Examination schedule has been officially published by the academic committee. 
 
@@ -33,9 +38,30 @@ Key Instructions:
 
 Detailed routine is attached below in the PDF version. Please ensure all dues are cleared before collecting admit cards.`,
     author: "Academic Coordinator",
+    authorRole: "School Administration",
     files: [{ name: "SSC_Test_Routine_2025.pdf", size: "1.2 MB" }]
   },
-  // Adding logic to handle dynamic IDs based on the mock data
+  {
+    id: "t1",
+    title: "Physics Assignment Submission Reminder",
+    teacher: "Md. Asaduzzaman",
+    classes: ["9", "10"],
+    date: "Oct 11, 2024",
+    type: "important",
+    category: "Academic Update",
+    content: `Dear students of Class 9 and 10,
+
+Please be reminded that the final submission date for your Physics Lab Reports (Chapter 4 & 5) is this Thursday, October 14th. 
+
+Reports should be neatly presented in the standard school practical notebook. Late submissions will result in a 20% mark deduction.
+
+- Topic: Work, Power and Energy Practical
+- Submission Venue: Physics Lab 1
+- Time: Before 2:00 PM`,
+    author: "Md. Asaduzzaman",
+    authorRole: "Assistant Teacher (ICT & Physics)",
+    files: []
+  }
 ];
 
 export default function NoticeDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -47,9 +73,11 @@ export default function NoticeDetailPage({ params }: { params: Promise<{ id: str
     id: id,
     title: "Notice Not Found",
     date: new Date().toLocaleDateString(),
+    type: "general",
     category: "General",
     content: "The requested notice could not be found or has been removed from the directory.",
     author: "System Administrator",
+    authorRole: "IT Department",
     files: []
   };
 
@@ -82,8 +110,11 @@ export default function NoticeDetailPage({ params }: { params: Promise<{ id: str
         <Card className="glass-card border-none shadow-2xl overflow-hidden">
           <CardHeader className="bg-primary/5 p-8 md:p-12 border-b border-dashed border-primary/20 space-y-6">
             <div className="flex items-center gap-4">
-              <Badge className="bg-accent text-primary uppercase font-black text-[10px] px-3 py-1">
-                {notice.category}
+              <Badge className={cn(
+                "uppercase font-black text-[10px] px-3 py-1",
+                notice.type === 'important' ? 'bg-rose-500' : 'bg-accent text-primary'
+              )}>
+                {notice.type}
               </Badge>
               <div className="flex items-center gap-2 text-muted-foreground text-xs font-bold uppercase tracking-widest">
                 <Calendar size={14} className="text-primary" /> {notice.date}
@@ -92,13 +123,13 @@ export default function NoticeDetailPage({ params }: { params: Promise<{ id: str
             <h1 className="text-3xl md:text-5xl font-headline font-black text-primary leading-tight">
               {notice.title}
             </h1>
-            <div className="flex items-center gap-3 pt-2">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black">
-                {notice.author[0]}
+            <div className="flex items-center gap-4 pt-4 border-t border-primary/10">
+              <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm border border-primary/5">
+                <User size={24} />
               </div>
               <div>
                 <p className="text-sm font-black text-primary uppercase leading-none">{notice.author}</p>
-                <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-tighter">Gabura G.L.M Secondary School</p>
+                <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-tighter mt-1">{notice.authorRole}</p>
               </div>
             </div>
           </CardHeader>
@@ -108,8 +139,8 @@ export default function NoticeDetailPage({ params }: { params: Promise<{ id: str
             </div>
 
             {/* Attachments */}
-            {notice.files.length > 0 && (
-              <div className="space-y-4">
+            {notice.files && notice.files.length > 0 && (
+              <div className="space-y-4 pt-8 border-t border-dashed">
                 <h3 className="font-headline font-black text-primary flex items-center gap-2">
                   <FileText size={20} className="text-accent" /> Attachments & Downloads
                 </h3>
@@ -134,15 +165,15 @@ export default function NoticeDetailPage({ params }: { params: Promise<{ id: str
               </div>
             )}
 
-            <div className="pt-8 border-t flex flex-wrap gap-4 items-center justify-between">
+            <div className="pt-8 flex flex-wrap gap-4 items-center justify-between">
               <div className="flex gap-4">
                 <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-primary">
                   <Printer size={16} /> Print Notice
                 </Button>
               </div>
-              <p className="text-[10px] text-muted-foreground font-bold italic">
-                * This is a digitally generated notice for Gabura G.L.M Secondary School.
-              </p>
+              <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-bold italic">
+                <ShieldCheck size={14} className="text-emerald-500" /> Official GGLMSS Digital Document
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -155,7 +186,7 @@ export default function NoticeDetailPage({ params }: { params: Promise<{ id: str
               <Link key={related.id} href={`/notices/${related.id}`}>
                 <div className="glass-card p-6 hover:border-accent transition-all group h-full flex flex-col justify-between">
                   <div className="space-y-2">
-                    <Badge variant="outline" className="text-[9px] uppercase font-black">{related.category}</Badge>
+                    <Badge variant="outline" className="text-[9px] uppercase font-black">{related.type}</Badge>
                     <h4 className="font-bold text-primary leading-tight group-hover:text-accent transition-colors">{related.title}</h4>
                   </div>
                   <div className="flex items-center justify-between mt-4">
@@ -171,5 +202,3 @@ export default function NoticeDetailPage({ params }: { params: Promise<{ id: str
     </div>
   );
 }
-
-import { cn } from "@/lib/utils";

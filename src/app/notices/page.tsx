@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { 
   Bell, 
@@ -10,67 +11,113 @@ import {
   ChevronRight, 
   ArrowLeft,
   Filter,
-  Download
+  Download,
+  Pin,
+  User,
+  GraduationCap,
+  Sparkles,
+  LayoutGrid
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { useUser } from "@/firebase";
 
-const mockNotices = [
+const mockMainNotices = [
   { 
     id: "1", 
-    title: "SSC 2025 Test Examination Schedule published", 
+    title: "SSC 2025 Test Examination Schedule Published", 
     date: "Oct 12, 2024", 
-    category: "Academic",
-    description: "The schedule for the upcoming SSC 2025 Test Examination has been finalized. All students are requested to collect their admit cards from the office."
+    type: "exam", 
+    category: "main",
+    isPinned: true,
+    description: "The schedule for the upcoming SSC 2025 Test Examination has been finalized. All students are requested to collect their admit cards from the office.",
+    hasAttachment: true,
+    attachmentName: "SSC_Routine_2025.pdf"
   },
   { 
     id: "2", 
-    title: "Annual Sports Day Registration starts tomorrow", 
+    title: "Annual Sports Day Registration Starts Tomorrow", 
     date: "Oct 10, 2024", 
-    category: "Events",
-    description: "Registration for the Annual Sports Day 2024 will begin from tomorrow. Students can sign up for various events including 100m sprint, long jump, and relay races."
+    type: "important", 
+    category: "main",
+    isPinned: false,
+    description: "Registration for the Annual Sports Day 2024 will begin from tomorrow. Students can sign up for various events including 100m sprint and long jump."
   },
   { 
     id: "3", 
-    title: "Class 6 Admission process and requirements", 
+    title: "Class 6 Admission Process 2025", 
     date: "Oct 08, 2024", 
-    category: "Admission",
-    description: "Admission for the academic year 2025 for Class 6 is now open. Please check the detailed requirements and collect forms from the administrative block."
-  },
-  { 
-    id: "4", 
-    title: "Half-yearly holiday announcement for students", 
-    date: "Oct 05, 2024", 
-    category: "Holiday",
-    description: "The school will remain closed for half-yearly holidays from October 15th to October 22nd. Classes will resume as per regular schedule from October 23rd."
-  },
-  { 
-    id: "5", 
-    title: "Parent-Teacher Meeting for Class 9 & 10", 
-    date: "Oct 01, 2024", 
-    category: "Meeting",
-    description: "A mandatory Parent-Teacher Meeting will be held this Saturday for Class 9 and 10 students to discuss academic progress and preparation for board exams."
+    type: "admission", 
+    category: "main",
+    isPinned: false,
+    description: "Admission for the academic year 2025 for Class 6 is now open. Please check the detailed requirements and collect forms."
   },
 ];
 
-const categories = ["All", "Academic", "Events", "Admission", "Holiday", "Meeting"];
+const mockTeacherNotices = [
+  {
+    id: "t1",
+    title: "Physics Assignment Submission Reminder",
+    teacher: "Md. Asaduzzaman",
+    classes: ["9", "10"],
+    date: "Oct 11, 2024",
+    type: "important",
+    category: "teacher",
+    description: "Students of class 9 and 10 are reminded to submit their Physics lab reports by this Thursday. Late submissions will not be accepted."
+  },
+  {
+    id: "t2",
+    title: "Math Special Class for Class 10-A",
+    teacher: "Sushanta Kumar Mondal",
+    classes: ["10"],
+    date: "Oct 09, 2024",
+    type: "general",
+    category: "teacher",
+    description: "A special mathematics remedial class will be held on Saturday at 10:00 AM in Room 204. Attendance is mandatory for group A."
+  }
+];
 
 export default function NoticeBoardPage() {
+  const { user } = useUser();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedType, setSelectedCategory] = useState("all");
+  const [selectedClass, setSelectedClass] = useState("all");
 
-  const filteredNotices = mockNotices.filter(notice => {
-    const matchesSearch = notice.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "All" || notice.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+  const filteredMain = mockMainNotices.filter(n => {
+    const matchesSearch = n.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesType = selectedType === "all" || n.type === selectedType;
+    return matchesSearch && matchesType;
   });
+
+  const filteredTeacher = mockTeacherNotices.filter(n => {
+    const matchesSearch = n.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesClass = selectedClass === "all" || n.classes.includes(selectedClass);
+    const matchesType = selectedType === "all" || n.type === selectedType;
+    
+    // Student sees only their class
+    if (user?.role === 'student' && user?.class) {
+      return matchesSearch && matchesType && n.classes.includes(user.class);
+    }
+    
+    return matchesSearch && matchesType && matchesClass;
+  });
+
+  const pinnedNotice = mockMainNotices.find(n => n.isPinned);
 
   return (
     <div className="pt-32 pb-24 min-h-screen bg-secondary/5">
-      <div className="max-w-5xl mx-auto px-4 space-y-12">
+      <div className="max-w-6xl mx-auto px-4 space-y-12">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-4">
@@ -80,106 +127,198 @@ export default function NoticeBoardPage() {
               </Button>
             </Link>
             <div className="space-y-1">
-              <span className="text-accent font-black uppercase tracking-[0.2em] text-[10px]">Official Bulletins</span>
-              <h1 className="text-4xl font-headline font-black text-primary flex items-center gap-3">
-                <Bell className="text-accent" /> নোটিশ বোর্ড
-              </h1>
+              <span className="text-accent font-black uppercase tracking-[0.2em] text-[10px] flex items-center gap-2">
+                <Bell size={12} /> Official Bulletins
+              </span>
+              <h1 className="text-4xl font-headline font-black text-primary">নোটিশ বোর্ড</h1>
             </div>
           </div>
           
-          <div className="relative max-w-sm w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-            <Input 
-              placeholder="নোটিশ খুঁজুন..." 
-              className="pl-10 h-12 bg-white border-border rounded-2xl shadow-sm"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+            <div className="relative flex-1 md:w-64 min-w-[200px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+              <Input 
+                placeholder="নোটিশ খুঁজুন..." 
+                className="pl-10 h-12 bg-white border-border rounded-2xl shadow-sm"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <Select value={selectedType} onValueChange={setSelectedCategory}>
+              <SelectTrigger className="w-[140px] h-12 rounded-2xl bg-white border-border">
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="important">Important</SelectItem>
+                <SelectItem value="exam">Exam</SelectItem>
+                <SelectItem value="holiday">Holiday</SelectItem>
+                <SelectItem value="admission">Admission</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
-        {/* Categories Filter */}
-        <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
-          {categories.map((cat) => (
-            <Button
-              key={cat}
-              variant={selectedCategory === cat ? "default" : "outline"}
-              onClick={() => setSelectedCategory(cat)}
-              className={cn(
-                "rounded-full h-10 px-6 text-xs font-bold uppercase tracking-widest transition-all shrink-0",
-                selectedCategory === cat ? "shadow-lg bg-primary" : "bg-white/50 border-white/40"
+        {/* Latest Important Notice Highlight */}
+        {pinnedNotice && (
+          <Card className="glass-card border-none bg-primary text-white overflow-hidden relative group">
+            <div className="absolute top-0 right-0 p-12 opacity-5 rotate-12 scale-150 group-hover:rotate-0 transition-transform duration-700">
+              <Sparkles size={120} />
+            </div>
+            <CardContent className="p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 relative z-10">
+              <div className="w-20 h-20 bg-accent text-primary rounded-[2rem] flex items-center justify-center shrink-0 shadow-xl shadow-black/20">
+                <Pin size={32} fill="currentColor" />
+              </div>
+              <div className="flex-1 text-center md:text-left space-y-4">
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                  <Badge className="bg-accent text-primary font-black uppercase text-[10px] px-3">Latest Important Notice</Badge>
+                  <span className="text-[10px] font-bold opacity-60 uppercase tracking-widest">{pinnedNotice.date}</span>
+                </div>
+                <h2 className="text-2xl md:text-4xl font-headline font-black leading-tight">
+                  {pinnedNotice.title}
+                </h2>
+                <p className="text-white/70 text-sm md:text-base max-w-2xl line-clamp-2">
+                  {pinnedNotice.description}
+                </p>
+                <div className="flex gap-4 justify-center md:justify-start pt-2">
+                  <Button asChild className="bg-white text-primary hover:bg-accent font-black rounded-xl px-8 h-12 shadow-lg">
+                    <Link href={`/notices/${pinnedNotice.id}`}>Read More</Link>
+                  </Button>
+                  {pinnedNotice.hasAttachment && (
+                    <Button variant="outline" className="border-white/20 hover:bg-white/10 rounded-xl px-6 h-12">
+                      <Download size={18} className="mr-2" /> Download Routine
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        <Tabs defaultValue="main" className="space-y-8">
+          <TabsList className="bg-white/50 p-1 border rounded-full h-auto flex gap-2 justify-start md:justify-center w-fit mx-auto shadow-sm">
+            <TabsTrigger value="main" className="rounded-full px-8 py-3 font-bold data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
+              <LayoutGrid size={16} className="mr-2" /> Main Notice Board
+            </TabsTrigger>
+            <TabsTrigger value="teacher" className="rounded-full px-8 py-3 font-bold data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
+              <User size={16} className="mr-2" /> Teacher Notices
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="main" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="grid gap-6">
+              {filteredMain.map((notice) => (
+                <NoticeCard key={notice.id} notice={notice} />
+              ))}
+              {filteredMain.length === 0 && <EmptyNotices />}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="teacher" className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                {user?.role === 'student' ? `Notices for Class ${user.class}` : "Class-specific academic updates"}
+              </p>
+              {user?.role !== 'student' && (
+                <Select value={selectedClass} onValueChange={setSelectedClass}>
+                  <SelectTrigger className="w-[140px] h-10 rounded-xl bg-white border-border">
+                    <SelectValue placeholder="Select Class" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Classes</SelectItem>
+                    {["6", "7", "8", "9", "10"].map(c => (
+                      <SelectItem key={c} value={c}>Class {c}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               )}
-            >
-              {cat}
-            </Button>
-          ))}
-        </div>
-
-        {/* Notices List */}
-        <div className="space-y-4">
-          {filteredNotices.map((notice) => (
-            <Link key={notice.id} href={`/notices/${notice.id}`} className="group block">
-              <Card className="glass-card hover:border-accent transition-all duration-300 overflow-hidden">
-                <CardContent className="p-0">
-                  <div className="flex flex-col sm:flex-row items-stretch">
-                    <div className="p-6 sm:w-48 bg-primary/5 flex flex-col justify-center items-center text-center border-b sm:border-b-0 sm:border-r border-dashed border-primary/20">
-                      <Calendar className="text-primary mb-2" size={24} />
-                      <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest leading-tight">Published On</p>
-                      <p className="font-bold text-primary text-sm">{notice.date}</p>
-                    </div>
-                    <div className="p-8 flex-1 space-y-4 relative">
-                      <div className="flex items-center gap-3">
-                        <Badge className="bg-accent text-primary uppercase font-black text-[9px]">
-                          {notice.category}
-                        </Badge>
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
-                      </div>
-                      <h3 className="text-xl md:text-2xl font-headline font-bold text-primary group-hover:text-accent transition-colors leading-tight">
-                        {notice.title}
-                      </h3>
-                      <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed">
-                        {notice.description}
-                      </p>
-                      <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
-                        View Full Notice <ChevronRight size={14} />
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-
-          {filteredNotices.length === 0 && (
-            <div className="py-32 text-center space-y-4 bg-white/40 rounded-[3rem] border-2 border-dashed border-muted-foreground/20">
-              <FileText size={64} className="mx-auto text-muted-foreground/30" />
-              <p className="text-muted-foreground font-medium">কোনো নোটিশ পাওয়া যায়নি।</p>
-              <Button variant="link" onClick={() => { setSearchTerm(""); setSelectedCategory("All"); }}>
-                ফিল্টার মুছুন
-              </Button>
             </div>
-          )}
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="glass-card p-12 bg-primary text-white relative overflow-hidden text-center">
-          <div className="absolute top-0 right-0 p-8 opacity-10">
-            <Bell size={150} />
-          </div>
-          <div className="relative z-10 space-y-4">
-            <h2 className="text-3xl font-headline font-black">সরাসরি আপডেট পেতে চান?</h2>
-            <p className="text-white/70 max-w-xl mx-auto">
-              আমাদের অফিসিয়াল নোটিশগুলো আপনার ইমেইলে সরাসরি পেতে সাবস্ক্রাইব করুন।
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto pt-4">
-              <Input placeholder="আপনার ইমেইল দিন" className="bg-white/10 border-white/20 text-white placeholder:text-white/40 h-12 rounded-xl" />
-              <Button className="bg-accent text-primary font-black h-12 px-8 rounded-xl hover:bg-white transition-colors">
-                সাবস্ক্রাইব
-              </Button>
+            <div className="grid gap-6">
+              {filteredTeacher.map((notice) => (
+                <NoticeCard key={notice.id} notice={notice} isTeacher />
+              ))}
+              {filteredTeacher.length === 0 && <EmptyNotices />}
             </div>
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
       </div>
+    </div>
+  );
+}
+
+function NoticeCard({ notice, isTeacher = false }: { notice: any, isTeacher?: boolean }) {
+  return (
+    <Link href={`/notices/${notice.id}`} className="group block">
+      <Card className="glass-card hover:border-accent transition-all duration-300 overflow-hidden border-2 border-transparent">
+        <CardContent className="p-0">
+          <div className="flex flex-col sm:flex-row items-stretch">
+            <div className="p-6 sm:w-48 bg-primary/5 flex flex-col justify-center items-center text-center border-b sm:border-b-0 sm:border-r border-dashed border-primary/20">
+              <Calendar className="text-primary mb-2" size={24} />
+              <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest leading-tight">Published On</p>
+              <p className="font-bold text-primary text-sm">{notice.date}</p>
+            </div>
+            <div className="p-8 flex-1 space-y-4 relative">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Badge className={cn(
+                    "uppercase font-black text-[9px] px-3",
+                    notice.type === 'important' ? 'bg-rose-500' : 
+                    notice.type === 'exam' ? 'bg-blue-500' : 'bg-accent text-primary'
+                  )}>
+                    {notice.type}
+                  </Badge>
+                  {isTeacher && notice.classes && (
+                    <div className="flex gap-1">
+                      {notice.classes.map((c: string) => (
+                        <Badge key={c} variant="outline" className="text-[9px] border-primary/20 text-primary">Cl {c}</Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                {notice.hasAttachment && (
+                  <Badge variant="outline" className="border-dashed border-accent text-accent font-black text-[9px]">
+                    <FileText size={10} className="mr-1" /> Attachment
+                  </Badge>
+                )}
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-xl md:text-2xl font-headline font-bold text-primary group-hover:text-accent transition-colors leading-tight">
+                  {notice.title}
+                </h3>
+                {isTeacher && (
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1">
+                    <User size={10} /> Posted by {notice.teacher}
+                  </p>
+                )}
+              </div>
+              <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed">
+                {notice.description}
+              </p>
+              <div className="flex items-center justify-between pt-2">
+                <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
+                  View Full Notice <ChevronRight size={14} />
+                </div>
+                {notice.hasAttachment && (
+                  <Button variant="ghost" size="sm" className="h-8 rounded-lg text-xs font-black text-accent hover:bg-accent/10">
+                    <Download size={14} className="mr-2" /> PDF
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
+
+function EmptyNotices() {
+  return (
+    <div className="py-24 text-center space-y-4 bg-white/30 rounded-[3rem] border-2 border-dashed border-muted-foreground/20">
+      <div className="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center mx-auto">
+        <FileText size={48} className="text-primary/20" />
+      </div>
+      <p className="text-muted-foreground font-bold uppercase tracking-widest text-xs">এই ট্যাবে কোনো নোটিশ পাওয়া যায়নি।</p>
     </div>
   );
 }
