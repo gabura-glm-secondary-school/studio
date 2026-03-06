@@ -52,13 +52,16 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
     }
   }, [user, userLoading, router]);
 
-  if (userLoading || user) {
+  if (userLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-secondary/5">
         <Sparkles className="animate-bounce text-primary" size={48} />
       </div>
     );
   }
+
+  // If already logged in, don't render content
+  if (user) return null;
 
   const roleLabels: Record<string, any> = {
     student: { title: "Student Registration", idLabel: "Student ID", idPlaceholder: "STUXXXXX", masterList: "studentMasterList" },
