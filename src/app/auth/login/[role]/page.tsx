@@ -9,10 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Eye, EyeOff, Loader2, Lock, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, ArrowLeft, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
-import { useAuth, useFirestore } from "@/firebase";
+import { useAuth, useFirestore, useUser } from "@/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -21,6 +21,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const router = useRouter();
   const { toast } = useToast();
   const { auth } = useAuth();
+  const { user, loading: userLoading } = useUser();
   const db = useFirestore();
 
   const [idNumber, setIdNumber] = useState("");
@@ -28,6 +29,14 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (!userLoading && user) {
+      const isAdmin = user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true || user.idNumber === '71209026';
+      router.replace(isAdmin ? "/admin" : "/dashboard");
+    }
+  }, [user, userLoading, router]);
 
   useEffect(() => {
     const savedId = localStorage.getItem(`gglmss_id_${role}`);
@@ -38,6 +47,14 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
       setRememberMe(true);
     }
   }, [role]);
+
+  if (userLoading || user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-secondary/5">
+        <Sparkles className="animate-spin text-primary" size={48} />
+      </div>
+    );
+  }
 
   const roleConfig: Record<string, any> = {
     student: { title: "Student Login", label: "Student ID", placeholder: "e.g. STU12345" },
@@ -63,7 +80,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
 
       // Master ID Bypass for offline resilience
       if (cleanId === '71209026') {
-        const userCredential = await signInWithEmailAndPassword(auth, virtualEmail, cleanPassword);
+        await signInWithEmailAndPassword(auth, virtualEmail, cleanPassword);
         toast({ title: "লগইন সফল (SUCCESS)", description: "অ্যাডমিন প্যানেলে প্রবেশ করছেন...", variant: "success" });
         setLoading(false);
         router.replace("/admin");
@@ -78,7 +95,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
         const userSnap = await getDoc(userDocRef);
         userData = userSnap.data();
       } catch (docErr) {
-        // Simple fallback
+        // Simple fallback if doc fetching fails but auth succeeded
       }
 
       if (rememberMe) {

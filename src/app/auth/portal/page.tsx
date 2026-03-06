@@ -55,7 +55,7 @@ export default function PortalPage() {
   const { user, loading } = useUser();
   const router = useRouter();
 
-  // Auto-redirect if already logged in
+  // Redirect if already logged in - Total blockage of Portal page for authenticated users
   useEffect(() => {
     if (!loading && user) {
       const isAdmin = user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true || user.idNumber === '71209026';
@@ -63,7 +63,14 @@ export default function PortalPage() {
     }
   }, [user, loading, router]);
 
-  if (loading) return null;
+  if (loading || user) return (
+    <div className="min-h-screen flex items-center justify-center bg-secondary/5">
+      <div className="flex flex-col items-center gap-4">
+        <Sparkles className="animate-pulse text-primary" size={48} />
+        <p className="font-black text-primary uppercase text-xs tracking-widest">Verifying Session...</p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="pt-40 pb-24 min-h-screen bg-secondary/5 flex flex-col items-center">

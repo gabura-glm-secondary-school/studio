@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, use } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,8 +12,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { PasswordPolicy, isPasswordValid } from "@/components/auth/PasswordPolicy";
-import { Loader2, ShieldCheck, UserCheck, Eye, EyeOff, ArrowLeft } from "lucide-react";
-import { useAuth, useFirestore } from "@/firebase";
+import { Loader2, ShieldCheck, UserCheck, Eye, EyeOff, ArrowLeft, Sparkles } from "lucide-react";
+import { useAuth, useFirestore, useUser } from "@/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
 import { cn } from "@/lib/utils";
@@ -24,6 +24,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
   const router = useRouter();
   const { toast } = useToast();
   const { auth } = useAuth();
+  const { user, loading: userLoading } = useUser();
   const db = useFirestore();
 
   const [step, setStep] = useState(1);
@@ -42,6 +43,22 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
     password: "",
     confirmPassword: ""
   });
+
+  // Redirect if already logged in - Auth Guard
+  useEffect(() => {
+    if (!userLoading && user) {
+      const isAdmin = user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true || user.idNumber === '71209026';
+      router.replace(isAdmin ? "/admin" : "/dashboard");
+    }
+  }, [user, userLoading, router]);
+
+  if (userLoading || user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-secondary/5">
+        <Sparkles className="animate-bounce text-primary" size={48} />
+      </div>
+    );
+  }
 
   const roleLabels: Record<string, any> = {
     student: { title: "Student Registration", idLabel: "Student ID", idPlaceholder: "STUXXXXX", masterList: "studentMasterList" },
@@ -125,15 +142,13 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
         ...(role === 'teacher' && { assignedClasses: [] })
       };
 
-      // Faster non-blocking setDoc
-      setDoc(doc(db, "users", userCredential.user.uid), userProfile)
-        .catch(err => console.error("Profile save warning:", err));
+      // Non-blocking save
+      setDoc(doc(db, "users", userCredential.user.uid), userProfile);
 
       toast({ 
         title: "রেজিস্ট্রেশন সফল (SUCCESS)", 
         description: "স্বাগতম! আপনার অ্যাকাউন্টটি তৈরি হয়েছে। ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...", 
         variant: "success",
-        duration: 3000
       });
       
       setLoading(false);
