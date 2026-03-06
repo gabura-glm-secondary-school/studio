@@ -16,7 +16,11 @@ import {
   Phone, 
   ChevronRight,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  Users,
+  Calendar,
+  Star,
+  ShieldAlert
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -45,11 +49,15 @@ export function Navbar() {
 
   const navLinks = [
     { title: "Home", href: "/", icon: Home },
+    { title: "About Us", href: "/about", icon: Users },
     { title: "Notice Board", href: "/notices", icon: Bell },
     { title: "SSC Batches", href: "/ssc-batches", icon: Trophy },
+    { title: "Events", href: "/events", icon: Calendar },
+    { title: "Leaderboard", href: "/leaderboard", icon: Star },
     { title: "Gallery", href: "/gallery", icon: ImageIcon },
     { title: "SSC Result", href: "/ssc-results", icon: FileCheck },
     { title: "Library", href: "/library", icon: Library },
+    { title: "Complaint Box", href: "/complaints", icon: ShieldAlert },
     { title: "Contact", href: "/contact", icon: Phone },
   ];
 
