@@ -1,22 +1,28 @@
 'use client';
 
-import { EventEmitter } from 'events';
 import { FirestorePermissionError } from './errors';
 
-type ErrorEvents = {
-  'permission-error': (error: FirestorePermissionError) => void;
-};
+type ErrorCallback = (error: FirestorePermissionError) => void;
 
-class FirebaseErrorEmitter extends EventEmitter {
-  emit<K extends keyof ErrorEvents>(
-    event: K,
-    ...args: Parameters<ErrorEvents[K]>
-  ): boolean {
-    return super.emit(event, ...args);
+class FirebaseErrorEmitter {
+  private listeners: { [key: string]: ErrorCallback[] } = {};
+
+  emit(event: 'permission-error', error: FirestorePermissionError): void {
+    if (this.listeners[event]) {
+      this.listeners[event].forEach((cb) => cb(error));
+    }
   }
 
-  on<K extends keyof ErrorEvents>(event: K, listener: ErrorEvents[K]): this {
-    return super.on(event, listener);
+  on(event: 'permission-error', listener: ErrorCallback): void {
+    if (!this.listeners[event]) {
+      this.listeners[event] = [];
+    }
+    this.listeners[event].push(listener);
+  }
+
+  off(event: 'permission-error', listener: ErrorCallback): void {
+    if (!this.listeners[event]) return;
+    this.listeners[event] = this.listeners[event].filter((cb) => cb !== listener);
   }
 }
 
