@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, use, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,7 @@ import { Eye, EyeOff, Loader2, Lock, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { useAuth, useFirestore } from "@/firebase";
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
 export default function LoginPage({ params }: { params: Promise<{ role: string }> }) {
@@ -29,7 +29,6 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Load saved credentials on mount for specific role
   useEffect(() => {
     const savedId = localStorage.getItem(`gglmss_id_${role}`);
     const savedPass = localStorage.getItem(`gglmss_pass_${role}`);
@@ -43,8 +42,8 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const roleConfig: Record<string, any> = {
     student: { title: "Student Login", label: "Student ID", placeholder: "e.g. STU12345" },
     teacher: { title: "Teacher Login", label: "EIN Number", placeholder: "e.g. EIN98765" },
-    staff: { title: "Staff Login", label: "EIN Number", placeholder: "e.g. EIN11223" },
-    external: { title: "External Login", label: "Mobile Number", placeholder: "017xxxxxxxx" },
+    staff: { title: "Staff Login", label: "EIN Number", placeholder: "e.g. 26200920" },
+    external: { title: "External Login", label: "Identification", placeholder: "Mobile/NID" },
   };
 
   const config = roleConfig[role] || roleConfig.student;
@@ -52,7 +51,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!auth || !db) {
-      toast({ title: "System Error", description: "Firebase initialization failed.", variant: "destructive" });
+      toast({ title: "সিস্টেম ত্রুটি", description: "ফায়ারবেস লোড হতে ব্যর্থ হয়েছে। পেজটি রিফ্রেশ করুন।", variant: "destructive" });
       return;
     }
 
@@ -74,12 +73,10 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
 
       const isUserAdmin = userData.role === 'admin' || userData.role === 'superadmin' || userData.adminApproved === true;
 
-      // Access control
       if (userData.role !== role && !isUserAdmin) {
         throw new Error(`এই অ্যাকাউন্টটি ${userData.role} হিসেবে নিবন্ধিত, আপনি ${role} পোর্টালে প্রবেশ করতে পারবেন না।`);
       }
 
-      // Handle Password Reminder (Remember Me)
       if (rememberMe) {
         localStorage.setItem(`gglmss_id_${role}`, idNumber);
         localStorage.setItem(`gglmss_pass_${role}`, password);
@@ -88,7 +85,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
         localStorage.removeItem(`gglmss_pass_${role}`);
       }
 
-      toast({ title: "Login Successful", description: "Redirecting to your dashboard..." });
+      toast({ title: "লগইন সফল", description: "আপনার ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে..." });
       
       if (isUserAdmin) {
         router.push("/admin");
@@ -96,22 +93,21 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
         router.push("/dashboard");
       }
     } catch (error: any) {
-      console.error("Login error:", error);
+      // সুন্দর নোটিশের মাধ্যমে এরর দেখানো
       let message = "লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।";
       
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-        message = "আপনার ID অথবা পাসওয়ার্ড ভুল। আপনি যদি আগে রেজিস্ট্রেশন না করে থাকেন, তবে আগে Register করুন।";
-      } else {
+        message = "আপনার ID অথবা পাসওয়ার্ড ভুল। আপনি যদি আগে রেজিস্ট্রেশন না করে থাকেন, তবে আগে REGISTER ট্যাবে গিয়ে রেজিস্ট্রেশন করুন।";
+      } else if (error.message) {
         message = error.message;
       }
       
       toast({ 
-        title: "Login Failed", 
+        title: "লগইন ব্যর্থ", 
         description: message, 
         variant: "destructive" 
       });
     } finally {
-      // Ensure loading is always stopped
       setLoading(false);
     }
   };
@@ -159,7 +155,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
                 required 
                 value={idNumber}
                 onChange={(e) => setIdNumber(e.target.value)}
-                className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
+                className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary text-lg"
               />
             </div>
             <div className="space-y-2">
@@ -176,7 +172,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
                   required 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 pr-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
+                  className="h-12 pr-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary text-lg"
                 />
                 <button
                   type="button"
