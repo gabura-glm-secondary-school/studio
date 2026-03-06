@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -55,96 +54,96 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-2 left-0 right-0 z-50 transition-all duration-300 flex justify-center pointer-events-none px-4">
+    <nav className="fixed top-2 left-0 right-0 z-50 transition-all duration-500 flex justify-center pointer-events-none px-4">
       <div 
         className={cn(
-          "pointer-events-auto transition-all duration-300 ease-out flex items-center justify-between px-4 md:px-8",
-          "glass-navbar",
+          "pointer-events-auto transition-all duration-500 ease-out flex items-center justify-between px-4 md:px-8",
+          "glass-navbar !bg-white/80",
           isScrolled 
-            ? "w-full md:w-[90%] lg:w-[65%] h-16 rounded-full py-1 shadow-2xl border-primary/20" 
-            : "w-full md:w-[95%] lg:w-[85%] h-20 rounded-full py-2 border-white/40"
+            ? "w-full md:w-[90%] lg:w-[65%] h-16 rounded-full py-1 shadow-2xl border-primary/30" 
+            : "w-full md:w-[95%] lg:w-[85%] h-20 rounded-full py-2 border-white/60 shadow-xl"
         )}
       >
-        <NextLink href="/" className="flex items-center group active:scale-95 transition-transform">
+        <NextLink href="/" className="flex items-center group active:scale-95 transition-transform shrink-0">
           <div className={cn(
-            "relative bg-white rounded-full p-0.5 shadow-xl transition-all duration-300 overflow-hidden shrink-0 border-2 border-primary/10 group-hover:border-primary",
-            isScrolled ? "w-11 h-11" : "w-14 h-14"
+            "relative bg-white rounded-full p-1 shadow-2xl transition-all duration-500 overflow-hidden shrink-0 border-[3px] border-primary/20 group-hover:border-primary group-hover:rotate-[360deg]",
+            isScrolled ? "w-12 h-12" : "w-16 h-16"
           )}>
             <Image
               src="https://i.postimg.cc/52gjwkTC/download-(3).jpg"
               alt="School Logo"
               fill
-              className="object-contain rounded-full group-hover:scale-110 transition-transform duration-300"
+              className="object-contain p-0.5 rounded-full"
             />
           </div>
         </NextLink>
 
         <div className="flex flex-col items-center text-center px-4 overflow-hidden flex-1">
           <h1 className={cn(
-            "font-headline font-black text-primary leading-none tracking-tight transition-all duration-300 whitespace-nowrap uppercase",
-            isScrolled ? "text-sm md:text-base" : "text-base md:text-xl"
+            "font-headline font-black text-primary leading-none tracking-tight transition-all duration-500 whitespace-nowrap uppercase",
+            isScrolled ? "text-sm md:text-lg" : "text-base md:text-2xl"
           )}>
             GABURA G.L.M <span className="text-accent">SECONDARY SCHOOL</span>
           </h1>
           <p className={cn(
-            "uppercase tracking-[0.15em] text-primary font-black transition-all duration-300 opacity-90",
-            isScrolled ? "text-[7px] mt-1" : "text-[9px] mt-1.5"
+            "uppercase tracking-[0.2em] text-primary font-black transition-all duration-500",
+            isScrolled ? "text-[8px] mt-1 opacity-100" : "text-[10px] mt-2 opacity-100"
           )}>
             সুশিক্ষাই আমাদের অঙ্গীকার
           </p>
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center shrink-0">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className={cn(
-              "flex items-center justify-center bg-primary text-white shadow-lg rounded-full hover:bg-accent transition-all duration-200 active:scale-90",
-              isScrolled ? "w-10 h-10" : "w-12 h-12"
+              "flex items-center justify-center bg-primary text-white shadow-2xl rounded-full hover:bg-accent transition-all duration-300 active:scale-75 group",
+              isScrolled ? "w-11 h-11" : "w-14 h-14"
             )}
           >
-            <LayoutGrid className={cn("transition-all", isScrolled ? "w-5 h-5" : "w-6 h-6")} />
+            <LayoutGrid className={cn("transition-all group-hover:rotate-90", isScrolled ? "w-5 h-5" : "w-7 h-7")} />
           </button>
         </div>
       </div>
 
       <div className={cn(
-        "fixed inset-0 z-[60] transition-all duration-300 pointer-events-none",
+        "fixed inset-0 z-[60] transition-all duration-500 pointer-events-none",
         isMobileMenuOpen ? "opacity-100" : "opacity-0"
       )}>
         <div 
           className={cn(
-            "absolute inset-0 bg-primary/20 backdrop-blur-md transition-opacity duration-300",
+            "absolute inset-0 bg-primary/30 backdrop-blur-xl transition-opacity duration-500",
             isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0"
           )}
           onClick={() => setIsMobileMenuOpen(false)} 
         />
         
         <div className={cn(
-          "absolute top-4 right-4 bottom-4 w-[90%] max-w-sm bg-white rounded-[2.5rem] shadow-2xl transition-all duration-300 ease-out flex flex-col pointer-events-auto overflow-hidden border border-primary/10",
-          isMobileMenuOpen ? "translate-x-0 scale-100" : "translate-x-[110%] scale-95"
+          "absolute top-4 right-4 bottom-4 w-[92%] max-w-md bg-white rounded-[3rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out flex flex-col pointer-events-auto overflow-hidden border border-primary/10",
+          isMobileMenuOpen ? "translate-x-0 scale-100" : "translate-x-[110%] scale-90"
         )}>
-          <div className="p-6 border-b flex items-center justify-between bg-primary/5">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 relative bg-white rounded-full p-1 shadow-md border border-primary/10">
+          <div className="p-8 border-b flex items-center justify-between bg-primary/5">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 relative bg-white rounded-2xl p-1.5 shadow-xl border border-primary/10">
                 <Image src="https://i.postimg.cc/52gjwkTC/download-(3).jpg" alt="Logo" fill className="object-contain" />
               </div>
               <div>
-                <h2 className="font-headline font-black text-primary text-sm leading-tight uppercase">GGLMSS Navigation</h2>
-                <p className="text-[10px] uppercase font-black tracking-widest text-accent">Platform Menu</p>
+                <h2 className="font-headline font-black text-primary text-base leading-tight uppercase">GGLMSS Portal</h2>
+                <p className="text-[10px] uppercase font-black tracking-[0.2em] text-accent">Menu Navigation</p>
               </div>
             </div>
             <button 
               onClick={() => setIsMobileMenuOpen(false)}
-              className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md text-primary hover:text-accent transition-colors active:scale-90"
+              className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg text-primary hover:text-accent transition-all active:scale-90 border border-primary/5"
             >
-              <X size={20} />
+              <X size={24} />
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 scrollbar-hide space-y-6">
-            <div className="space-y-1">
-              <p className="px-4 text-[10px] font-black uppercase text-primary/40 tracking-[0.2em] mb-2">Explore Pages</p>
-              <div className="grid grid-cols-1 gap-1">
+          <div className="flex-1 overflow-y-auto p-6 scrollbar-hide space-y-8">
+            <div className="space-y-3">
+              <p className="px-4 text-[11px] font-black uppercase text-primary/50 tracking-[0.3em] mb-2">Platform Pages</p>
+              <div className="grid grid-cols-1 gap-2">
                 {navLinks.map((link) => (
                   <DrawerLink key={link.title} href={link.href} icon={link.icon} onClick={() => setIsMobileMenuOpen(false)}>
                     {link.title}
@@ -153,9 +152,9 @@ export function Navbar() {
               </div>
             </div>
 
-            <div className="space-y-1">
-              <p className="px-4 text-[10px] font-black uppercase text-primary/40 tracking-[0.2em] mb-2">About Our Institution</p>
-              <div className="grid grid-cols-1 gap-1">
+            <div className="space-y-3">
+              <p className="px-4 text-[11px] font-black uppercase text-primary/50 tracking-[0.3em] mb-2">Institutional Info</p>
+              <div className="grid grid-cols-1 gap-2">
                 {aboutLinks.map((link) => (
                   <DrawerLink key={link.title} href={link.href} icon={link.icon} onClick={() => setIsMobileMenuOpen(false)}>
                     {link.title}
@@ -165,13 +164,13 @@ export function Navbar() {
             </div>
           </div>
 
-          <div className="p-6 space-y-3 bg-primary/5">
+          <div className="p-8 space-y-4 bg-primary/5">
             <NextLink href="/auth/portal" onClick={() => setIsMobileMenuOpen(false)} className="block">
-              <Button className="w-full h-14 rounded-2xl bg-primary text-white font-black shadow-xl hover:bg-accent transition-all text-base gap-2 active:scale-[0.98]">
-                Portal Login <ArrowRight size={20} />
+              <Button className="w-full h-16 rounded-2xl bg-primary text-white font-black shadow-[0_15px_30px_-5px_rgba(124,58,237,0.4)] hover:bg-accent transition-all text-lg gap-3 active:scale-[0.95]">
+                Portal Login <ArrowRight size={22} />
               </Button>
             </NextLink>
-            <p className="text-center text-[10px] text-primary/60 uppercase tracking-widest font-black">
+            <p className="text-center text-[10px] text-primary/60 uppercase tracking-[0.2em] font-black">
               © {new Date().getFullYear()} Gabura G.L.M Secondary School
             </p>
           </div>
@@ -186,15 +185,15 @@ function DrawerLink({ href, icon: Icon, children, onClick }: any) {
     <NextLink 
       href={href} 
       onClick={onClick}
-      className="flex items-center justify-between px-4 py-3.5 rounded-2xl text-primary font-black transition-all hover:bg-primary/10 group active:scale-[0.98]"
+      className="flex items-center justify-between px-5 py-4 rounded-[1.5rem] text-primary font-black transition-all hover:bg-primary/10 group active:scale-[0.97] border border-transparent hover:border-primary/10"
     >
-      <div className="flex items-center gap-4">
-        <div className="w-10 h-10 bg-white shadow-sm border border-primary/5 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
-          <Icon size={20} />
+      <div className="flex items-center gap-5">
+        <div className="w-12 h-12 bg-white shadow-md border border-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500">
+          <Icon size={24} />
         </div>
-        <span className="text-base uppercase tracking-tight">{children}</span>
+        <span className="text-lg uppercase tracking-tight">{children}</span>
       </div>
-      <ChevronRight size={18} className="text-primary/20 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+      <ChevronRight size={20} className="text-primary/20 group-hover:text-primary group-hover:translate-x-2 transition-all duration-300" />
     </NextLink>
   );
 }

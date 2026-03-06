@@ -32,14 +32,14 @@ export function NewsTicker() {
   return (
     <div 
       className={cn(
-        "fixed left-0 right-0 z-40 transition-all duration-300 flex justify-center px-4 pointer-events-none",
-        isScrolled ? "top-[68px]" : "top-[84px]"
+        "fixed left-0 right-0 z-40 transition-all duration-500 flex justify-center px-4 pointer-events-none",
+        isScrolled ? "top-[80px]" : "top-[104px]"
       )}
     >
       <div className="w-full max-w-7xl pointer-events-auto">
-        <div className="glass-navbar h-9 rounded-full flex items-center px-3 overflow-hidden border border-white/20 shadow-lg">
-          <div className="bg-accent text-primary text-[9px] font-black uppercase px-2.5 py-1 rounded-full mr-3 flex items-center gap-2 shrink-0 shadow-sm border border-white/40">
-            <Megaphone size={12} className="animate-pulse" />
+        <div className="glass-navbar h-10 rounded-full flex items-center px-4 overflow-hidden border border-white/40 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)]">
+          <div className="bg-accent text-primary text-[10px] font-black uppercase px-3 py-1.5 rounded-full mr-4 flex items-center gap-2 shrink-0 shadow-md border border-white/50">
+            <Megaphone size={14} className="animate-pulse" />
             <span className="hidden sm:inline">Notice Board</span>
           </div>
 
@@ -47,16 +47,16 @@ export function NewsTicker() {
             <div className="animate-marquee whitespace-nowrap flex items-center">
               {notices.map((notice, idx) => (
                 <div key={idx} className="flex items-center">
-                  <span className="text-primary text-[10px] font-black uppercase tracking-wider mx-10 flex items-center gap-3">
-                    <span className="w-1 h-1 rounded-full bg-accent animate-pulse shadow-[0_0_8px_rgba(20,184,166,0.5)]"></span>
+                  <span className="text-primary text-[11px] font-bold uppercase tracking-wider mx-12 flex items-center gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shadow-[0_0_10px_rgba(20,184,166,0.6)]"></span>
                     {notice}
                   </span>
                 </div>
               ))}
               {notices.map((notice, idx) => (
                 <div key={`dup-${idx}`} className="flex items-center">
-                  <span className="text-primary text-[10px] font-black uppercase tracking-wider mx-10 flex items-center gap-3">
-                    <span className="w-1 h-1 rounded-full bg-accent animate-pulse shadow-[0_0_8px_rgba(20,184,166,0.5)]"></span>
+                  <span className="text-primary text-[11px] font-bold uppercase tracking-wider mx-12 flex items-center gap-3">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shadow-[0_0_10px_rgba(20,184,166,0.6)]"></span>
                     {notice}
                   </span>
                 </div>
