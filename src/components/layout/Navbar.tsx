@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -18,14 +19,17 @@ import {
   MessageSquare,
   Star,
   ChevronRight,
-  ArrowRight
+  ArrowRight,
+  ShieldCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useUser } from "@/firebase";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user } = useUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,6 +40,9 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Admin button visibility logic based on Firestore rules helper: isAdmin()
+  const canAccessAdmin = user && !user.disabled && (user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true);
+
   const navLinks = [
     { title: "Home", href: "/", icon: Home },
     { title: "Notice Board", href: "/notices", icon: Bell },
@@ -44,13 +51,6 @@ export function Navbar() {
     { title: "SSC Result", href: "/ssc-results", icon: FileCheck },
     { title: "Library", href: "/library", icon: Library },
     { title: "Contact", href: "/contact", icon: Phone },
-  ];
-
-  const aboutLinks = [
-    { title: "Our History", href: "/about/history", icon: History },
-    { title: "Administration", href: "/about/head-teachers", icon: UserRound },
-    { title: "Principal Message", href: "/about/principal", icon: MessageSquare },
-    { title: "Chairman Message", href: "/about/chairman", icon: Star },
   ];
 
   const logoUrl = "https://i.postimg.cc/rwjdJqQK/1000144744-removebg-preview-(1).png";
@@ -94,7 +94,14 @@ export function Navbar() {
           </div>
         </NextLink>
 
-        <div className="flex items-center shrink-0 pl-2">
+        <div className="flex items-center gap-2 shrink-0 pl-2">
+          {canAccessAdmin && (
+            <NextLink href="/admin" className="hidden md:block">
+              <Button size="sm" className="rounded-full bg-accent text-primary font-black uppercase text-[10px] tracking-widest gap-2 shadow-lg hover:bg-accent/90">
+                <ShieldCheck size={14} /> Admin
+              </Button>
+            </NextLink>
+          )}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className={cn(
@@ -142,21 +149,18 @@ export function Navbar() {
           </div>
 
           <div className="flex-1 overflow-y-auto p-6 scrollbar-hide space-y-8">
+            {canAccessAdmin && (
+              <NextLink href="/admin" onClick={() => setIsMobileMenuOpen(false)}>
+                <div className="mx-4 mb-4 p-4 rounded-2xl bg-accent text-primary font-black flex items-center justify-between shadow-xl active:scale-95 transition-transform">
+                  <span className="uppercase text-xs tracking-[0.2em]">Open Admin Control</span>
+                  <ShieldCheck size={20} />
+                </div>
+              </NextLink>
+            )}
             <div className="space-y-3">
               <p className="px-4 text-[11px] font-black uppercase text-primary/50 tracking-[0.3em] mb-2">Platform Pages</p>
               <div className="grid grid-cols-1 gap-2">
                 {navLinks.map((link) => (
-                  <DrawerLink key={link.title} href={link.href} icon={link.icon} onClick={() => setIsMobileMenuOpen(false)}>
-                    {link.title}
-                  </DrawerLink>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <p className="px-4 text-[11px] font-black uppercase text-primary/50 tracking-[0.3em] mb-2">Institutional Info</p>
-              <div className="grid grid-cols-1 gap-2">
-                {aboutLinks.map((link) => (
                   <DrawerLink key={link.title} href={link.href} icon={link.icon} onClick={() => setIsMobileMenuOpen(false)}>
                     {link.title}
                   </DrawerLink>
@@ -168,7 +172,7 @@ export function Navbar() {
           <div className="p-8 space-y-4 bg-primary/5">
             <NextLink href="/auth/portal" onClick={() => setIsMobileMenuOpen(false)} className="block">
               <Button className="w-full h-16 rounded-2xl bg-primary text-white font-black shadow-[0_15px_30px_-5px_rgba(124,58,237,0.4)] hover:bg-accent transition-all text-lg gap-3 active:scale-[0.95]">
-                Portal Login <ArrowRight size={22} />
+                {user ? "Dashboard" : "Portal Login"} <ArrowRight size={22} />
               </Button>
             </NextLink>
             <p className="text-center text-[10px] text-primary font-black uppercase tracking-[0.2em]">

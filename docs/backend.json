@@ -1,8 +1,9 @@
+
 {
   "entities": {
     "UserProfile": {
       "title": "User Profile",
-      "description": "Main user account information.",
+      "description": "System user account with role-based access.",
       "type": "object",
       "properties": {
         "uid": { "type": "string" },
@@ -13,7 +14,9 @@
         "classId": { "type": "string" },
         "assignedClasses": { "type": "array", "items": { "type": "string" } },
         "adminApproved": { "type": "boolean" },
-        "disabled": { "type": "boolean" }
+        "disabled": { "type": "boolean" },
+        "ein": { "type": "string" },
+        "studentId": { "type": "string" }
       },
       "required": ["uid", "role"]
     },
@@ -26,7 +29,29 @@
         "publishedAt": { "type": "string", "format": "date-time" },
         "type": { "type": "string", "enum": ["important", "exam", "holiday", "admission", "general"] },
         "teacherUid": { "type": "string" },
-        "targetClasses": { "type": "array", "items": { "type": "string" } }
+        "targetClasses": { "type": "array", "items": { "type": "string" } },
+        "isPinned": { "type": "boolean" },
+        "attachmentUrl": { "type": "string" }
+      }
+    },
+    "Attendance": {
+      "title": "Attendance Record",
+      "type": "object",
+      "properties": {
+        "studentUid": { "type": "string" },
+        "classId": { "type": "string" },
+        "date": { "type": "string" },
+        "isPresent": { "type": "boolean" },
+        "markedByUid": { "type": "string" }
+      }
+    },
+    "MasterRecord": {
+      "title": "Master Verification List",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "isValid": { "type": "boolean" }
       }
     }
   },
@@ -36,31 +61,35 @@
   "firestore": {
     "/users/{uid}": {
       "schema": { "$ref": "#/backend/entities/UserProfile" },
-      "description": "System user accounts."
+      "description": "User profiles managed by rules."
     },
-    "/mainNotices/{noticeId}": {
+    "/mainNotices/{id}": {
       "schema": { "$ref": "#/backend/entities/Notice" },
-      "description": "Official school-wide notices."
+      "description": "Official announcements."
     },
-    "/teacherNotices/{noticeId}": {
+    "/teacherNotices/{id}": {
       "schema": { "$ref": "#/backend/entities/Notice" },
-      "description": "Class-specific notices from teachers."
+      "description": "Class specific notices."
     },
-    "/slidingNotices/{docId}": {
-      "schema": { "type": "object" },
-      "description": "Notices for the homepage ticker."
+    "/studentMasterList/{id}": {
+      "schema": { "$ref": "#/backend/entities/MasterRecord" },
+      "description": "Admin-only verification list for students."
     },
-    "/complaints/{complaintId}": {
-      "schema": { "type": "object" },
-      "description": "Complaint box submissions."
+    "/teacherMasterList/{id}": {
+      "schema": { "$ref": "#/backend/entities/MasterRecord" },
+      "description": "Admin-only verification list for teachers."
     },
-    "/studentProfiles/{uid}": {
-      "schema": { "type": "object" },
-      "description": "Detailed student academic records."
+    "/attendance/{id}": {
+      "schema": { "$ref": "#/backend/entities/Attendance" },
+      "description": "Student daily attendance."
     },
-    "/teacherProfiles/{uid}": {
+    "/complaints/{id}": {
       "schema": { "type": "object" },
-      "description": "Detailed teacher professional records."
+      "description": "Feedback box submissions."
+    },
+    "/statistics/{id}": {
+      "schema": { "type": "object" },
+      "description": "Homepage animated stats."
     }
   }
 }

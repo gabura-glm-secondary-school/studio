@@ -1,3 +1,6 @@
+
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -30,14 +33,18 @@ export function Hero() {
               <p className="text-[11px] font-black uppercase tracking-[0.1em] text-primary">Admission Open 2025</p>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-headline font-black text-primary leading-[1.05] tracking-tight">
-              Shaping <span className="gradient-text">Futures</span> <br />
-              In Sundarbans
-            </h1>
-
-            <p className="text-xl text-slate-700 leading-relaxed font-semibold max-w-lg">
-              Gabura Gopal Laxmi Memorial Secondary School is committed to providing quality education and fostering excellence in every student.
-            </p>
+            <div className="space-y-4">
+              <h1 className="text-5xl md:text-7xl font-headline font-black text-primary leading-[1.05] tracking-tight">
+                Shaping <span className="gradient-text">Futures</span> <br />
+                In Sundarbans
+              </h1>
+              <p className="text-xl text-slate-800 leading-relaxed font-bold max-w-lg italic">
+                "Quality Education is Our Commitment"
+              </p>
+              <p className="text-lg text-slate-700 leading-relaxed font-semibold max-w-lg">
+                Gabura Gopal Laxmi Memorial Secondary School is committed to providing quality education and fostering excellence in every student.
+              </p>
+            </div>
 
             <div className="flex flex-wrap gap-5 pt-2">
               <Link href="/contact" className="block">
