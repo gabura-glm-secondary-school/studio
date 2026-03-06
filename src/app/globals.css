@@ -10,10 +10,10 @@
     --card-foreground: 195 40% 10%;
     --popover: 0 0% 100%;
     --popover-foreground: 195 40% 10%;
-    --primary: 195 40% 29%;
+    --primary: 262 83% 58%;
     --primary-foreground: 197 24% 98%;
-    --secondary: 197 24% 90%;
-    --secondary-foreground: 195 40% 29%;
+    --secondary: 176 75% 50%;
+    --secondary-foreground: 195 40% 10%;
     --muted: 197 10% 90%;
     --muted-foreground: 195 20% 40%;
     --accent: 176 75% 50%;
@@ -22,9 +22,9 @@
     --destructive-foreground: 0 0% 98%;
     --border: 195 20% 88%;
     --input: 195 20% 88%;
-    --ring: 195 40% 29%;
-    --radius: 1rem;
-    --chart-1: 195 40% 29%;
+    --ring: 262 83% 58%;
+    --radius: 2rem;
+    --chart-1: 262 83% 58%;
     --chart-2: 176 75% 50%;
     --chart-3: 195 20% 40%;
     --chart-4: 176 50% 40%;
@@ -59,13 +59,29 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground selection:bg-primary/20;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
 .glass-card {
-  @apply bg-white/60 backdrop-blur-md border border-white/40 shadow-xl;
+  @apply bg-white/65 backdrop-blur-[15px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.05)] rounded-[2.5rem];
+}
+
+.glass-navbar {
+  @apply bg-white/70 backdrop-blur-[20px] border border-white/40 shadow-[0_10px_40px_rgba(0,0,0,0.08)];
+}
+
+.btn-pill {
+  @apply rounded-full px-8 py-6 font-bold transition-all duration-300 active:scale-95;
+}
+
+.btn-gradient-primary {
+  @apply bg-gradient-to-r from-[#7c3aed] to-[#a855f7] text-white shadow-[0_10px_20px_-5px_rgba(124,58,237,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(124,58,237,0.6)] hover:-translate-y-1;
+}
+
+.btn-gradient-accent {
+  @apply bg-gradient-to-r from-[#14b8a6] to-[#2dd4bf] text-white shadow-[0_10px_20px_-5px_rgba(20,184,166,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(20,184,166,0.6)] hover:-translate-y-1;
 }
 
 .animate-marquee {
@@ -81,4 +97,8 @@
 
 .gradient-text {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+}
+
+.hover-lift {
+  @apply transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl;
 }

@@ -12,46 +12,47 @@ import { ArrowRight, Star } from "lucide-react";
 
 export default function Home() {
   return (
-    <>
+    <div className="space-y-12">
       <NewsTicker />
       <Hero />
+      
+      {/* Statistics floating container */}
       <Statistics />
       
-      {/* Latest Notices Section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-            <div className="space-y-4">
-              <span className="text-accent font-bold uppercase tracking-[0.2em] text-sm">Stay Updated</span>
-              <h2 className="text-4xl lg:text-5xl font-headline font-bold text-primary">Latest From Notice Board</h2>
-            </div>
-            <Button variant="outline" asChild className="rounded-full border-primary/20 hover:bg-primary hover:text-white group">
-              <Link href="/notices">
-                View All Notices <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+      {/* Notices Section */}
+      <section className="py-24 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 space-y-4">
+            <span className="text-accent font-black uppercase tracking-[0.2em] text-xs">Stay Updated</span>
+            <h2 className="text-4xl lg:text-5xl font-headline font-black text-primary">Latest Announcements</h2>
+          </div>
+          <LatestNotices />
+          <div className="mt-12 text-center">
+            <Button variant="link" asChild className="text-primary font-black uppercase tracking-widest hover:text-accent">
+              <Link href="/notices" className="flex items-center gap-2">
+                View Notice Board <ArrowRight size={16} />
               </Link>
             </Button>
           </div>
-          <LatestNotices />
         </div>
       </section>
 
-      {/* Highlights Section */}
-      <section className="py-24 bg-secondary/20">
+      <section className="py-24 bg-gradient-to-b from-transparent via-primary/5 to-transparent">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16 space-y-4">
-             <span className="text-accent font-bold uppercase tracking-[0.2em] text-sm">Our Excellence</span>
-             <h2 className="text-4xl lg:text-5xl font-headline font-bold text-primary">School Highlights</h2>
+             <span className="text-accent font-black uppercase tracking-[0.2em] text-xs">Our Excellence</span>
+             <h2 className="text-4xl lg:text-5xl font-headline font-black text-primary">School Highlights</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { title: "Quality Education", desc: "Equipped with modern teaching aids and experienced faculty members.", icon: "🎓" },
-              { title: "Sundarbans Setting", desc: "Located in a unique natural environment promoting ecological awareness.", icon: "🌳" },
-              { title: "Cultural Heritage", desc: "Strong focus on local culture, traditions, and extra-curricular activities.", icon: "🎭" }
+              { title: "Quality Education", desc: "Equipped with modern teaching aids and experienced faculty members.", icon: "🎓", color: "from-blue-500/20 to-indigo-500/20" },
+              { title: "Sundarbans Setting", desc: "Located in a unique natural environment promoting ecological awareness.", icon: "🌳", color: "from-green-500/20 to-emerald-500/20" },
+              { title: "Cultural Heritage", desc: "Strong focus on local culture, traditions, and extra-curricular activities.", icon: "🎭", color: "from-purple-500/20 to-pink-500/20" }
             ].map((item, idx) => (
-              <div key={idx} className="glass-card p-10 rounded-3xl space-y-4 hover:shadow-2xl transition-all">
-                <div className="text-5xl mb-6">{item.icon}</div>
-                <h3 className="text-2xl font-headline font-bold text-primary">{item.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
+              <div key={idx} className={`glass-card p-12 space-y-6 hover-lift bg-gradient-to-br ${item.color}`}>
+                <div className="text-6xl mb-6 drop-shadow-xl">{item.icon}</div>
+                <h3 className="text-2xl font-headline font-black text-primary">{item.title}</h3>
+                <p className="text-muted-foreground leading-relaxed font-medium">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -60,25 +61,29 @@ export default function Home() {
 
       <PrincipalChairmanMessages />
 
-      {/* Student Achievements */}
-      <section className="py-24 bg-primary text-white overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-[120px]"></div>
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <div className="text-center mb-16 space-y-4">
-             <span className="text-accent font-bold uppercase tracking-[0.2em] text-sm">Pride of Gabura</span>
-             <h2 className="text-4xl lg:text-5xl font-headline font-bold">Student Achievements</h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="bg-white/5 backdrop-blur-lg border border-white/10 p-6 rounded-2xl space-y-4">
-                <div className="w-full aspect-square relative rounded-xl overflow-hidden mb-4">
-                  <img src={`https://picsum.photos/seed/student${i}/300/300`} alt="Topper" className="object-cover w-full h-full" />
-                </div>
-                <div className="flex text-accent gap-1"><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /><Star size={16} fill="currentColor" /></div>
-                <h4 className="font-bold text-xl">Top Rank in SSC {2024 - i}</h4>
-                <p className="text-white/60 text-sm">Outstanding performance with GPA 5.00 in all subjects.</p>
+      {/* Student Achievements with Glass Cards */}
+      <section className="py-24 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="glass-card p-12 bg-primary/95 text-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-accent/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
+            <div className="relative z-10">
+              <div className="text-center mb-16 space-y-4">
+                 <span className="text-accent font-black uppercase tracking-[0.2em] text-xs">Pride of Gabura</span>
+                 <h2 className="text-4xl lg:text-5xl font-headline font-black">Student Achievements</h2>
               </div>
-            ))}
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-[2.5rem] space-y-4 hover-lift">
+                    <div className="w-full aspect-square relative rounded-3xl overflow-hidden mb-4 shadow-xl">
+                      <img src={`https://picsum.photos/seed/student${i}/300/300`} alt="Topper" className="object-cover w-full h-full" />
+                    </div>
+                    <div className="flex text-accent gap-1"><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /></div>
+                    <h4 className="font-bold text-xl leading-tight">Top Rank SSC {2024 - i}</h4>
+                    <p className="text-white/60 text-xs font-medium">Outstanding performance with GPA 5.00.</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -86,6 +91,6 @@ export default function Home() {
       <GalleryPreview />
       <QuickLinks />
       <ContactPreview />
-    </>
+    </div>
   );
 }

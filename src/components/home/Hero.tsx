@@ -8,85 +8,72 @@ export function Hero() {
   const bg = PlaceHolderImages.find(img => img.id === 'hero-bg');
 
   return (
-    <section className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden">
-      {/* Background Image with Overlay */}
+    <section className="relative min-h-[95vh] flex items-center pt-24 pb-12 overflow-hidden px-4">
+      {/* Background with Ambient Glow */}
       <div className="absolute inset-0 z-0">
         <Image
           src={bg?.imageUrl || "https://picsum.photos/seed/sundar1/1920/1080"}
-          alt="Sundarbans Background"
+          alt="Sundarbans"
           fill
           priority
-          className="object-cover"
+          className="object-cover scale-105 blur-[2px]"
           data-ai-hint="sundarbans forest"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/20 via-background/80 to-background"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
-        <div className="space-y-8 animate-in fade-in slide-in-from-left duration-1000">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 relative bg-white rounded-2xl p-2 shadow-xl">
+      <div className="relative z-10 max-w-6xl mx-auto w-full">
+        <div className="glass-card p-8 md:p-16 grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom duration-1000">
+            <div className="inline-flex items-center gap-3 bg-white/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/40 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+              <p className="text-[10px] font-black uppercase tracking-widest text-primary">Admission Open 2025</p>
+            </div>
+
+            <h1 className="text-4xl md:text-6xl font-headline font-black text-primary leading-[1.1]">
+              Shaping <span className="gradient-text">Futures</span> <br />
+              In Sundarbans
+            </h1>
+
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Providing high-quality education since decades, we empower students to achieve excellence and contribute positively to society.
+            </p>
+
+            <div className="flex flex-wrap gap-4 pt-4">
+              <Button size="lg" className="btn-pill btn-gradient-primary group">
+                Apply Now <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button size="lg" variant="outline" className="btn-pill border-2 border-primary/20 bg-white/20 hover:bg-white/40">
+                Explore Programs
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4 pt-8">
+              {[
+                { icon: FileText, label: "Notices", href: "/notices" },
+                { icon: User, label: "Portal", href: "/auth/portal" },
+                { icon: Phone, label: "Contact", href: "/contact" }
+              ].map((item, i) => (
+                <Link key={i} href={item.href} className="flex flex-col items-center gap-2 p-4 bg-white/30 backdrop-blur-lg rounded-3xl border border-white/40 hover:bg-white/50 transition-all group">
+                  <item.icon className="text-primary group-hover:scale-110 transition-transform" size={20} />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-primary">{item.label}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="hidden lg:block relative aspect-square animate-in fade-in zoom-in duration-1000 delay-300">
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-accent/20 rounded-[3rem] -rotate-6"></div>
+            <div className="relative w-full h-full rounded-[3rem] overflow-hidden rotate-3 shadow-2xl border-4 border-white/60">
               <Image
-                src="https://i.postimg.cc/52gjwkTC/download-(3).jpg"
-                alt="Logo"
+                src="https://picsum.photos/seed/school1/800/800"
+                alt="Students"
                 fill
-                className="object-contain"
+                className="object-cover"
+                data-ai-hint="happy students"
               />
             </div>
-            <div>
-              <p className="text-accent font-bold tracking-widest uppercase text-sm">Welcome to</p>
-              <h2 className="text-white font-headline font-extrabold text-2xl lg:text-3xl">
-                Gabura Gopal Laxmi Memorial Secondary School
-              </h2>
-            </div>
           </div>
-
-          <h1 className="text-4xl lg:text-6xl font-headline font-black text-white leading-[1.1]">
-            <span className="text-accent italic block mb-2">“সুশিক্ষাই আমাদের অঙ্গীকার”</span>
-            Shaping Futures in the <br />
-            <span className="text-accent">Heart of Sundarbans</span>
-          </h1>
-
-          <p className="text-lg text-white/80 max-w-xl leading-relaxed">
-            Providing high-quality education since decades, we empower students to achieve excellence and contribute positively to society.
-          </p>
-
-          <div className="flex flex-wrap gap-4 pt-4">
-            <Button size="lg" className="bg-accent text-primary hover:bg-accent/90 rounded-full px-8 shadow-xl group">
-              Admission Info <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 rounded-full px-8 backdrop-blur-sm shadow-xl">
-              Contact Us
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-3 gap-4 pt-8">
-            <Link href="/notices" className="flex flex-col items-center gap-2 p-4 bg-white/10 backdrop-blur-md rounded-2xl text-white hover:bg-white/20 transition-all border border-white/20">
-              <FileText className="text-accent" />
-              <span className="text-xs font-bold uppercase tracking-widest">Notice Board</span>
-            </Link>
-            <Link href="#" className="flex flex-col items-center gap-2 p-4 bg-white/10 backdrop-blur-md rounded-2xl text-white hover:bg-white/20 transition-all border border-white/20">
-              <User className="text-accent" />
-              <span className="text-xs font-bold uppercase tracking-widest">Portal</span>
-            </Link>
-            <Link href="/contact" className="flex flex-col items-center gap-2 p-4 bg-white/10 backdrop-blur-md rounded-2xl text-white hover:bg-white/20 transition-all border border-white/20">
-              <Phone className="text-accent" />
-              <span className="text-xs font-bold uppercase tracking-widest">Contact</span>
-            </Link>
-          </div>
-        </div>
-
-        <div className="hidden lg:block relative h-[600px] animate-in fade-in zoom-in duration-1000">
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-accent/20 rounded-full blur-3xl animate-pulse"></div>
-           <div className="relative w-full h-full glass-card rounded-[2rem] overflow-hidden rotate-3 shadow-2xl border-white/20">
-             <Image
-               src="https://picsum.photos/seed/school1/800/1000"
-               alt="School Life"
-               fill
-               className="object-cover"
-               data-ai-hint="happy students"
-             />
-           </div>
         </div>
       </div>
     </section>
