@@ -10,7 +10,7 @@ export function Footer() {
   const pathname = usePathname();
   const logoUrl = "https://i.postimg.cc/rwjdJqQK/1000144744-removebg-preview-(1).png";
 
-  // Hide global footer on admin pages
+  // Hide global footer on admin pages - Ensure no hooks are called after this
   if (pathname?.startsWith('/admin')) return null;
 
   return (

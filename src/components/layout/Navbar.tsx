@@ -39,9 +39,6 @@ export function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Hide global navbar on admin pages to avoid overlap
-  if (pathname?.startsWith('/admin')) return null;
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -66,6 +63,9 @@ export function Navbar() {
     user.idNumber === '71209026' ||
     user.ein === '71209026'
   );
+
+  // Hide global navbar on admin pages to avoid overlap - MUST BE AFTER ALL HOOKS
+  if (pathname?.startsWith('/admin')) return null;
 
   const navLinks = [
     { title: "Home", href: "/", icon: Home },

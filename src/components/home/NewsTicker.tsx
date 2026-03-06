@@ -19,7 +19,7 @@ export function NewsTicker() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Hide global ticker on admin pages
+  // Hide global ticker on admin pages - MUST BE AFTER ALL HOOKS
   if (pathname?.startsWith('/admin')) return null;
 
   const notices = [
