@@ -1,7 +1,7 @@
 
 "use client";
 
-import { FileText, CheckCircle2, Clock, ShieldCheck, ArrowLeft, Info } from "lucide-react";
+import { ShieldCheck, ArrowLeft, Clock, Info, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,35 +20,35 @@ export default function CitizensCharterPage() {
       <div className="max-w-5xl mx-auto px-4 space-y-12">
         <div className="space-y-4">
           <Link href="/about">
-            <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-primary px-0 active:scale-95 transition-transform">
+            <Button variant="ghost" className="gap-2 text-primary font-black hover:bg-primary/10 px-0 active:scale-95 transition-transform">
               <ArrowLeft size={18} /> সম্পর্কে ফিরে যান
             </Button>
           </Link>
           <div className="space-y-1">
-            <span className="text-accent font-black uppercase tracking-[0.2em] text-[10px]">Service Standards</span>
-            <h1 className="text-4xl font-headline font-black text-primary">সিটিজেন চার্টার</h1>
-            <p className="text-muted-foreground font-medium">আমাদের সেবার মান এবং প্রয়োজনীয় তথ্যাদি এখানে প্রদান করা হলো।</p>
+            <span className="text-accent font-black uppercase tracking-[0.2em] text-[10px] bg-primary/5 px-4 py-1 rounded-full">Service Standards</span>
+            <h1 className="text-4xl font-headline font-black text-primary tracking-tight">সিটিজেন চার্টার</h1>
+            <p className="text-slate-700 font-bold">আমাদের সেবার মান এবং প্রয়োজনীয় তথ্যাদি এখানে প্রদান করা হলো।</p>
           </div>
         </div>
 
-        <Card className="glass-card overflow-hidden">
+        <Card className="bg-white border-2 border-white rounded-[2.5rem] shadow-2xl overflow-hidden">
           <CardContent className="p-0">
             <Table>
               <TableHeader className="bg-primary/5">
-                <TableRow>
-                  <TableHead className="font-black text-primary uppercase text-xs py-6 pl-8">সেবার নাম</TableHead>
-                  <TableHead className="font-black text-primary uppercase text-xs py-6">প্রয়োজনীয় কাগজপত্র</TableHead>
-                  <TableHead className="font-black text-primary uppercase text-xs py-6 text-right pr-8">প্রদানের সময়সীমা</TableHead>
+                <TableRow className="border-b-2 border-primary/10">
+                  <TableHead className="font-black text-primary uppercase text-xs py-8 pl-10">সেবার নাম</TableHead>
+                  <TableHead className="font-black text-primary uppercase text-xs py-8">প্রয়োজনীয় কাগজপত্র</TableHead>
+                  <TableHead className="font-black text-primary uppercase text-xs py-8 text-right pr-10">প্রদানের সময়সীমা</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {services.map((s, i) => (
-                  <TableRow key={i} className="hover:bg-secondary/5 transition-colors group">
-                    <TableCell className="font-bold text-primary py-6 pl-8">{s.service}</TableCell>
-                    <TableCell className="text-muted-foreground font-medium text-sm">{s.docs}</TableCell>
-                    <TableCell className="text-right pr-8">
-                      <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-100">
-                        <Clock size={12} /> {s.time}
+                  <TableRow key={i} className="hover:bg-secondary/5 transition-colors border-b border-dashed border-primary/10 group">
+                    <TableCell className="font-black text-primary py-8 pl-10 text-lg">{s.service}</TableCell>
+                    <TableCell className="text-slate-800 font-bold text-sm max-w-xs">{s.docs}</TableCell>
+                    <TableCell className="text-right pr-10">
+                      <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest border-2 border-emerald-200 shadow-sm">
+                        <Clock size={14} /> {s.time}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -58,21 +58,31 @@ export default function CitizensCharterPage() {
           </CardContent>
         </Card>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="glass-card p-8 space-y-4">
-            <div className="flex items-center gap-3 text-primary font-black text-lg">
-              <Info className="text-accent" /> গুরুত্বপূর্ণ নোট
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-white p-10 space-y-6 rounded-[2.5rem] shadow-xl border-2 border-primary/5 hover:border-accent transition-all">
+            <div className="flex items-center gap-4 text-primary font-black text-xl">
+              <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary shadow-inner">
+                <Info size={24} />
+              </div>
+              গুরুত্বপূর্ণ নোট
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed font-medium">
+            <p className="text-base text-slate-800 leading-relaxed font-black">
               যেকোনো সেবার জন্য আবেদন অফিস চলাকালীন (সকাল ৯:০০ - বিকাল ৪:০০) সময়ের মধ্যে করতে হবে। সকল আবেদন প্রধান শিক্ষক বরাবর হতে হবে।
             </p>
           </div>
-          <div className="glass-card p-8 space-y-4">
-            <div className="flex items-center gap-3 text-primary font-black text-lg">
-              <ShieldCheck className="text-accent" /> আমাদের অঙ্গীকার
+          
+          <div className="bg-primary p-10 space-y-6 rounded-[2.5rem] shadow-xl text-white relative overflow-hidden group">
+            <div className="absolute -bottom-4 -right-4 opacity-10 group-hover:rotate-12 transition-transform duration-700">
+              <CheckCircle2 size={120} />
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-              আমরা দ্রুততম সময়ে হয়রানি মুক্ত সেবা প্রদানে অঙ্গীকারবদ্ধ। কোনো অভিযোগ থাকলে অভিযোগ বক্সে জানাতে পারেন।
+            <div className="flex items-center gap-4 font-black text-xl relative z-10">
+              <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-accent shadow-lg border border-white/20">
+                <ShieldCheck size={24} />
+              </div>
+              আমাদের অঙ্গীকার
+            </div>
+            <p className="text-base text-white/90 leading-relaxed font-bold relative z-10">
+              আমরা দ্রুততম সময়ে হয়রানি মুক্ত সেবা প্রদানে অঙ্গীকারবদ্ধ। কোনো অভিযোগ থাকলে সরাসরি প্রধান শিক্ষক অথবা অভিযোগ বক্সে জানাতে পারেন।
             </p>
           </div>
         </div>
