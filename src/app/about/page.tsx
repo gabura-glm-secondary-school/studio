@@ -10,10 +10,13 @@ import {
   ArrowRight,
   ShieldCheck,
   GraduationCap,
-  Users
+  Users,
+  Users2,
+  FileText,
+  Target,
+  Building2
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 const aboutSections = [
   {
@@ -26,11 +29,43 @@ const aboutSections = [
   },
   {
     title: "Administration",
-    bnTitle: "বিদ্যালয় প্রশাসন",
+    bnTitle: "শিক্ষক ও কর্মচারী",
     desc: "Meet our dedicated teachers and administrative staff.",
     icon: UserRound,
     href: "/about/head-teachers",
     color: "bg-emerald-500"
+  },
+  {
+    title: "Managing Committee",
+    bnTitle: "ম্যানেজিং কমিটি",
+    desc: "The leadership board guiding our institution's growth.",
+    icon: Users2,
+    href: "/about/committee",
+    color: "bg-indigo-500"
+  },
+  {
+    title: "Vision & Mission",
+    bnTitle: "ভিশন ও মিশন",
+    desc: "Our core values and future educational goals.",
+    icon: Target,
+    href: "/about/vision",
+    color: "bg-rose-500"
+  },
+  {
+    title: "Citizen's Charter",
+    bnTitle: "সিটিজেন চার্টার",
+    desc: "Commitment to public service and institutional standards.",
+    icon: FileText,
+    href: "/about/charter",
+    color: "bg-amber-600"
+  },
+  {
+    title: "Infrastructure",
+    bnTitle: "ভৌত অবকাঠামো",
+    desc: "Our campus facilities and learning environment.",
+    icon: Building2,
+    href: "/about/infrastructure",
+    color: "bg-teal-500"
   },
   {
     title: "Principal's Message",
@@ -38,7 +73,7 @@ const aboutSections = [
     desc: "A visionary message from S.M Easminur Rahman Linkon.",
     icon: MessageSquare,
     href: "/about/principal",
-    color: "bg-amber-500"
+    color: "bg-purple-500"
   },
   {
     title: "Chairman's Message",
@@ -46,7 +81,7 @@ const aboutSections = [
     desc: "Insight from our Chairman, Gazi Nazrul Islam (MP).",
     icon: Star,
     href: "/about/chairman",
-    color: "bg-purple-500"
+    color: "bg-orange-500"
   }
 ];
 
@@ -62,22 +97,22 @@ export default function AboutPortalPage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 mb-16">
           {aboutSections.map((section, idx) => (
             <Link key={section.href} href={section.href} className="group">
               <Card className="glass-card hover:border-accent transition-all duration-300 overflow-hidden border-2 border-transparent h-full">
                 <CardContent className="p-8 flex items-start gap-6">
-                  <div className={`w-16 h-16 ${section.color} text-white rounded-[1.5rem] flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
-                    <section.icon size={32} />
+                  <div className={`w-14 h-14 ${section.color} text-white rounded-2xl flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
+                    <section.icon size={28} />
                   </div>
-                  <div className="space-y-2 flex-1">
+                  <div className="space-y-1 flex-1">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-2xl font-headline font-black text-primary leading-tight">
+                      <h3 className="text-xl font-headline font-black text-primary leading-tight">
                         {section.bnTitle}
                       </h3>
                       <ArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all text-accent" />
                     </div>
-                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{section.title}</p>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{section.title}</p>
                     <p className="text-sm text-muted-foreground font-medium leading-relaxed pt-2">
                       {section.desc}
                     </p>
