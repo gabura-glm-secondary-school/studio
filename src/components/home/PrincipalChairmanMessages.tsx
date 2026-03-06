@@ -9,7 +9,7 @@ export function PrincipalChairmanMessages() {
       <div className="max-w-7xl mx-auto space-y-24">
         {/* Principal Message */}
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="relative animate-in slide-in-from-left duration-300">
+          <div className="relative animate-in slide-in-from-left duration-500">
             <div className="absolute inset-0 bg-primary/10 rounded-[3rem] -rotate-3 scale-105"></div>
             <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/60">
               <Image 
@@ -38,7 +38,7 @@ export function PrincipalChairmanMessages() {
                 <h4 className="font-headline font-black text-xl text-primary leading-none">মোঃ আশরাফুল আলম</h4>
                 <p className="text-[10px] font-black text-accent uppercase tracking-widest mt-1">অধ্যক্ষ, গাবুরা জি.এল.এম. মাধ্যমিক বিদ্যালয়</p>
               </div>
-              <Button size="lg" className="btn-pill btn-gradient-primary w-full md:w-auto h-12 tap-effect" asChild>
+              <Button size="lg" className="btn-pill btn-gradient-primary w-full md:w-auto h-12 active:scale-95 transition-transform" asChild>
                 <Link href="/about/principal">বিস্তারিত পড়ুন</Link>
               </Button>
             </div>
@@ -50,22 +50,24 @@ export function PrincipalChairmanMessages() {
           <div className="order-2 lg:order-1 space-y-6 lg:pr-8">
              <div className="space-y-3 text-right lg:text-left">
               <span className="text-accent font-black uppercase tracking-[0.2em] text-[10px]">পরিচালনা পর্ষদ</span>
-              <h2 className="text-3xl lg:text-5xl font-headline font-black text-primary">সভাপতির বার্তা</h2>
+              <h2 className="text-3xl lg:text-5xl font-headline font-black text-primary text-right lg:text-left">সভাপতির বার্তা</h2>
             </div>
             <div className="glass-card p-8 space-y-4 bg-gradient-to-br from-white/60 to-accent/5">
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed font-medium">
-                আমাদের বিদ্যালয়টি গাবুরা অঞ্চলের শিক্ষার মূল ভিত্তি হিসেবে কাজ করছে। প্রতিষ্ঠার পর থেকেই আমরা গ্রামীণ চ্যালেঞ্জ এবং আধুনিক সুযোগ-সুবিধার মধ্যে সমন্বয় সাধনের চেষ্টা করে আসছি।
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed font-medium line-clamp-4">
+                প্রতিষ্ঠানের পরিচালকবৃন্দ, শিক্ষকবৃন্দ, অভিভাবকবৃন্দ, শিক্ষার্থীদের ও সর্বোপরি এলাকাবাসীর সমন্বিত প্রচেষ্টার ফল। এলাকাবাসীর সেবার মনোভাব নিয়ে মান সম্পন্ন শিক্ষা প্রসারে এবং কৃতিত্বপূর্ণ ফল অর্জন করে এই প্রতিষ্ঠানটি ইতিমধ্যে একটি স্থান করে নিয়েছে। প্রতিষ্ঠানের সার্বিক ক্ষেত্রে সফলতার জন্য মানুষের মাঝে এক ধরনের চাহিদা সৃষ্টি হওয়ায়...
               </p>
-              <div className="pt-2">
+              <div className="pt-2 text-right lg:text-left">
                 <h4 className="font-headline font-black text-xl text-primary leading-none">হাজী মোঃ মফিজুল হক</h4>
                 <p className="text-[10px] font-black text-accent uppercase tracking-widest mt-1">সভাপতি, পরিচালনা পর্ষদ</p>
               </div>
-              <Button size="lg" className="btn-pill btn-gradient-accent w-full md:w-auto h-12 tap-effect" asChild>
-                <Link href="/about/chairman">সম্পূর্ণ গল্প</Link>
-              </Button>
+              <div className="flex justify-end lg:justify-start">
+                <Button size="lg" className="btn-pill btn-gradient-accent w-full md:w-auto h-12 active:scale-95 transition-transform" asChild>
+                  <Link href="/about/chairman">সম্পূর্ণ গল্প</Link>
+                </Button>
+              </div>
             </div>
           </div>
-          <div className="order-1 lg:order-2 relative animate-in slide-in-from-right duration-300">
+          <div className="order-1 lg:order-2 relative animate-in slide-in-from-right duration-500">
              <div className="absolute inset-0 bg-accent/10 rounded-[3rem] rotate-3 scale-105"></div>
             <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/60">
               <Image 
