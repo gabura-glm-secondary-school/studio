@@ -9,9 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { PasswordPolicy, isPasswordValid } from "@/components/auth/PasswordPolicy";
-import { Loader2, ShieldCheck, UserCheck, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Loader2, ShieldCheck, UserCheck, Eye, EyeOff, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { useAuth, useFirestore } from "@/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
@@ -28,6 +29,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isAgreed, setIsAgreed] = useState(false);
 
   const [verifyData, setVerifyData] = useState({
     idNumber: "", 
@@ -35,7 +37,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
     classId: "",
   });
 
-  const [accountData, setSetAccountData] = useState({
+  const [accountData, setAccountData] = useState({
     mobile: "",
     password: "",
     confirmPassword: ""
@@ -52,7 +54,10 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!db) return;
+    if (!db) {
+      toast({ title: "সিস্টেম ত্রুটি", description: "ডাটাবেস লোড হয়নি। দয়া করে পেজটি রিফ্রেশ করুন।", variant: "destructive" });
+      return;
+    }
 
     setLoading(true);
     try {
@@ -93,7 +98,16 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!auth || !db) return;
+    
+    if (!auth || !db) {
+      toast({ title: "সিস্টেম ত্রুটি", description: "অথেনটিকেশন সার্ভিস পাওয়া যায়নি। রিফ্রেশ করুন।", variant: "destructive" });
+      return;
+    }
+
+    if (!isAgreed) {
+      toast({ title: "সতর্কবার্তা", description: "রেজিস্ট্রেশন সম্পন্ন করতে শর্তাবলীতে সম্মতি দিন।", variant: "destructive" });
+      return;
+    }
 
     if (accountData.password !== accountData.confirmPassword) {
       toast({ 
@@ -106,18 +120,20 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
     setLoading(true);
     try {
-      const virtualEmail = `${verifyData.idNumber.trim().toLowerCase()}@gglmss.edu.bd`;
+      const cleanId = verifyData.idNumber.trim();
+      const virtualEmail = `${cleanId.toLowerCase()}@gglmss.edu.bd`;
+      
       const userCredential = await createUserWithEmailAndPassword(auth, virtualEmail, accountData.password.trim());
       
-      const isMasterAdmin = verifyData.idNumber.trim() === '71209026';
+      const isMasterAdmin = cleanId === '71209026';
 
       const userProfile = {
         uid: userCredential.user.uid,
         role: isMasterAdmin ? 'admin' : role,
         disabled: false,
         adminApproved: isMasterAdmin ? true : false, 
-        ein: verifyData.idNumber.trim(),
-        idNumber: verifyData.idNumber.trim(),
+        ein: cleanId,
+        idNumber: cleanId,
         displayName: verifyData.displayName.trim(),
         mobile: accountData.mobile.trim(),
         createdAt: new Date().toISOString(),
@@ -129,7 +145,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
       toast({ 
         title: "রেজিস্ট্রেশন সফল (Success)", 
-        description: `স্বাগতম! আপনার অ্যাকাউন্টটি সফলভাবে তৈরি হয়েছে। লগইন করা হচ্ছে...`,
+        description: `স্বাগতম! আপনার অ্যাকাউন্টটি সফলভাবে তৈরি হয়েছে।`,
         variant: "success"
       });
       
@@ -152,9 +168,10 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
         description: message, 
         variant: "destructive" 
       });
-    } finally {
+      // Important: Ensure loading is set to false if registration fails
       setLoading(false);
     }
+    // Note: finally block is avoided here to prevent state updates after navigation
   };
 
   return (
@@ -252,7 +269,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
                   placeholder="017XXXXXXXX" 
                   required 
                   value={accountData.mobile}
-                  onChange={(e) => setSetAccountData({...accountData, mobile: e.target.value})}
+                  onChange={(e) => setAccountData({...accountData, mobile: e.target.value})}
                   className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
                 />
               </div>
@@ -263,7 +280,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
                     <Input 
                       type={showPassword ? "text" : "password"}
                       value={accountData.password}
-                      onChange={(e) => setSetAccountData({...accountData, password: e.target.value})}
+                      onChange={(e) => setAccountData({...accountData, password: e.target.value})}
                       required
                       className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
                     />
@@ -277,7 +294,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
                   <Input 
                     type="password"
                     value={accountData.confirmPassword}
-                    onChange={(e) => setSetAccountData({...accountData, confirmPassword: e.target.value})}
+                    onChange={(e) => setAccountData({...accountData, confirmPassword: e.target.value})}
                     required
                     className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
                   />
@@ -286,10 +303,25 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
               
               <PasswordPolicy password={accountData.password} />
 
+              <div className="flex items-start space-x-3 p-4 bg-primary/5 rounded-xl border border-primary/10">
+                <Checkbox 
+                  id="agreement" 
+                  checked={isAgreed} 
+                  onCheckedChange={(checked) => setIsAgreed(checked as boolean)}
+                  className="mt-1 border-primary/30 data-[state=checked]:bg-primary"
+                />
+                <label
+                  htmlFor="agreement"
+                  className="text-xs font-bold text-slate-700 leading-relaxed cursor-pointer select-none"
+                >
+                  আমি প্রতিষ্ঠানের সকল নিয়ম-কানুন মেনে চলতে সম্মত আছি এবং স্বীকার করছি যে আমার দেওয়া সকল তথ্য সঠিক।
+                </label>
+              </div>
+
               <Button 
                 type="submit" 
-                disabled={loading || !isPasswordValid(accountData.password)} 
-                className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 shadow-xl bg-emerald-600 hover:bg-emerald-700 rounded-2xl text-white"
+                disabled={loading || !isAgreed || !isPasswordValid(accountData.password)} 
+                className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 shadow-xl bg-emerald-600 hover:bg-emerald-700 rounded-2xl text-white disabled:opacity-50 disabled:grayscale transition-all"
               >
                 {loading ? <Loader2 className="animate-spin" /> : <UserCheck size={20} />} Complete Registration
               </Button>
