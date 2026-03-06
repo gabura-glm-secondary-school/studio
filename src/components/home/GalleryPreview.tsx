@@ -24,7 +24,13 @@ export function GalleryPreview() {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="col-span-2 row-span-2 relative rounded-3xl overflow-hidden group">
-            <Image src={images[0]?.imageUrl} alt="Gallery" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+            <Image 
+              src={images[0]?.imageUrl || "https://picsum.photos/seed/gallery1/800/600"} 
+              alt="Gallery" 
+              fill 
+              className="object-cover group-hover:scale-110 transition-transform duration-700" 
+              data-ai-hint="school event"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-8">
               <div className="text-white">
                 <h4 className="font-bold text-xl">Annual Sports Day</h4>
@@ -33,13 +39,31 @@ export function GalleryPreview() {
             </div>
           </div>
           <div className="relative rounded-3xl overflow-hidden h-64 group">
-             <Image src={images[1]?.imageUrl} alt="Gallery" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+             <Image 
+               src={images[1]?.imageUrl || "https://picsum.photos/seed/gallery2/600/400"} 
+               alt="Gallery" 
+               fill 
+               className="object-cover group-hover:scale-110 transition-transform duration-700" 
+               data-ai-hint="school sports"
+             />
           </div>
           <div className="relative rounded-3xl overflow-hidden h-64 group">
-             <Image src={images[2]?.imageUrl} alt="Gallery" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+             <Image 
+               src={images[2]?.imageUrl || "https://picsum.photos/seed/gallery3/600/400"} 
+               alt="Gallery" 
+               fill 
+               className="object-cover group-hover:scale-110 transition-transform duration-700" 
+               data-ai-hint="classroom"
+             />
           </div>
           <div className="col-span-2 relative rounded-3xl overflow-hidden h-64 group">
-             <Image src="https://picsum.photos/seed/gall4/800/400" alt="Gallery" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+             <Image 
+               src="https://picsum.photos/seed/gall4/800/400" 
+               alt="Gallery" 
+               fill 
+               className="object-cover group-hover:scale-110 transition-transform duration-700" 
+               data-ai-hint="campus life"
+             />
              <div className="absolute inset-0 flex items-center justify-center">
                 <Link href="/gallery" className="glass-card p-4 rounded-full flex items-center gap-3 text-primary font-bold hover:bg-accent transition-colors">
                   <ImageIcon /> Explore 100+ Photos
