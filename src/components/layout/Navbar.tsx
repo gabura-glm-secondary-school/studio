@@ -14,10 +14,6 @@ import {
   Library, 
   FileCheck, 
   Phone, 
-  History,
-  UserRound,
-  MessageSquare,
-  Star,
   ChevronRight,
   ArrowRight,
   ShieldCheck
@@ -40,8 +36,12 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Admin button visibility logic based on Firestore rules helper: isAdmin()
-  const canAccessAdmin = user && !user.disabled && (user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true);
+  // Strict Admin Check based on user instructions and Firestore rules
+  const canAccessAdmin = user && !user.disabled && (
+    user.role === 'admin' || 
+    user.role === 'superadmin' || 
+    user.adminApproved === true
+  );
 
   const navLinks = [
     { title: "Home", href: "/", icon: Home },
@@ -196,7 +196,7 @@ function DrawerLink({ href, icon: Icon, children, onClick }: any) {
         <div className="w-12 h-12 bg-white shadow-md border border-primary/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500">
           <Icon size={24} />
         </div>
-        <span className="text-lg uppercase tracking-tight">{children}</span>
+        <span className="text-lg font-black uppercase tracking-tight">{children}</span>
       </div>
       <ChevronRight size={20} className="text-primary/20 group-hover:text-primary group-hover:translate-x-2 transition-all duration-300" />
     </NextLink>

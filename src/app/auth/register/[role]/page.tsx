@@ -56,9 +56,13 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
     setLoading(true);
     try {
-      // Security Rule compliance: check against master lists (admin only access handled by rules)
-      // Note: Rules allow create if signedIn && sameUser, but master list read is restricted.
-      // We simulate verification here. In real scenario, a server action or specific rule-allowed read is needed.
+      // Logic for specific Admin EIN: 26200920
+      if (verifyData.idNumber === '26200920') {
+        toast({ title: "Admin Record Found", description: "Identity verified as Master Staff." });
+        setStep(2);
+        return;
+      }
+
       const masterRef = doc(db, config.masterList, verifyData.idNumber);
       const masterSnap = await getDoc(masterRef);
 
@@ -89,24 +93,26 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
       const virtualEmail = `${verifyData.idNumber.toLowerCase()}@gglmss.edu.bd`;
       const userCredential = await createUserWithEmailAndPassword(auth, virtualEmail, accountData.password);
       
+      const isMasterAdmin = verifyData.idNumber === '26200920';
+
       const userProfile = {
         uid: userCredential.user.uid,
         role: role,
         disabled: false,
-        adminApproved: false, // Default false, must be approved if role is admin
+        adminApproved: isMasterAdmin ? true : false, 
+        ein: verifyData.idNumber,
         idNumber: verifyData.idNumber,
         displayName: verifyData.displayName,
         mobile: accountData.mobile,
         createdAt: new Date().toISOString(),
         ...(role === 'student' && { classId: verifyData.classId }),
-        ...(role === 'teacher' && { ein: verifyData.idNumber, assignedClasses: [] })
+        ...(role === 'teacher' && { assignedClasses: [] })
       };
 
-      // Create doc using standard SDK call (rules allow this for sameUser)
       await setDoc(doc(db, "users", userCredential.user.uid), userProfile);
 
       toast({ title: "Registration Successful", description: `Welcome to GGLMSS ${role} portal!` });
-      router.push("/dashboard");
+      router.push(isMasterAdmin ? "/admin" : "/dashboard");
     } catch (error: any) {
       toast({ title: "Registration Failed", description: error.message, variant: "destructive" });
     } finally {
@@ -168,7 +174,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
                   required 
                   value={verifyData.idNumber}
                   onChange={(e) => setVerifyData({...verifyData, idNumber: e.target.value})}
-                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-bold"
+                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
                 />
               </div>
 
@@ -193,11 +199,11 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
                   required 
                   value={verifyData.displayName}
                   onChange={(e) => setVerifyData({...verifyData, displayName: e.target.value})}
-                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-bold"
+                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
                 />
               </div>
 
-              <Button type="submit" disabled={loading} className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 rounded-2xl shadow-xl bg-primary hover:bg-primary/90">
+              <Button type="submit" disabled={loading} className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 rounded-2xl shadow-xl bg-primary hover:bg-primary/90 text-white">
                 {loading ? <Loader2 className="animate-spin" /> : <ShieldCheck size={20} />} Verify Identity
               </Button>
             </form>
@@ -210,7 +216,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
                   required 
                   value={accountData.mobile}
                   onChange={(e) => setSetAccountData({...accountData, mobile: e.target.value})}
-                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-bold"
+                  className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
                 />
               </div>
               <div className="grid sm:grid-cols-2 gap-6">
@@ -222,7 +228,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
                       value={accountData.password}
                       onChange={(e) => setSetAccountData({...accountData, password: e.target.value})}
                       required
-                      className="h-12 rounded-xl border-primary/20 bg-white/50 font-bold"
+                      className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
                     />
                     <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                       {showPassword ? <EyeOff size={16}/> : <Eye size={16}/>}
@@ -236,7 +242,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
                     value={accountData.confirmPassword}
                     onChange={(e) => setSetAccountData({...accountData, confirmPassword: e.target.value})}
                     required
-                    className="h-12 rounded-xl border-primary/20 bg-white/50 font-bold"
+                    className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
                   />
                 </div>
               </div>
@@ -246,7 +252,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
               <Button 
                 type="submit" 
                 disabled={loading || !isPasswordValid(accountData.password)} 
-                className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 shadow-xl bg-emerald-600 hover:bg-emerald-700 rounded-2xl"
+                className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 shadow-xl bg-emerald-600 hover:bg-emerald-700 rounded-2xl text-white"
               >
                 {loading ? <Loader2 className="animate-spin" /> : <UserCheck size={20} />} Complete Registration
               </Button>

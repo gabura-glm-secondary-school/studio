@@ -38,10 +38,10 @@ export function Hero() {
                 Shaping <span className="gradient-text">Futures</span> <br />
                 In Sundarbans
               </h1>
-              <p className="text-xl text-slate-800 leading-relaxed font-bold max-w-lg italic">
+              <p className="text-xl text-slate-900 leading-relaxed font-black max-w-lg italic">
                 "Quality Education is Our Commitment"
               </p>
-              <p className="text-lg text-slate-700 leading-relaxed font-semibold max-w-lg">
+              <p className="text-lg text-slate-800 leading-relaxed font-bold max-w-lg">
                 Gabura Gopal Laxmi Memorial Secondary School is committed to providing quality education and fostering excellence in every student.
               </p>
             </div>
