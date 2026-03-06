@@ -4,6 +4,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase';
+import { NewsTicker } from '@/components/home/NewsTicker';
 
 export const metadata: Metadata = {
   title: 'Sundarbans Scholars | Gabura Gopal Laxmi Memorial Secondary School',
@@ -24,10 +25,16 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased bg-background text-foreground flex flex-col min-h-screen">
         <FirebaseClientProvider>
+          {/* Main Navigation capsule */}
           <Navbar />
+          
+          {/* Global sliding notice ticker - positioned dynamically below Navbar */}
+          <NewsTicker />
+          
           <main className="flex-grow">
             {children}
           </main>
+          
           <Footer />
           <Toaster />
         </FirebaseClientProvider>

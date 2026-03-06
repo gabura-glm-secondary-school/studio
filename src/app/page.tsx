@@ -1,5 +1,4 @@
 import { Hero } from "@/components/home/Hero";
-import { NewsTicker } from "@/components/home/NewsTicker";
 import { Statistics } from "@/components/home/Statistics";
 import { LatestNotices } from "@/components/home/LatestNotices";
 import { PrincipalChairmanMessages } from "@/components/home/PrincipalChairmanMessages";
@@ -13,13 +12,11 @@ import { ArrowRight, Star } from "lucide-react";
 export default function Home() {
   return (
     <div className="space-y-12">
-      <NewsTicker />
+      {/* Hero section with floating statistics container */}
       <Hero />
-      
-      {/* Statistics floating container */}
       <Statistics />
       
-      {/* Notices Section */}
+      {/* Latest Announcements Grid */}
       <section className="py-24 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
@@ -37,6 +34,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* School Excellence / Highlights */}
       <section className="py-24 bg-gradient-to-b from-transparent via-primary/5 to-transparent">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16 space-y-4">
@@ -59,9 +57,10 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Leadership Messages */}
       <PrincipalChairmanMessages />
 
-      {/* Student Achievements with Glass Cards */}
+      {/* Student Achievements Showcase */}
       <section className="py-24 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="glass-card p-12 bg-primary/95 text-white relative overflow-hidden">
@@ -77,7 +76,13 @@ export default function Home() {
                     <div className="w-full aspect-square relative rounded-3xl overflow-hidden mb-4 shadow-xl">
                       <img src={`https://picsum.photos/seed/student${i}/300/300`} alt="Topper" className="object-cover w-full h-full" />
                     </div>
-                    <div className="flex text-accent gap-1"><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /><Star size={14} fill="currentColor" /></div>
+                    <div className="flex text-accent gap-1">
+                      <Star size={14} fill="currentColor" />
+                      <Star size={14} fill="currentColor" />
+                      <Star size={14} fill="currentColor" />
+                      <Star size={14} fill="currentColor" />
+                      <Star size={14} fill="currentColor" />
+                    </div>
                     <h4 className="font-bold text-xl leading-tight">Top Rank SSC {2024 - i}</h4>
                     <p className="text-white/60 text-xs font-medium">Outstanding performance with GPA 5.00.</p>
                   </div>
@@ -88,6 +93,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Visual Journey, Quick Resources and Contact Info */}
       <GalleryPreview />
       <QuickLinks />
       <ContactPreview />
