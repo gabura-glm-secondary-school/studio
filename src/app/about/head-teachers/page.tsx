@@ -112,7 +112,7 @@ const personnel = [
     bnName: "আব্দুল কাদের",
     role: "Assistant Teacher (English)",
     bnRole: "সহকারী শিক্ষক (ইংরেজি)",
-    image: "https://i.postimg.cc/44qmL7Js/FB-IMG-1772773482000.jpg",
+    image: "https://i.postimg.cc/KvCsJypW/FB-IMG-1772773368990.jpg",
     category: "Teacher",
     dept: "English"
   },
