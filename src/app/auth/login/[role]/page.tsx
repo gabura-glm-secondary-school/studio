@@ -51,11 +51,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!auth || !db) {
-      toast({ 
-        title: "সিস্টেম ত্রুটি (Unsuccess)", 
-        description: "ফায়ারবেস লোড হতে ব্যর্থ হয়েছে। পেজটি রিফ্রেশ করুন।", 
-        variant: "destructive" 
-      });
+      toast({ title: "সিস্টেম ত্রুটি (Unsuccess)", description: "ফায়ারবেস লোড হতে ব্যর্থ হয়েছে।", variant: "destructive" });
       return;
     }
 
@@ -72,7 +68,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
       const userData = userDoc.data();
 
       if (!userData) {
-        throw new Error("আপনার তথ্যের কোনো রেকর্ড ডাটাবেসে পাওয়া যায়নি। অনুগ্রহ করে আগে রেজিস্ট্রেশন সম্পন্ন করুন।");
+        throw new Error("আপনার তথ্যের কোনো রেকর্ড ডাটাবেসে পাওয়া যায়নি। দয়া করে আগে রেজিস্ট্রেশন করুন।");
       }
 
       const isUserAdmin = userData.role === 'admin' || userData.role === 'superadmin' || userData.adminApproved === true;
@@ -89,35 +85,18 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
         localStorage.removeItem(`gglmss_pass_${role}`);
       }
 
-      toast({ 
-        title: "লগইন সফল (Success)", 
-        description: "স্বাগতম! আপনার ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...",
-        variant: "success"
-      });
+      toast({ title: "লগইন সফল (Success)", description: "স্বাগতম! ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...", variant: "success" });
       
-      setTimeout(() => {
-        if (isUserAdmin) {
-          router.push("/admin");
-        } else {
-          router.push("/dashboard");
-        }
-      }, 500);
-
+      router.push(isUserAdmin ? "/admin" : "/dashboard");
     } catch (error: any) {
-      let message = "লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।";
-      
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/invalid-email' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-        message = "আপনার ID অথবা পাসওয়ার্ড ভুল। আপনি যদি আগে একাউন্ট তৈরি না করে থাকেন, তবে REGISTER ট্যাবে গিয়ে রেজিস্ট্রেশন করুন।";
+      let message = "লগইন ব্যর্থ হয়েছে।";
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        message = "আপনার ID অথবা পাসওয়ার্ড ভুল। আপনি যদি একাউন্ট তৈরি না করে থাকেন, তবে REGISTER করুন।";
       } else if (error.message) {
         message = error.message;
       }
       
-      toast({ 
-        title: "লগইন ব্যর্থ (Unsuccess)", 
-        description: message, 
-        variant: "destructive" 
-      });
-    } finally {
+      toast({ title: "লগইন ব্যর্থ (Unsuccess)", description: message, variant: "destructive" });
       setLoading(false);
     }
   };

@@ -12,7 +12,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { PasswordPolicy, isPasswordValid } from "@/components/auth/PasswordPolicy";
-import { Loader2, ShieldCheck, UserCheck, Eye, EyeOff, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Loader2, ShieldCheck, UserCheck, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useAuth, useFirestore } from "@/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
@@ -55,19 +55,14 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!db) {
-      toast({ title: "সিস্টেম ত্রুটি", description: "ডাটাবেস লোড হয়নি। দয়া করে পেজটি রিফ্রেশ করুন।", variant: "destructive" });
+      toast({ title: "সিস্টেম ত্রুটি (Unsuccess)", description: "ডাটাবেস লোড হয়নি। দয়া করে পেজটি রিফ্রেশ করুন।", variant: "destructive" });
       return;
     }
 
     setLoading(true);
     try {
-      // Special check for master admin EIN
       if (verifyData.idNumber.trim() === '71209026') {
-        toast({ 
-          title: "যাচাই সফল (Success)", 
-          description: "অ্যাডমিন আইডি পাওয়া গেছে। এখন পাসওয়ার্ড সেট করুন।",
-          variant: "success"
-        });
+        toast({ title: "যাচাই সফল (Success)", description: "অ্যাডমিন আইডি পাওয়া গেছে। এখন পাসওয়ার্ড সেট করুন।", variant: "success" });
         setStep(2);
         return;
       }
@@ -76,21 +71,13 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
       const masterSnap = await getDoc(masterRef);
 
       if (!masterSnap.exists()) {
-        throw new Error(`প্রদত্ত ${config.idLabel} আমাদের অনুমোদিত তালিকায় নেই। সঠিক তথ্য দিন অথবা অফিসের সাথে যোগাযোগ করুন।`);
+        throw new Error(`প্রদত্ত ${config.idLabel} আমাদের অনুমোদিত তালিকায় নেই। সঠিক তথ্য দিন।`);
       }
 
-      toast({ 
-        title: "তথ্য যাচাই সফল (Success)", 
-        description: "অফিসিয়াল রেকর্ড পাওয়া গেছে। একাউন্ট তৈরি করতে পরবর্তী ধাপ সম্পন্ন করুন।",
-        variant: "success"
-      });
+      toast({ title: "তথ্য যাচাই সফল (Success)", description: "অফিসিয়াল রেকর্ড পাওয়া গেছে। পরবর্তী ধাপ সম্পন্ন করুন।", variant: "success" });
       setStep(2);
     } catch (error: any) {
-      toast({ 
-        title: "যাচাইকরণ ব্যর্থ (Unsuccess)", 
-        description: error.message || "কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।", 
-        variant: "destructive" 
-      });
+      toast({ title: "যাচাইকরণ ব্যর্থ (Unsuccess)", description: error.message || "কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।", variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -100,21 +87,17 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
     e.preventDefault();
     
     if (!auth || !db) {
-      toast({ title: "সিস্টেম ত্রুটি", description: "অথেনটিকেশন সার্ভিস পাওয়া যায়নি। রিফ্রেশ করুন।", variant: "destructive" });
+      toast({ title: "সিস্টেম ত্রুটি (Unsuccess)", description: "অথেনটিকেশন সার্ভিস পাওয়া যায়নি।", variant: "destructive" });
       return;
     }
 
     if (!isAgreed) {
-      toast({ title: "সতর্কবার্তা", description: "রেজিস্ট্রেশন সম্পন্ন করতে শর্তাবলীতে সম্মতি দিন।", variant: "destructive" });
+      toast({ title: "সতর্কবার্তা (Unsuccess)", description: "রেজিস্ট্রেশন সম্পন্ন করতে শর্তাবলীতে টিক চিহ্ন দিন।", variant: "destructive" });
       return;
     }
 
     if (accountData.password !== accountData.confirmPassword) {
-      toast({ 
-        title: "পাসওয়ার্ড মেলেনি (Unsuccess)", 
-        description: "উভয় পাসওয়ার্ড একই হতে হবে। দয়া করে পুনরায় চেক করুন।", 
-        variant: "destructive" 
-      });
+      toast({ title: "পাসওয়ার্ড মেলেনি (Unsuccess)", description: "উভয় পাসওয়ার্ড একই হতে হবে।", variant: "destructive" });
       return;
     }
 
@@ -143,35 +126,23 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
       await setDoc(doc(db, "users", userCredential.user.uid), userProfile);
 
-      toast({ 
-        title: "রেজিস্ট্রেশন সফল (Success)", 
-        description: `স্বাগতম! আপনার অ্যাকাউন্টটি সফলভাবে তৈরি হয়েছে।`,
-        variant: "success"
-      });
+      toast({ title: "রেজিস্ট্রেশন সফল (Success)", description: "স্বাগতম! আপনার অ্যাকাউন্টটি তৈরি হয়েছে। ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...", variant: "success" });
       
-      setTimeout(() => {
-        router.push(isMasterAdmin ? "/admin" : "/dashboard");
-      }, 1000);
-
+      // Navigate immediately
+      router.push(isMasterAdmin ? "/admin" : "/dashboard");
     } catch (error: any) {
-      let message = "রেজিস্ট্রেশন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।";
+      let message = "রেজিস্ট্রেশন ব্যর্থ হয়েছে।";
       if (error.code === 'auth/email-already-in-use') {
-        message = "এই ID দিয়ে ইতিমধ্যেই একটি অ্যাকাউন্ট তৈরি করা আছে। দয়া করে লগইন ট্যাবে গিয়ে লগইন করুন।";
+        message = "এই ID দিয়ে ইতিমধ্যেই একটি অ্যাকাউন্ট আছে। দয়া করে লগইন করুন।";
       } else if (error.code === 'auth/weak-password') {
-        message = "পাসওয়ার্ডটি খুব দুর্বল। অন্তত ৮ অক্ষরের শক্তিশালী পাসওয়ার্ড দিন।";
+        message = "পাসওয়ার্ডটি খুব দুর্বল। অন্তত ৮ অক্ষরের দিন।";
       } else if (error.message) {
         message = error.message;
       }
       
-      toast({ 
-        title: "রেজিস্ট্রেশন ত্রুটি (Unsuccess)", 
-        description: message, 
-        variant: "destructive" 
-      });
-      // Important: Ensure loading is set to false if registration fails
+      toast({ title: "রেজিস্ট্রেশন ত্রুটি (Unsuccess)", description: message, variant: "destructive" });
       setLoading(false);
     }
-    // Note: finally block is avoided here to prevent state updates after navigation
   };
 
   return (
