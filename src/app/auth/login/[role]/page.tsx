@@ -30,10 +30,11 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Redirect if already logged in - Silent redirect
+  // Instant Redirect if already logged in
   useEffect(() => {
     if (!userLoading && user) {
-      const isAdmin = user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true || user.idNumber === '71209026';
+      const isMasterAdmin = user.email === '71209026@gglmss.edu.bd' || user.idNumber === '71209026';
+      const isAdmin = user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true || isMasterAdmin;
       router.replace(isAdmin ? "/admin" : "/dashboard");
     }
   }, [user, userLoading, router]);
@@ -48,7 +49,6 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
     }
   }, [role]);
 
-  // If already logged in, hide content while redirecting
   if (!userLoading && user) return null;
 
   const roleConfig: Record<string, any> = {
@@ -62,10 +62,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!auth || !db) {
-      toast({ title: "সিস্টেম ত্রুটি (UNSUCCESS)", description: "সার্ভার লোড হতে ব্যর্থ হয়েছে। পেজটি রিফ্রেশ করুন।", variant: "destructive" });
-      return;
-    }
+    if (!auth) return;
 
     setLoading(true);
     try {
@@ -73,32 +70,13 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
       const virtualEmail = `${cleanId}@gglmss.edu.bd`;
       const cleanPassword = password.trim();
 
-      // Master ID Bypass for offline resilience
-      if (cleanId === '71209026') {
-        await signInWithEmailAndPassword(auth, virtualEmail, cleanPassword);
-        toast({ title: "লগইন সফল (SUCCESS)", description: "অ্যাডমিন প্যানেলে প্রবেশ করছেন...", variant: "success" });
-        setLoading(false);
-        router.replace("/admin");
-        return;
-      }
-
-      const userCredential = await signInWithEmailAndPassword(auth, virtualEmail, cleanPassword);
-      
-      let userData: any = null;
-      try {
-        const userDocRef = doc(db, "users", userCredential.user.uid);
-        const userSnap = await getDoc(userDocRef);
-        userData = userSnap.data();
-      } catch (docErr) {
-        // Simple fallback
-      }
+      // Sign in first
+      await signInWithEmailAndPassword(auth, virtualEmail, cleanPassword);
 
       if (rememberMe) {
         localStorage.setItem(`gglmss_id_${role}`, idNumber);
         localStorage.setItem(`gglmss_pass_${role}`, password);
       }
-
-      const isUserAdmin = userData?.role === 'admin' || userData?.role === 'superadmin' || userData?.adminApproved === true || cleanId === '71209026';
 
       toast({ 
         title: "লগইন সফল (SUCCESS)", 
@@ -106,18 +84,14 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
         variant: "success",
       });
       
+      // The useEffect will handle redirecting automatically
       setLoading(false);
-      router.replace(isUserAdmin ? "/admin" : "/dashboard");
     } catch (error: any) {
       setLoading(false);
       let message = "লগইন ব্যর্থ হয়েছে।";
-      
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-        message = "আপনার ID অথবা পাসওয়ার্ড ভুল। একাউন্ট না থাকলে REGISTER করুন।";
-      } else if (error.message.includes("offline")) {
-        message = "ইন্টারনেট সংযোগ বিচ্ছিন্ন। আবার চেষ্টা করুন।";
+        message = "আপনার ID অথবা পাসওয়ার্ড ভুল।";
       }
-      
       toast({ title: "লগইন ব্যর্থ (UNSUCCESS)", description: message, variant: "destructive" });
     }
   };
