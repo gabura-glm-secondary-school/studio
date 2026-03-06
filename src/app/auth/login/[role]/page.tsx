@@ -7,7 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Loader2, Lock, ShieldAlert } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Eye, EyeOff, Loader2, Lock, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { useAuth, useFirestore } from "@/firebase";
@@ -41,12 +42,9 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
 
     setLoading(true);
     try {
-      // In a real scenario, we'd map ID/EIN to a Firebase email or use a service
-      // For this MVP, we'll use a virtual email: idNumber@gglmss.edu.bd
       const virtualEmail = `${idNumber.toLowerCase()}@gglmss.edu.bd`;
       const userCredential = await signInWithEmailAndPassword(auth, virtualEmail, password);
       
-      // Verify role in Firestore
       const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
       const userData = userDoc.data();
 
@@ -68,33 +66,56 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   };
 
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-secondary/5 flex items-center justify-center px-4">
-      <Card className="glass-card w-full max-w-md">
-        <CardHeader className="text-center space-y-2">
-          <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mx-auto mb-2">
-            <Lock size={24} />
-          </div>
-          <CardTitle className="text-3xl font-headline font-bold">{config.title}</CardTitle>
-          <CardDescription>Enter your credentials to access your dashboard.</CardDescription>
+    <div className="pt-32 pb-24 min-h-screen bg-secondary/5 flex flex-col items-center justify-center px-4">
+      <Link href="/auth/portal" className="mb-8 group flex items-center gap-2 text-muted-foreground hover:text-primary font-black uppercase text-xs tracking-widest transition-all">
+        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back to Portals
+      </Link>
+
+      <Card className="glass-card w-full max-w-md overflow-hidden border-none shadow-2xl">
+        <CardHeader className="p-0 border-b">
+          <Tabs value="login" className="w-full">
+            <TabsList className="w-full h-14 bg-transparent p-0 rounded-none">
+              <TabsTrigger 
+                value="login" 
+                className="flex-1 h-full rounded-none font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-white data-[state=active]:text-primary border-r"
+              >
+                Login
+              </TabsTrigger>
+              <Link href={`/auth/register/${role}`} className="flex-1 h-full">
+                <div className="flex items-center justify-center h-full font-black uppercase tracking-widest text-[10px] text-muted-foreground hover:bg-white/50 transition-colors">
+                  Register
+                </div>
+              </Link>
+            </TabsList>
+          </Tabs>
         </CardHeader>
-        <CardContent>
+        
+        <CardContent className="p-8 md:p-10 space-y-8">
+          <div className="text-center space-y-2">
+            <div className="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Lock size={24} />
+            </div>
+            <CardTitle className="text-3xl font-headline font-black text-primary">{config.title}</CardTitle>
+            <CardDescription className="font-medium">Enter your credentials to access your dashboard.</CardDescription>
+          </div>
+
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="idNumber">{config.label}</Label>
+              <Label htmlFor="idNumber" className="font-black uppercase text-[10px] tracking-widest text-primary/60">{config.label}</Label>
               <Input 
                 id="idNumber" 
                 placeholder={config.placeholder} 
                 required 
                 value={idNumber}
                 onChange={(e) => setIdNumber(e.target.value)}
-                className="h-12"
+                className="h-12 rounded-xl border-primary/10 bg-white/50"
               />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link href="/auth/recovery" className="text-xs font-bold text-accent hover:underline">
-                  Forgot Password?
+                <Label htmlFor="password" className="font-black uppercase text-[10px] tracking-widest text-primary/60">Password</Label>
+                <Link href="/auth/recovery" className="text-[10px] font-black text-accent hover:underline uppercase tracking-widest">
+                  Forgot?
                 </Link>
               </div>
               <div className="relative">
@@ -104,7 +125,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
                   required 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 pr-12"
+                  className="h-12 pr-12 rounded-xl border-primary/10 bg-white/50"
                 />
                 <button
                   type="button"
@@ -116,21 +137,9 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
               </div>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full h-12 text-lg gap-2 rounded-xl shadow-lg">
+            <Button type="submit" disabled={loading} className="w-full h-14 text-lg font-black uppercase tracking-widest gap-2 rounded-2xl shadow-xl bg-primary hover:bg-primary/90">
               {loading ? <Loader2 className="animate-spin" /> : "Sign In"}
             </Button>
-
-            <div className="text-center space-y-4">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-border" /></div>
-                <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-muted-foreground">New Here?</span></div>
-              </div>
-              <Link href={`/auth/register/${role}`}>
-                <Button variant="outline" className="w-full h-12 rounded-xl border-2">
-                  Create {role.charAt(0).toUpperCase() + role.slice(1)} Account
-                </Button>
-              </Link>
-            </div>
           </form>
         </CardContent>
       </Card>
