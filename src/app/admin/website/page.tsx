@@ -18,7 +18,11 @@ import {
   Loader2,
   Layout,
   GraduationCap,
-  Briefcase
+  Briefcase,
+  Megaphone,
+  Plus,
+  Trash2,
+  BarChart3 as BarChartIcon
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
@@ -26,6 +30,11 @@ import Image from "next/image";
 export default function WebsiteSettings() {
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
+  const [tickerNotices, setTickerNotices] = useState([
+    "SSC 2025 Result Published - Students can now check their results through the student portal.",
+    "Admission Open 2025 - Enrollment for the new academic session is now active for all classes.",
+    "School Picnic Registration Open - Join us for the annual excursion to the Sundarbans Mangrove Forest."
+  ]);
 
   const handleSave = () => {
     setSaving(true);
@@ -33,6 +42,20 @@ export default function WebsiteSettings() {
       setSaving(false);
       toast({ title: "Settings Updated", description: "School information has been saved successfully." });
     }, 1500);
+  };
+
+  const addTickerNotice = () => {
+    setTickerNotices([...tickerNotices, ""]);
+  };
+
+  const removeTickerNotice = (index: number) => {
+    setTickerNotices(tickerNotices.filter((_, i) => i !== index));
+  };
+
+  const updateTickerNotice = (index: number, val: string) => {
+    const next = [...tickerNotices];
+    next[index] = val;
+    setTickerNotices(next);
   };
 
   return (
@@ -52,6 +75,9 @@ export default function WebsiteSettings() {
           <TabsTrigger value="general" className="rounded-xl gap-2 h-10 font-bold data-[state=active]:bg-primary data-[state=active]:text-white">
             <Layout size={16} /> General Info
           </TabsTrigger>
+          <TabsTrigger value="ticker" className="rounded-xl gap-2 h-10 font-bold data-[state=active]:bg-primary data-[state=active]:text-white">
+            <Megaphone size={16} /> Notice Ticker
+          </TabsTrigger>
           <TabsTrigger value="contact" className="rounded-xl gap-2 h-10 font-bold data-[state=active]:bg-primary data-[state=active]:text-white">
             <MapPin size={16} /> Contact Details
           </TabsTrigger>
@@ -70,11 +96,11 @@ export default function WebsiteSettings() {
                   <Input defaultValue="Gabura Gopal Laxmi Memorial Secondary School" className="rounded-xl" />
                 </div>
                 <div className="space-y-2">
-                  <Label>School Motto (Bangla/English)</Label>
+                  <Label>School Motto (Bangla)</Label>
                   <Input defaultValue="সুশিক্ষাই আমাদের অঙ্গীকার" className="rounded-xl" />
                 </div>
                 <div className="space-y-2">
-                  <Label>Main Website URL</Label>
+                  <Label>Official Website URL</Label>
                   <Input defaultValue="https://gglmss.edu.bd" className="rounded-xl" />
                 </div>
               </CardContent>
@@ -89,7 +115,7 @@ export default function WebsiteSettings() {
                   </div>
                   <div className="space-y-2">
                     <p className="font-bold text-sm text-primary leading-tight">School Official Logo</p>
-                    <p className="text-[10px] text-muted-foreground italic">Recommended size: 512x512px (PNG/JPG)</p>
+                    <p className="text-[10px] text-muted-foreground italic">Size: 512x512px preferred</p>
                     <Button variant="outline" size="sm" className="rounded-lg gap-2 h-8 border-2">
                       <ImageIcon size={14} /> Change Logo
                     </Button>
@@ -98,6 +124,40 @@ export default function WebsiteSettings() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        <TabsContent value="ticker" className="animate-in slide-in-from-bottom-4 duration-500">
+          <Card className="border-none shadow-sm">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Notice Ticker Management</CardTitle>
+                <CardDescription>Messages appearing in the sliding bar below the navbar.</CardDescription>
+              </div>
+              <Button onClick={addTickerNotice} size="sm" className="rounded-xl gap-2 font-black">
+                <Plus size={16} /> Add Notice
+              </Button>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {tickerNotices.map((notice, idx) => (
+                <div key={idx} className="flex gap-3">
+                  <Input 
+                    value={notice} 
+                    onChange={(e) => updateTickerNotice(idx, e.target.value)}
+                    placeholder="Enter notice text..." 
+                    className="rounded-xl"
+                  />
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => removeTickerNotice(idx)}
+                    className="rounded-xl text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 size={18} />
+                  </Button>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="contact" className="animate-in slide-in-from-bottom-4 duration-500">
@@ -120,7 +180,7 @@ export default function WebsiteSettings() {
               </div>
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <Label className="flex items-center gap-2"><MapPin size={14} /> School Physical Address</Label>
+                  <Label className="flex items-center gap-2"><MapPin size={14} /> Physical Address</Label>
                   <Input defaultValue="Gabura, Shyamnagar, Satkhira, Bangladesh" className="rounded-xl" />
                 </div>
                 <div className="space-y-2">
@@ -136,14 +196,14 @@ export default function WebsiteSettings() {
           <Card className="border-none shadow-sm">
             <CardHeader>
               <CardTitle>Homepage Statistics</CardTitle>
-              <CardDescription>These values appear in the animated statistics section of the public website.</CardDescription>
+              <CardDescription>Animate on scroll values for the impact section.</CardDescription>
             </CardHeader>
             <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
-                { l: "Total Students", v: "1200", icon: GraduationCap },
-                { l: "Total Teachers", v: "45", icon: Briefcase },
+                { l: "Students", v: "1200", icon: GraduationCap },
+                { l: "Teachers", v: "45", icon: Briefcase },
                 { l: "SSC Pass Rate (%)", v: "98", icon: CheckCircle2 },
-                { l: "Years of Excellence", v: "25", icon: Clock },
+                { l: "Excellence (Years)", v: "75", icon: Clock },
               ].map((s, i) => (
                 <div key={i} className="space-y-2 p-6 bg-secondary/20 rounded-3xl border border-border/50 text-center group">
                   <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-2 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
@@ -160,5 +220,3 @@ export default function WebsiteSettings() {
     </div>
   );
 }
-
-import { BarChart3 as BarChartIcon } from "lucide-react";

@@ -5,9 +5,9 @@ import { Users, GraduationCap, Award, Calendar } from "lucide-react";
 
 const stats = [
   { label: "Students", value: 1200, icon: Users, suffix: "+" },
-  { label: "Teachers", value: 45, icon: GraduationCap, suffix: "+" },
-  { label: "Pass Rate", value: 98, icon: Award, suffix: "%" },
-  { label: "Excellence", value: 25, icon: Calendar, suffix: "y+" },
+  { label: "Teachers", value: 45, icon: GraduationCap, suffix: "" },
+  { label: "SSC Pass Rate", value: 98, icon: Award, suffix: "%" },
+  { label: "Years of Excellence", value: 75, icon: Calendar, suffix: "+" },
 ];
 
 export function Statistics() {
@@ -20,7 +20,7 @@ export function Statistics() {
       (entries) => {
         if (entries[0].isIntersecting && !hasAnimated) {
           setHasAnimated(true);
-          const duration = 1000; // Snappier duration
+          const duration = 1000;
           const frameDuration = 1000 / 60;
           const totalFrames = Math.round(duration / frameDuration);
 
@@ -47,11 +47,11 @@ export function Statistics() {
   }, [hasAnimated]);
 
   return (
-    <section ref={sectionRef} className="py-12 md:py-24 px-4 overflow-hidden">
+    <section ref={sectionRef} className="py-12 md:py-20 px-4 overflow-hidden -mt-12 md:-mt-24 relative z-20">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {stats.map((stat, idx) => (
-            <div key={idx} className="glass-card p-6 md:p-8 text-center hover-lift group active:scale-95 transition-transform cursor-default">
+            <div key={idx} className="glass-card p-6 md:p-8 text-center hover-lift group active:scale-95 transition-transform cursor-default bg-white/80">
               <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 md:mb-6 group-hover:rotate-12 transition-transform duration-200">
                 <stat.icon size={24} className="text-primary" />
               </div>

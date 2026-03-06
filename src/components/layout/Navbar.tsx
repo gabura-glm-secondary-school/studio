@@ -31,7 +31,6 @@ export function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    // Initialize state on mount in case user is already scrolled
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -84,7 +83,7 @@ export function Navbar() {
             "font-headline font-black text-primary leading-none tracking-tight transition-all duration-300 whitespace-nowrap",
             isScrolled ? "text-xs md:text-sm" : "text-sm md:text-lg"
           )}>
-            GABURA G.L.M <span className="text-accent">SECONDARY SCHOOL</span>
+            GABURA G.L.M <span className="text-accent uppercase">Secondary School</span>
           </h1>
           <p className={cn(
             "uppercase tracking-[0.2em] text-muted-foreground font-bold transition-all duration-300",

@@ -35,15 +35,15 @@ export function Hero() {
               In Sundarbans
             </h1>
 
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Providing high-quality education since decades, we empower students to achieve excellence and contribute positively to society.
+            <p className="text-lg text-muted-foreground leading-relaxed font-medium">
+              Gabura Gopal Laxmi Memorial Secondary School is committed to providing quality education and fostering excellence in every student, preparing them for a dynamic future.
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2">
-              <Button size="lg" className="btn-pill btn-gradient-primary group h-14">
+              <Button size="lg" className="btn-pill btn-gradient-primary group h-14 min-w-[180px]">
                 Apply Now <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline" className="btn-pill border-2 border-primary/20 bg-white/20 hover:bg-white/40 h-14">
+              <Button size="lg" variant="outline" className="btn-pill border-2 border-primary/20 bg-white/20 hover:bg-white/40 h-14 min-w-[180px]">
                 Explore Programs
               </Button>
             </div>
