@@ -6,15 +6,15 @@ import { useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminTopbar } from "@/components/admin/AdminTopbar";
-import { ShieldAlert, Home } from "lucide-react";
+import { ShieldAlert, Home, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useUser();
   const router = useRouter();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Master Admin Identification (Instant detection)
+  // Master Admin Identification
   const isMasterAdmin = 
     user?.email?.includes('71209026') || 
     user?.ein === '71209026' || 
@@ -33,9 +33,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }, [user, loading, router]);
 
-  // No more blocking loading screen if it's the Master Admin or user is present
   if (loading && !user) return null;
-
   if (!user && !isMasterAdmin) return null;
 
   // Security Gate
@@ -66,14 +64,35 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="flex min-h-screen bg-[#EEF3F5]">
+    <div className="flex min-h-screen bg-[#EEF3F5] relative overflow-x-hidden">
+      {/* Sidebar - Control visibility properly to avoid "lines" */}
       <AdminSidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+      
+      {/* Floating Arrow Toggle Button when sidebar is closed */}
+      {!isSidebarOpen && (
+        <button 
+          onClick={() => setIsSidebarOpen(true)}
+          className="fixed left-0 top-1/2 -translate-y-1/2 z-[60] bg-primary text-white p-3 rounded-r-2xl shadow-[10px_0_30px_-5px_rgba(var(--primary),0.4)] border border-l-0 border-white/20 animate-in slide-in-from-left-full duration-500 hover:bg-accent transition-colors group"
+          title="Open Admin Menu"
+        >
+          <ChevronRight size={28} className="group-hover:translate-x-1 transition-transform" strokeWidth={3} />
+        </button>
+      )}
+
       <div className="flex-1 flex flex-col min-w-0">
         <AdminTopbar setIsSidebarOpen={() => setIsSidebarOpen(!isSidebarOpen)} />
         <main className="p-4 md:p-10 overflow-y-auto">
           {children}
         </main>
       </div>
+
+      {/* Overlay for mobile when sidebar is open */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
     </div>
   );
 }
