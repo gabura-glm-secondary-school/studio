@@ -15,7 +15,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // Firestore Rule Compliance: isAdmin check helper logic
-  const canAccess = user && !user.disabled && (user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true);
+  // Added 71209026 as an explicit master admin check
+  const canAccess = user && !user.disabled && (
+    user.role === 'admin' || 
+    user.role === 'superadmin' || 
+    user.adminApproved === true || 
+    user.idNumber === '71209026' || 
+    user.ein === '71209026'
+  );
 
   useEffect(() => {
     if (!loading && !user) {
@@ -43,7 +50,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             Your account does not have permission to access the Admin Control Panel. 
             This area is restricted to approved administrators only.
           </p>
-          <Button onClick={() => router.push("/")} className="rounded-xl px-8">Return to Homepage</Button>
+          <Button onClick={() => router.push("/")} className="rounded-xl px-8 bg-primary">Return to Homepage</Button>
         </div>
       </div>
     );

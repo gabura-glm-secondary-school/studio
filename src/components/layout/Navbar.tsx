@@ -58,7 +58,8 @@ export function Navbar() {
     user.role === 'admin' || 
     user.role === 'superadmin' || 
     user.adminApproved === true ||
-    user.idNumber === '71209026'
+    user.idNumber === '71209026' ||
+    user.ein === '71209026'
   );
 
   const navLinks = [
