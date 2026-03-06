@@ -20,16 +20,16 @@ export default function ChairmanMessagePage() {
         <div className="grid lg:grid-cols-5 gap-12 items-start">
           {/* Chairman Image & Basic Info */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white animate-in fade-in zoom-in duration-300">
+            <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white animate-in fade-in zoom-in duration-300 bg-white">
               <Image 
                 src="https://i.postimg.cc/HsrPmKDM/FB-IMG-1772767240131.jpg" 
                 alt="সভাপতি" 
                 fill 
                 className="object-cover" 
-                data-ai-hint="professional leader"
+                priority
               />
             </div>
-            <div className="glass-card p-6 text-center space-y-2">
+            <div className="glass-card p-6 text-center space-y-2 !rounded-[2rem]">
               <h2 className="text-xl font-headline font-black text-primary uppercase">GAZI NAZRUL ISLAM</h2>
               <p className="text-xs font-bold text-accent uppercase tracking-widest">MP Satkhira 04</p>
               <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">সভাপতি, পরিচালনা পর্ষদ</p>

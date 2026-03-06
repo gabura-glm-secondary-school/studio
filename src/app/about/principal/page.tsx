@@ -20,19 +20,19 @@ export default function PrincipalMessagePage() {
         <div className="grid lg:grid-cols-5 gap-12 items-start">
           {/* Principal Image & Basic Info */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white animate-in fade-in zoom-in duration-500">
+            <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white animate-in fade-in zoom-in duration-500 bg-white">
               <Image 
-                src="https://i.postimg.cc/44LFrGMs/images-(1)-(13).jpg" 
+                src="https://i.postimg.cc/44LFrGMs/images-1-13.jpg" 
                 alt="প্রধান শিক্ষক" 
                 fill 
                 className="object-cover" 
-                data-ai-hint="headteacher portrait"
+                priority
               />
             </div>
-            <div className="glass-card p-6 text-center space-y-2">
+            <div className="glass-card p-6 text-center space-y-2 !rounded-[2rem]">
               <h2 className="text-xl font-headline font-black text-primary uppercase">S.M EASMINUR RAHMAN LINKON</h2>
               <p className="text-xs font-bold text-accent uppercase tracking-widest">প্রধান শিক্ষক</p>
-              <p className="text-[10px] text-muted-foreground font-medium">গাবুরা জি.এল.এম. মাধ্যমিক বিদ্যালয়</p>
+              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">গাবুরা জি.এল.এম. মাধ্যমিক বিদ্যালয়</p>
             </div>
           </div>
 
@@ -64,17 +64,17 @@ export default function PrincipalMessagePage() {
 
             {/* Success highlights */}
             <div className="grid grid-cols-3 gap-4">
-              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default">
+              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default tap-effect">
                 <GraduationCap className="mx-auto text-primary mb-2" size={24} />
                 <p className="text-xl font-black text-primary">১০০%</p>
                 <p className="text-[8px] font-bold text-muted-foreground uppercase">পাশ হার</p>
               </div>
-              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default">
+              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default tap-effect">
                 <Award className="mx-auto text-accent mb-2" size={24} />
                 <p className="text-xl font-black text-primary">৩০০০+</p>
                 <p className="text-[8px] font-bold text-muted-foreground uppercase">সফল গ্র্যাজুয়েট</p>
               </div>
-              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default">
+              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default tap-effect">
                 <Users className="mx-auto text-primary mb-2" size={24} />
                 <p className="text-xl font-black text-primary">৭০+</p>
                 <p className="text-[8px] font-bold text-muted-foreground uppercase">অভিজ্ঞ শিক্ষক</p>
