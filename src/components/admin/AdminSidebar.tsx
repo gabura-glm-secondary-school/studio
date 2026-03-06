@@ -21,7 +21,6 @@ import {
   ShieldAlert,
   Download,
   ChevronLeft,
-  Megaphone,
   Mail
 } from "lucide-react";
 import Image from "next/image";
@@ -68,10 +67,10 @@ export function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
 
   return (
     <aside className={cn(
-      "fixed lg:relative z-50 h-screen transition-all duration-500 ease-in-out bg-white shadow-[20px_0_50px_-15px_rgba(0,0,0,0.05)]",
+      "fixed lg:relative z-[70] h-screen transition-all duration-500 ease-in-out bg-white shadow-[20px_0_50px_-15px_rgba(0,0,0,0.05)]",
       isOpen 
-        ? "w-72 translate-x-0 border-r" 
-        : "w-0 -translate-x-full border-none"
+        ? "w-72 translate-x-0 border-r pointer-events-auto" 
+        : "w-0 -translate-x-full border-none pointer-events-none"
     )}>
       <div className={cn("flex flex-col h-full", !isOpen && "hidden")}>
         {/* Logo Section */}
@@ -102,11 +101,11 @@ export function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                   <div className="space-y-1 mb-4">
                     <p className="px-3 text-[10px] font-black uppercase text-muted-foreground/60 mb-2 tracking-[0.2em]">{item.label}</p>
                     {item.items.map((sub, sIdx) => (
-                      <SidebarItem key={sIdx} item={sub} isActive={pathname === sub.href} />
+                      <SidebarItem key={sIdx} item={sub} isActive={pathname === sub.href} onClick={() => setIsOpen(false)} />
                     ))}
                   </div>
                 ) : (
-                  <SidebarItem item={item} isActive={pathname === item.href} />
+                  <SidebarItem item={item} isActive={pathname === item.href} onClick={() => setIsOpen(false)} />
                 )}
               </div>
             ))}
@@ -123,10 +122,11 @@ export function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
   );
 }
 
-function SidebarItem({ item, isActive }: { item: any, isActive: boolean }) {
+function SidebarItem({ item, isActive, onClick }: { item: any, isActive: boolean, onClick: () => void }) {
   return (
     <Link 
       href={item.href}
+      onClick={onClick}
       className={cn(
         "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all group mb-1",
         isActive 

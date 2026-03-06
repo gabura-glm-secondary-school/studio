@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/table";
 import { 
   Search, 
-  Plus, 
   Filter, 
   Edit3, 
   Trash2, 
@@ -26,7 +25,8 @@ import {
   MoreVertical,
   Download,
   UserPlus,
-  Loader2
+  Loader2,
+  Plus
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -139,11 +139,11 @@ export default function StudentManagement() {
                     <TableCell className="text-right pr-6">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="rounded-full opacity-0 md:group-hover:opacity-100 transition-opacity">
+                          <Button variant="ghost" size="icon" className="rounded-full bg-white sm:bg-transparent shadow-sm sm:shadow-none border sm:border-none active:scale-90 transition-all">
                             <MoreVertical size={18} />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="rounded-xl p-2 w-48 shadow-xl">
+                        <DropdownMenuContent align="end" className="rounded-xl p-2 w-48 shadow-xl z-[80]">
                           <DropdownMenuItem className="gap-2 rounded-lg cursor-pointer">
                             <Edit3 size={16} /> Edit Details
                           </DropdownMenuItem>
@@ -180,7 +180,7 @@ export default function StudentManagement() {
 
       {/* Add Student Modal */}
       <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-        <DialogContent className="max-w-md rounded-[2.5rem] border-none shadow-2xl p-0 overflow-hidden">
+        <DialogContent className="max-w-md rounded-[2.5rem] border-none shadow-2xl p-0 overflow-hidden z-[100]">
           <form onSubmit={handleAddStudent}>
             <DialogHeader className="p-8 bg-primary/5 border-b">
               <DialogTitle className="text-2xl font-headline font-black text-primary">New Student Record</DialogTitle>
@@ -208,7 +208,7 @@ export default function StudentManagement() {
             </div>
             <DialogFooter className="p-8 bg-muted/10 border-t gap-3">
               <Button type="button" variant="ghost" onClick={() => setIsAddModalOpen(false)} className="rounded-xl">Cancel</Button>
-              <Button type="submit" disabled={loading} className="rounded-xl bg-primary shadow-lg min-w-[120px]">
+              <Button type="submit" disabled={loading} className="rounded-xl bg-primary shadow-lg min-w-[120px] active:scale-95">
                 {loading ? <Loader2 className="animate-spin" /> : <Plus size={18} className="mr-2" />} Save Record
               </Button>
             </DialogFooter>

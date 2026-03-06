@@ -8,14 +8,12 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { 
   BookOpen, 
-  Plus, 
   Search, 
   FileText, 
   Download, 
   Trash2, 
   Edit3, 
   Upload,
-  Bookmark,
   Filter
 } from "lucide-react";
 
@@ -35,45 +33,49 @@ export default function AdminLibraryPage() {
           </h1>
           <p className="text-muted-foreground text-sm font-medium">Upload and manage study materials for students.</p>
         </div>
-        <Button className="rounded-xl gap-2 font-bold h-11 shadow-lg bg-primary">
+        <Button className="rounded-xl gap-2 font-bold h-11 shadow-lg bg-primary active:scale-95 transition-transform">
           <Upload size={18} /> Upload Resource
         </Button>
       </div>
 
-      <Card className="border-none shadow-sm">
+      <Card className="border-none shadow-sm overflow-hidden">
         <CardHeader className="bg-secondary/10 border-b py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <div className="relative max-w-sm w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-              <Input placeholder="Search resources..." className="pl-10 h-10 rounded-xl" />
+              <Input placeholder="Search resources..." className="pl-10 h-10 rounded-xl bg-white" />
             </div>
-            <Button variant="outline" size="sm" className="rounded-xl gap-2 h-10">
-              <Filter size={16} /> Categories
+            <Button variant="outline" size="sm" className="rounded-xl gap-2 h-10 border-2 active:scale-95">
+              <Filter size={16} /> <span className="hidden sm:inline">Categories</span>
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-4 sm:p-6">
           <div className="grid gap-4">
             {mockLibraryItems.map((item) => (
-              <div key={item.id} className="flex items-center justify-between p-4 bg-secondary/5 rounded-2xl border border-border/50 group hover:border-accent transition-colors">
+              <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-secondary/5 rounded-2xl border border-border/50 group hover:border-accent transition-all gap-4">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm border border-primary/10">
                     <FileText size={24} />
                   </div>
-                  <div>
-                    <h4 className="font-bold text-primary">{item.title}</h4>
+                  <div className="min-w-0">
+                    <h4 className="font-bold text-primary truncate">{item.title}</h4>
                     <div className="flex items-center gap-3 text-[10px] font-black uppercase text-muted-foreground tracking-widest mt-1">
                       <span className="text-accent">{item.category}</span>
                       <span>•</span>
                       <span>{item.type}</span>
                       <span>•</span>
-                      <span className="flex items-center gap-1"><Download size={10} /> {item.downloads} Downloads</span>
+                      <span className="flex items-center gap-1"><Download size={10} /> {item.downloads}</span>
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Button variant="ghost" size="icon" className="rounded-xl hover:bg-white"><Edit3 size={16} /></Button>
-                  <Button variant="ghost" size="icon" className="rounded-xl text-destructive hover:bg-destructive/10"><Trash2 size={16} /></Button>
+                <div className="flex gap-2 justify-end">
+                  <Button variant="ghost" size="icon" className="rounded-xl bg-white shadow-sm border md:opacity-0 md:group-hover:opacity-100 transition-all active:scale-90">
+                    <Edit3 size={16} className="text-primary" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="rounded-xl bg-white shadow-sm border text-destructive hover:bg-destructive/10 md:opacity-0 md:group-hover:opacity-100 transition-all active:scale-90">
+                    <Trash2 size={16} />
+                  </Button>
                 </div>
               </div>
             ))}
