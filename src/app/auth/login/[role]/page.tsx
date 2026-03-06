@@ -61,31 +61,24 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
       const virtualEmail = `${cleanId}@gglmss.edu.bd`;
       const cleanPassword = password.trim();
 
+      // Master ID Bypass for offline resilience
+      if (cleanId === '71209026') {
+        const userCredential = await signInWithEmailAndPassword(auth, virtualEmail, cleanPassword);
+        toast({ title: "লগইন সফল (SUCCESS)", description: "অ্যাডমিন প্যানেলে প্রবেশ করছেন...", variant: "success" });
+        setLoading(false);
+        router.replace("/admin");
+        return;
+      }
+
       const userCredential = await signInWithEmailAndPassword(auth, virtualEmail, cleanPassword);
       
-      // Attempt to fetch user profile with retry logic
       let userData: any = null;
       try {
         const userDocRef = doc(db, "users", userCredential.user.uid);
         const userSnap = await getDoc(userDocRef);
         userData = userSnap.data();
       } catch (docErr) {
-        console.warn("Firestore fetch failed, checking network status...");
-      }
-
-      if (!userData) {
-        // Fallback: If UID is master admin, allow bypass
-        if (cleanId === '71209026') {
-          userData = { role: 'admin', adminApproved: true };
-        } else {
-          throw new Error("আপনার তথ্যের কোনো রেকর্ড পাওয়া যায়নি। দয়া করে আগে রেজিস্ট্রেশন করুন।");
-        }
-      }
-
-      const isUserAdmin = userData.role === 'admin' || userData.role === 'superadmin' || userData.adminApproved === true;
-
-      if (userData.role !== role && !isUserAdmin) {
-        throw new Error(`এই অ্যাকাউন্টটি ${userData.role} হিসেবে নিবন্ধিত। আপনি ${role} পোর্টালে প্রবেশ করতে পারবেন না।`);
+        // Simple fallback
       }
 
       if (rememberMe) {
@@ -93,25 +86,24 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
         localStorage.setItem(`gglmss_pass_${role}`, password);
       }
 
+      const isUserAdmin = userData?.role === 'admin' || userData?.role === 'superadmin' || userData?.adminApproved === true || cleanId === '71209026';
+
       toast({ 
         title: "লগইন সফল (SUCCESS)", 
-        description: "স্বাগতম! আপনার ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...", 
+        description: "স্বাগতম! ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...", 
         variant: "success",
-        duration: 3000
       });
       
       setLoading(false);
-      router.push(isUserAdmin ? "/admin" : "/dashboard");
+      router.replace(isUserAdmin ? "/admin" : "/dashboard");
     } catch (error: any) {
       setLoading(false);
       let message = "লগইন ব্যর্থ হয়েছে।";
       
-      if (error.message.includes("offline")) {
-        message = "ইন্টারনেট সংযোগ বিচ্ছিন্ন অথবা সার্ভার ব্যস্ত। আবার চেষ্টা করুন।";
-      } else if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-        message = "আপনার ID অথবা পাসওয়ার্ড ভুল। আপনি যদি একাউন্ট তৈরি না করে থাকেন, তবে REGISTER করুন।";
-      } else if (error.message) {
-        message = error.message;
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        message = "আপনার ID অথবা পাসওয়ার্ড ভুল। একাউন্ট না থাকলে REGISTER করুন।";
+      } else if (error.message.includes("offline")) {
+        message = "ইন্টারনেট সংযোগ বিচ্ছিন্ন। আবার চেষ্টা করুন।";
       }
       
       toast({ title: "লগইন ব্যর্থ (UNSUCCESS)", description: message, variant: "destructive" });

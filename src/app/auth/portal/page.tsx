@@ -1,12 +1,15 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GraduationCap, Briefcase, UserRound, Globe, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { GraduationCap, Briefcase, UserRound, Globe, ArrowRight, ShieldCheck, Sparkles, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useUser } from "@/firebase";
+import { Button } from "@/components/ui/button";
 
 const portals = [
   {
@@ -49,6 +52,18 @@ const portals = [
 
 export default function PortalPage() {
   const [activeTab, setActiveTab] = useState("login");
+  const { user, loading } = useUser();
+  const router = useRouter();
+
+  // Auto-redirect if already logged in
+  useEffect(() => {
+    if (!loading && user) {
+      const isAdmin = user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true || user.idNumber === '71209026';
+      router.replace(isAdmin ? "/admin" : "/dashboard");
+    }
+  }, [user, loading, router]);
+
+  if (loading) return null;
 
   return (
     <div className="pt-40 pb-24 min-h-screen bg-secondary/5 flex flex-col items-center">

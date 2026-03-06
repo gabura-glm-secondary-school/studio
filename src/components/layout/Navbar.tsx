@@ -20,16 +20,22 @@ import {
   Users,
   Calendar,
   Star,
-  ShieldAlert
+  ShieldAlert,
+  LogOut,
+  LayoutDashboard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useUser } from "@/firebase";
+import { useUser, useAuth } from "@/firebase";
+import { signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user } = useUser();
+  const { auth } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,11 +46,19 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Strict Admin Check based on user instructions and Firestore rules
-  const canAccessAdmin = user && !user.disabled && (
+  const handleLogout = async () => {
+    if (auth) {
+      await signOut(auth);
+      setIsMobileMenuOpen(false);
+      router.push("/");
+    }
+  };
+
+  const isAdmin = user && !user.disabled && (
     user.role === 'admin' || 
     user.role === 'superadmin' || 
-    user.adminApproved === true
+    user.adminApproved === true ||
+    user.idNumber === '71209026'
   );
 
   const navLinks = [
@@ -103,12 +117,22 @@ export function Navbar() {
         </NextLink>
 
         <div className="flex items-center gap-2 shrink-0 pl-2">
-          {canAccessAdmin && (
-            <NextLink href="/admin" className="hidden md:block">
+          {isAdmin && (
+            <NextLink href="/admin" className="hidden lg:block">
               <Button size="sm" className="rounded-full bg-accent text-primary font-black uppercase text-[10px] tracking-widest gap-2 shadow-lg hover:bg-accent/90 px-4 h-9">
                 <ShieldCheck size={14} /> Admin
               </Button>
             </NextLink>
+          )}
+          {user && (
+            <Button 
+              onClick={handleLogout}
+              variant="outline" 
+              size="sm" 
+              className="hidden md:flex rounded-full border-2 border-primary/10 text-primary font-black uppercase text-[10px] tracking-widest gap-2 h-9"
+            >
+              <LogOut size={14} /> Logout
+            </Button>
           )}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
@@ -158,7 +182,7 @@ export function Navbar() {
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 scrollbar-hide space-y-6">
-            {canAccessAdmin && (
+            {isAdmin && (
               <NextLink href="/admin" onClick={() => setIsMobileMenuOpen(false)}>
                 <div className="mx-2 mb-4 p-4 rounded-2xl bg-accent text-primary font-black flex items-center justify-between shadow-lg active:scale-95 transition-transform">
                   <span className="uppercase text-[10px] tracking-[0.2em]">Open Admin Control</span>
@@ -179,11 +203,28 @@ export function Navbar() {
           </div>
 
           <div className="p-6 space-y-4 bg-primary/5">
-            <NextLink href="/auth/portal" onClick={() => setIsMobileMenuOpen(false)} className="block">
-              <Button className="w-full h-14 rounded-2xl bg-primary text-white font-black shadow-lg hover:bg-accent transition-all text-base gap-3 active:scale-[0.95]">
-                {user ? "Dashboard" : "Portal Login"} <ArrowRight size={20} />
-              </Button>
-            </NextLink>
+            {user ? (
+              <div className="grid grid-cols-2 gap-3">
+                <NextLink href={isAdmin ? "/admin" : "/dashboard"} onClick={() => setIsMobileMenuOpen(false)} className="block">
+                  <Button className="w-full h-14 rounded-2xl bg-primary text-white font-black shadow-lg hover:bg-accent transition-all text-sm gap-2 active:scale-[0.95]">
+                    <LayoutDashboard size={18} /> Dashboard
+                  </Button>
+                </NextLink>
+                <Button 
+                  onClick={handleLogout}
+                  variant="outline" 
+                  className="w-full h-14 rounded-2xl border-2 border-primary/20 text-primary font-black shadow-sm transition-all text-sm gap-2 active:scale-[0.95]"
+                >
+                  <LogOut size={18} /> Logout
+                </Button>
+              </div>
+            ) : (
+              <NextLink href="/auth/portal" onClick={() => setIsMobileMenuOpen(false)} className="block">
+                <Button className="w-full h-14 rounded-2xl bg-primary text-white font-black shadow-lg hover:bg-accent transition-all text-base gap-3 active:scale-[0.95]">
+                  Portal Login <ArrowRight size={20} />
+                </Button>
+              </NextLink>
+            )}
             <p className="text-center text-[9px] text-primary font-black uppercase tracking-[0.2em]">
               © {new Date().getFullYear()} Gabura G.L.M Secondary School
             </p>
