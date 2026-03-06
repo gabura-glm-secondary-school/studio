@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, use } from "react";
@@ -55,9 +56,8 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
     setLoading(true);
     try {
-      // Logic for Master Admin EIN: 26200920
       if (verifyData.idNumber.trim() === '26200920') {
-        toast({ title: "Master Record Found", description: "Identity verified as Priority Staff." });
+        toast({ title: "তথ্য পাওয়া গেছে", description: "আপনার পরিচিতি সফলভাবে যাচাই করা হয়েছে।" });
         setStep(2);
         return;
       }
@@ -66,13 +66,17 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
       const masterSnap = await getDoc(masterRef);
 
       if (!masterSnap.exists()) {
-        throw new Error(`The provided ${config.idLabel} is not in our authorized list. Please contact the office.`);
+        throw new Error(`প্রদত্ত ${config.idLabel} আমাদের অনুমোদিত তালিকায় নেই। অনুগ্রহ করে স্কুলের অফিসে যোগাযোগ করুন।`);
       }
 
-      toast({ title: "Identity Verified", description: "Official record found. Set up your password." });
+      toast({ title: "তথ্য যাচাই সফল", description: "অফিসিয়াল রেকর্ড পাওয়া গেছে। এখন পাসওয়ার্ড সেট করুন।" });
       setStep(2);
     } catch (error: any) {
-      toast({ title: "Verification Failed", description: error.message, variant: "destructive" });
+      toast({ 
+        title: "যাচাইকরণ ব্যর্থ", 
+        description: error.message || "কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।", 
+        variant: "destructive" 
+      });
     } finally {
       setLoading(false);
     }
@@ -83,7 +87,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
     if (!auth || !db) return;
 
     if (accountData.password !== accountData.confirmPassword) {
-      toast({ title: "Passwords Mismatch", description: "Passwords do not match.", variant: "destructive" });
+      toast({ title: "পাসওয়ার্ড মেলেনি", description: "উভয় পাসওয়ার্ড একই হতে হবে।", variant: "destructive" });
       return;
     }
 
@@ -96,7 +100,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
       const userProfile = {
         uid: userCredential.user.uid,
-        role: isMasterAdmin ? 'admin' : role, // Set role to admin if master EIN
+        role: isMasterAdmin ? 'admin' : role,
         disabled: false,
         adminApproved: isMasterAdmin ? true : false, 
         ein: verifyData.idNumber.trim(),
@@ -110,10 +114,24 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
       await setDoc(doc(db, "users", userCredential.user.uid), userProfile);
 
-      toast({ title: "Registration Successful", description: `Welcome to GGLMSS ${role} portal!` });
+      toast({ title: "রেজিস্ট্রেশন সফল", description: `স্বাগতম! আপনার অ্যাকাউন্টটি সফলভাবে তৈরি হয়েছে।` });
       router.push(isMasterAdmin ? "/admin" : "/dashboard");
     } catch (error: any) {
-      toast({ title: "Registration Failed", description: error.message, variant: "destructive" });
+      let message = "রেজিস্ট্রেশন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।";
+      if (error.code === 'auth/email-already-in-use') {
+        message = "এই ID দিয়ে ইতিমধ্যেই একটি অ্যাকাউন্ট তৈরি করা আছে। দয়া করে লগইন ট্যাবে গিয়ে লগইন করুন।";
+      } else if (error.code === 'auth/weak-password') {
+        message = "পাসওয়ার্ডটি খুব দুর্বল। অন্তত ৮ অক্ষরের শক্তিশালী পাসওয়ার্ড দিন।";
+      } else if (error.message) {
+        message = error.message;
+      }
+      
+      toast({ 
+        title: "রেজিস্ট্রেশন ত্রুটি", 
+        description: message, 
+        variant: "destructive" 
+      });
+    } finally {
       setLoading(false);
     }
   };
@@ -159,7 +177,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
               {step === 1 ? config.title : "Account Setup"}
             </CardTitle>
             <CardDescription className="font-bold text-muted-foreground">
-              {step === 1 ? "Verify your institutional identity to proceed." : "Set your secure password and contact number."}
+              {step === 1 ? "আপনার প্রাতিষ্ঠানিক পরিচয় যাচাই করুন।" : "আপনার গোপন পাসওয়ার্ড এবং কন্টাক্ট নম্বর সেট করুন।"}
             </CardDescription>
           </div>
 
@@ -193,7 +211,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
               <div className="space-y-2">
                 <Label className="font-black uppercase text-[10px] tracking-widest text-primary/60">Full Name (Institutional Name)</Label>
                 <Input 
-                  placeholder="Your Full Name" 
+                  placeholder="আপনার পূর্ণ নাম" 
                   required 
                   value={verifyData.displayName}
                   onChange={(e) => setVerifyData({...verifyData, displayName: e.target.value})}

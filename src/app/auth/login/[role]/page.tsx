@@ -93,7 +93,6 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
         router.push("/dashboard");
       }
     } catch (error: any) {
-      // সুন্দর নোটিশের মাধ্যমে এরর দেখানো
       let message = "লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।";
       
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
