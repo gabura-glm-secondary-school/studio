@@ -17,7 +17,7 @@ import {
   Download,
   LayoutDashboard,
   LineChart as LineChartIcon
-} from "lucide-center";
+} from "lucide-react";
 import { 
   LineChart, 
   Line, 
@@ -30,7 +30,6 @@ import {
   Area
 } from "recharts";
 import Link from "next/link";
-import { LucideIcon } from "lucide-react";
 
 // Helper to handle icons properly
 const performanceData = [
@@ -47,7 +46,7 @@ export default function StudentDashboard({ user }: { user: any }) {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1">
-            <h1 className="text-3xl font-headline font-bold text-primary">Welcome Back, {user.displayName || "Student"}!</h1>
+            <h1 className="text-3xl font-headline font-black text-primary">Welcome Back, {user.displayName || "Student"}!</h1>
             <p className="text-muted-foreground flex items-center gap-2">
               <GraduationCap size={18} /> Class {user.class || "N/A"} • Section {user.section || "A"} • Roll {user.rollNumber || "00"}
             </p>
@@ -193,7 +192,7 @@ export default function StudentDashboard({ user }: { user: any }) {
             { label: "Community", icon: Users, href: "/dashboard", color: "bg-purple-500" },
             { label: "Library", icon: BookOpen, href: "/library", color: "bg-blue-500" },
             { label: "Quizzes", icon: GraduationCap, href: "/dashboard", color: "bg-emerald-500" },
-            { label: "Calendar", icon: "/events", color: "bg-orange-500" }, // fix type
+            { label: "Calendar", icon: Calendar, href: "/events", color: "bg-orange-500" },
             { label: "Leaderboard", icon: Award, href: "/leaderboard", color: "bg-amber-500" },
             { label: "Notices", icon: Bell, href: "/notices", color: "bg-rose-500" },
           ].map((item, i) => (
@@ -211,5 +210,3 @@ export default function StudentDashboard({ user }: { user: any }) {
     </div>
   );
 }
-
-import { LucideProps } from "lucide-react";
