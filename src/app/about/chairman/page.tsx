@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -21,7 +22,7 @@ export default function ChairmanMessagePage() {
           <div className="lg:col-span-2 space-y-6">
             <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white animate-in fade-in zoom-in duration-300">
               <Image 
-                src="https://picsum.photos/seed/chairman1/600/750" 
+                src="https://i.postimg.cc/HsrPmKDM/FB-IMG-1772767240131.jpg" 
                 alt="সভাপতি" 
                 fill 
                 className="object-cover" 
@@ -29,7 +30,7 @@ export default function ChairmanMessagePage() {
               />
             </div>
             <div className="glass-card p-6 text-center space-y-2">
-              <h2 className="text-xl font-headline font-black text-primary">GAZI NAZRUL ISLAM</h2>
+              <h2 className="text-xl font-headline font-black text-primary uppercase">GAZI NAZRUL ISLAM</h2>
               <p className="text-xs font-bold text-accent uppercase tracking-widest">MP Satkhira 04</p>
               <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">সভাপতি, পরিচালনা পর্ষদ</p>
             </div>

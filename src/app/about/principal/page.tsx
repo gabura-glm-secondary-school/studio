@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -21,7 +22,7 @@ export default function PrincipalMessagePage() {
           <div className="lg:col-span-2 space-y-6">
             <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white animate-in fade-in zoom-in duration-500">
               <Image 
-                src="https://picsum.photos/seed/principal1/600/750" 
+                src="https://i.postimg.cc/44LFrGMs/images-(1)-(13).jpg" 
                 alt="প্রধান শিক্ষক" 
                 fill 
                 className="object-cover" 
@@ -29,7 +30,7 @@ export default function PrincipalMessagePage() {
               />
             </div>
             <div className="glass-card p-6 text-center space-y-2">
-              <h2 className="text-xl font-headline font-black text-primary">S.M EASMINUR RAHMAN LINKON</h2>
+              <h2 className="text-xl font-headline font-black text-primary uppercase">S.M EASMINUR RAHMAN LINKON</h2>
               <p className="text-xs font-bold text-accent uppercase tracking-widest">প্রধান শিক্ষক</p>
               <p className="text-[10px] text-muted-foreground font-medium">গাবুরা জি.এল.এম. মাধ্যমিক বিদ্যালয়</p>
             </div>

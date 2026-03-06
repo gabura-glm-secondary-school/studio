@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -13,7 +14,7 @@ export function PrincipalChairmanMessages() {
             <div className="absolute inset-0 bg-primary/10 rounded-[3rem] -rotate-3 scale-105"></div>
             <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/60">
               <Image 
-                src="https://picsum.photos/seed/principal1/600/750" 
+                src="https://i.postimg.cc/44LFrGMs/images-(1)-(13).jpg" 
                 alt="Principal" 
                 fill 
                 className="object-cover" 
@@ -74,7 +75,7 @@ export function PrincipalChairmanMessages() {
              <div className="absolute inset-0 bg-accent/10 rounded-[3rem] rotate-3 scale-105"></div>
             <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/60">
               <Image 
-                src="https://picsum.photos/seed/chairman1/600/750" 
+                src="https://i.postimg.cc/HsrPmKDM/FB-IMG-1772767240131.jpg" 
                 alt="Chairman" 
                 fill 
                 className="object-cover" 

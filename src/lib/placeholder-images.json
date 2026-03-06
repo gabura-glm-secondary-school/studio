@@ -14,15 +14,15 @@
     },
     {
       "id": "principal",
-      "description": "Portrait of a distinguished academic professional",
-      "imageUrl": "https://picsum.photos/seed/principal1/400/500",
-      "imageHint": "professor portrait"
+      "description": "S.M EASMINUR RAHMAN LINKON - Head Teacher",
+      "imageUrl": "https://i.postimg.cc/44LFrGMs/images-(1)-(13).jpg",
+      "imageHint": "head teacher"
     },
     {
       "id": "chairman",
-      "description": "Portrait of a professional community leader",
-      "imageUrl": "https://picsum.photos/seed/chairman1/400/500",
-      "imageHint": "professional man"
+      "description": "GAZI NAZRUL ISLAM - Chairman (MP Satkhira 04)",
+      "imageUrl": "https://i.postimg.cc/HsrPmKDM/FB-IMG-1772767240131.jpg",
+      "imageHint": "chairman portrait"
     },
     {
       "id": "gallery-1",
