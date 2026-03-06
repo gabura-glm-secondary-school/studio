@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, use } from "react";
@@ -56,8 +55,13 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
     setLoading(true);
     try {
+      // Special check for master admin EIN
       if (verifyData.idNumber.trim() === '26200920') {
-        toast({ title: "তথ্য পাওয়া গেছে", description: "আপনার পরিচিতি সফলভাবে যাচাই করা হয়েছে।" });
+        toast({ 
+          title: "যাচাই সফল (Success)", 
+          description: "অ্যাডমিন আইডি পাওয়া গেছে। এখন পাসওয়ার্ড সেট করুন।",
+          variant: "success"
+        });
         setStep(2);
         return;
       }
@@ -66,14 +70,18 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
       const masterSnap = await getDoc(masterRef);
 
       if (!masterSnap.exists()) {
-        throw new Error(`প্রদত্ত ${config.idLabel} আমাদের অনুমোদিত তালিকায় নেই। অনুগ্রহ করে স্কুলের অফিসে যোগাযোগ করুন।`);
+        throw new Error(`প্রদত্ত ${config.idLabel} আমাদের অনুমোদিত তালিকায় নেই। সঠিক তথ্য দিন অথবা অফিসের সাথে যোগাযোগ করুন।`);
       }
 
-      toast({ title: "তথ্য যাচাই সফল", description: "অফিসিয়াল রেকর্ড পাওয়া গেছে। এখন পাসওয়ার্ড সেট করুন।" });
+      toast({ 
+        title: "তথ্য যাচাই সফল (Success)", 
+        description: "অফিসিয়াল রেকর্ড পাওয়া গেছে। একাউন্ট তৈরি করতে পরবর্তী ধাপ সম্পন্ন করুন।",
+        variant: "success"
+      });
       setStep(2);
     } catch (error: any) {
       toast({ 
-        title: "যাচাইকরণ ব্যর্থ", 
+        title: "যাচাইকরণ ব্যর্থ (Unsuccess)", 
         description: error.message || "কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।", 
         variant: "destructive" 
       });
@@ -87,7 +95,11 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
     if (!auth || !db) return;
 
     if (accountData.password !== accountData.confirmPassword) {
-      toast({ title: "পাসওয়ার্ড মেলেনি", description: "উভয় পাসওয়ার্ড একই হতে হবে।", variant: "destructive" });
+      toast({ 
+        title: "পাসওয়ার্ড মেলেনি (Unsuccess)", 
+        description: "উভয় পাসওয়ার্ড একই হতে হবে। দয়া করে পুনরায় চেক করুন।", 
+        variant: "destructive" 
+      });
       return;
     }
 
@@ -114,8 +126,16 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
 
       await setDoc(doc(db, "users", userCredential.user.uid), userProfile);
 
-      toast({ title: "রেজিস্ট্রেশন সফল", description: `স্বাগতম! আপনার অ্যাকাউন্টটি সফলভাবে তৈরি হয়েছে।` });
-      router.push(isMasterAdmin ? "/admin" : "/dashboard");
+      toast({ 
+        title: "রেজিস্ট্রেশন সফল (Success)", 
+        description: `স্বাগতম! আপনার অ্যাকাউন্টটি সফলভাবে তৈরি হয়েছে। লগইন করা হচ্ছে...`,
+        variant: "success"
+      });
+      
+      setTimeout(() => {
+        router.push(isMasterAdmin ? "/admin" : "/dashboard");
+      }, 1000);
+
     } catch (error: any) {
       let message = "রেজিস্ট্রেশন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।";
       if (error.code === 'auth/email-already-in-use') {
@@ -127,7 +147,7 @@ export default function UnifiedRegistration({ params }: { params: Promise<{ role
       }
       
       toast({ 
-        title: "রেজিস্ট্রেশন ত্রুটি", 
+        title: "রেজিস্ট্রেশন ত্রুটি (Unsuccess)", 
         description: message, 
         variant: "destructive" 
       });
