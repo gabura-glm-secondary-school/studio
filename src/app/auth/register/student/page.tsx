@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -14,6 +13,7 @@ import { Loader2, ShieldCheck, UserCheck, Eye, EyeOff } from "lucide-react";
 import { useAuth, useFirestore } from "@/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
+import { cn } from "@/lib/utils";
 
 export default function StudentRegistration() {
   const router = useRouter();
