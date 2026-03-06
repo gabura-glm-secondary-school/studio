@@ -29,7 +29,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Load saved credentials on mount
+  // Load saved credentials on mount for specific role
   useEffect(() => {
     const savedId = localStorage.getItem(`gglmss_id_${role}`);
     const savedPass = localStorage.getItem(`gglmss_pass_${role}`);
@@ -39,16 +39,6 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
       setRememberMe(true);
     }
   }, [role]);
-
-  useEffect(() => {
-    if (!auth) return;
-    const unsub = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // Redirection handled by success callback in handleLogin
-      }
-    });
-    return () => unsub();
-  }, [auth]);
 
   const roleConfig: Record<string, any> = {
     student: { title: "Student Login", label: "Student ID", placeholder: "e.g. STU12345" },
@@ -68,26 +58,28 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
 
     setLoading(true);
     try {
-      const virtualEmail = `${idNumber.trim().toLowerCase()}@gglmss.edu.bd`;
-      const userCredential = await signInWithEmailAndPassword(auth, virtualEmail, password.trim());
+      const cleanId = idNumber.trim().toLowerCase();
+      const virtualEmail = `${cleanId}@gglmss.edu.bd`;
+      const cleanPassword = password.trim();
+
+      const userCredential = await signInWithEmailAndPassword(auth, virtualEmail, cleanPassword);
       
       const userDocRef = doc(db, "users", userCredential.user.uid);
       const userDoc = await getDoc(userDocRef);
       const userData = userDoc.data();
 
       if (!userData) {
-        setLoading(false);
-        throw new Error("User record not found in database. Please register first.");
+        throw new Error("আপনার তথ্যের কোনো রেকর্ড ডাটাবেসে পাওয়া যায়নি। অনুগ্রহ করে আগে রেজিস্ট্রেশন সম্পন্ন করুন।");
       }
 
       const isUserAdmin = userData.role === 'admin' || userData.role === 'superadmin' || userData.adminApproved === true;
 
+      // Access control
       if (userData.role !== role && !isUserAdmin) {
-        setLoading(false);
-        throw new Error(`This account is registered as ${userData.role}, not authorized for ${role} portal.`);
+        throw new Error(`এই অ্যাকাউন্টটি ${userData.role} হিসেবে নিবন্ধিত, আপনি ${role} পোর্টালে প্রবেশ করতে পারবেন না।`);
       }
 
-      // Handle Password Reminder
+      // Handle Password Reminder (Remember Me)
       if (rememberMe) {
         localStorage.setItem(`gglmss_id_${role}`, idNumber);
         localStorage.setItem(`gglmss_pass_${role}`, password);
@@ -104,16 +96,11 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
         router.push("/dashboard");
       }
     } catch (error: any) {
-      setLoading(false);
       console.error("Login error:", error);
-      let message = "Invalid credentials. Please try again.";
+      let message = "লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।";
       
-      if (error.code === 'auth/invalid-credential') {
-        message = "Incorrect ID or Password. If you haven't registered yet, please go to the Register tab.";
-      } else if (error.code === 'auth/user-not-found') {
-        message = "No account found with this ID.";
-      } else if (error.code === 'auth/wrong-password') {
-        message = "Incorrect password.";
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        message = "আপনার ID অথবা পাসওয়ার্ড ভুল। আপনি যদি আগে রেজিস্ট্রেশন না করে থাকেন, তবে আগে Register করুন।";
       } else {
         message = error.message;
       }
@@ -123,6 +110,9 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
         description: message, 
         variant: "destructive" 
       });
+    } finally {
+      // Ensure loading is always stopped
+      setLoading(false);
     }
   };
 

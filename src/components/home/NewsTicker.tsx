@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -7,7 +8,7 @@ import { cn } from "@/lib/utils";
 /**
  * NewsTicker Component
  * 
- * Optimized for high interaction speed and smooth layout integration.
+ * Slow motion scrolling for readability (60s duration).
  */
 export function NewsTicker() {
   const [isScrolled, setIsScrolled] = useState(false);
