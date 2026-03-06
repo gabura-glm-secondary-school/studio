@@ -6,7 +6,7 @@ import { useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminTopbar } from "@/components/admin/AdminTopbar";
-import { ShieldAlert, Home, ArrowLeft } from "lucide-react";
+import { ShieldAlert, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -14,7 +14,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  // Master Admin Identification (Using Email for fastest possible detection)
+  // Master Admin Identification (Instant detection)
   const isMasterAdmin = 
     user?.email?.includes('71209026') || 
     user?.ein === '71209026' || 
@@ -33,21 +33,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }, [user, loading, router]);
 
-  // Bypass heavy loading screen if it's the Master Admin
-  if (loading && !isMasterAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-primary/10 border-t-primary rounded-full animate-spin"></div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-primary/40 animate-pulse">Entering System...</p>
-        </div>
-      </div>
-    );
-  }
+  // No more blocking loading screen if it's the Master Admin or user is present
+  if (loading && !user) return null;
 
   if (!user && !isMasterAdmin) return null;
 
-  // Master Bypass: If it's the specific ID, show dashboard directly
+  // Security Gate
   if (!canAccess && !isMasterAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#EEF3F5] p-6">
@@ -63,7 +54,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 আপনার অ্যাকাউন্টটি অ্যাডমিন প্যানেল ব্যবহারের জন্য অনুমোদিত নয়।
               </p>
             </div>
-            <div className="pt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="pt-10">
               <Button onClick={() => router.push("/")} className="h-14 rounded-2xl px-8 bg-primary font-black uppercase text-xs tracking-widest shadow-xl hover:scale-105 transition-all">
                 <Home size={18} className="mr-2" /> প্রচ্ছদ পাতা
               </Button>

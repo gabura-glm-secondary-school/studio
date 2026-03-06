@@ -4,7 +4,6 @@
 import { useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Loader2 } from "lucide-react";
 import StudentDashboard from "@/components/dashboard/StudentDashboard";
 import TeacherDashboard from "@/components/dashboard/TeacherDashboard";
 
@@ -12,28 +11,30 @@ export default function DashboardPage() {
   const { user, loading } = useUser();
   const router = useRouter();
 
+  // Identification Logic for Master Admin
+  const isMasterAdmin = 
+    user?.email?.includes('71209026') || 
+    user?.ein === '71209026' || 
+    user?.idNumber === '71209026';
+
+  const role = isMasterAdmin ? 'admin' : user?.role;
+
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/auth/portal");
+      router.replace("/auth/portal");
     }
   }, [user, loading, router]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin text-primary" size={48} />
-      </div>
-    );
+  // Bypass blocking spinner if we have a user (even if profile is still syncing)
+  if (!user && loading) {
+    return null; // Return empty to avoid visual flicker while first check happens
   }
 
   if (!user) return null;
 
-  // Assuming user object from useUser() has the role and other firestore data
-  // In our setup, useUser likely returns the auth user, we need the profile
-  // For MVP, we'll assume the role is accessible or redirect accordingly
-  
-  if (user.role === "teacher" || user.role === "staff" || user.role === "admin") {
-    return <TeacherDashboard user={user} />;
+  // Use inferred role or database role to show dashboard immediately
+  if (role === "teacher" || role === "staff" || role === "admin" || isMasterAdmin) {
+    return <TeacherDashboard user={{...user, role: role || 'admin'}} />;
   }
 
   return <StudentDashboard user={user} />;
