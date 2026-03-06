@@ -1,0 +1,91 @@
+
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Extended user information stored in Firestore.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "teacher", "staff", "external", "admin", "super_admin"] },
+        "status": { "type": "string", "enum": ["active", "inactive", "pending", "locked"] },
+        "displayName": { "type": "string" },
+        "idNumber": { "type": "string", "description": "Student ID or EIN" },
+        "mobile": { "type": "string" },
+        "email": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "class": { "type": "string" },
+        "section": { "type": "string" },
+        "rollNumber": { "type": "string" },
+        "isAdmin": { "type": "boolean" },
+        "isSuperAdmin": { "type": "boolean" },
+        "failedAttempts": { "type": "number" },
+        "lockUntil": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "role", "status"]
+    },
+    "StudentRecord": {
+      "title": "Pre-verified Student Record",
+      "description": "Records created by admin to verify student registration.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "rollNumber": { "type": "string" },
+        "class": { "type": "string" },
+        "section": { "type": "string" },
+        "name": { "type": "string" },
+        "guardianPhone": { "type": "string" },
+        "isRegistered": { "type": "boolean" }
+      }
+    },
+    "TeacherRecord": {
+      "title": "Pre-verified Teacher Record",
+      "description": "Records created by admin to verify teacher registration.",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string" },
+        "ein": { "type": "string" },
+        "name": { "type": "string" },
+        "subject": { "type": "string" },
+        "designation": { "type": "string" },
+        "tempPassword": { "type": "string" },
+        "isRegistered": { "type": "boolean" }
+      }
+    },
+    "RecoveryRequest": {
+      "title": "Account Recovery Request",
+      "description": "Requests for password reset approved by teachers or admins.",
+      "type": "object",
+      "properties": {
+        "idNumber": { "type": "string" },
+        "role": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "tempPassword": { "type": "string" },
+        "approvedBy": { "type": "string" },
+        "requestedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["password"]
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": { "$ref": "#/backend/entities/UserProfile" },
+      "description": "User profile data."
+    },
+    "/student_records/{recordId}": {
+      "schema": { "$ref": "#/backend/entities/StudentRecord" },
+      "description": "Pre-verification student data."
+    },
+    "/teacher_records/{recordId}": {
+      "schema": { "$ref": "#/backend/entities/TeacherRecord" },
+      "description": "Pre-verification teacher data."
+    },
+    "/recovery_requests/{requestId}": {
+      "schema": { "$ref": "#/backend/entities/RecoveryRequest" },
+      "description": "Pending and past recovery requests."
+    }
+  }
+}
