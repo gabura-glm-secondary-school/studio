@@ -32,10 +32,10 @@ export function PrincipalChairmanMessages() {
               <h2 className="text-3xl lg:text-5xl font-headline font-black text-primary">প্রধান শিক্ষকের দূরদর্শী স্বপ্ন</h2>
             </div>
             <div className="glass-card p-8 space-y-4">
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed font-medium line-clamp-4">
+              <p className="text-base md:text-lg text-slate-800 leading-relaxed font-bold line-clamp-4">
                 দ্বীপ ইউনিয়ন গাবুরার গাইন পরিবারের পৃষ্ঠপোষকতায় এলাকার একদল বিদ্যোৎসাহী ব্যক্তির নিরলস প্রচেষ্টার ফসল গাবুরা জি, এল, এম, মাধ্যমিক বিদ্যালয়। ১৯৪৬ সাল থেকে অদ্যাবধি গাবুরা ইউনিয়নের প্রাণকেন্দ্রে অবস্থিত এ বিদ্যালয়টি এলাকার শিক্ষার বাতিঘর হিসাবে স্বমহিমায় প্রজ্জলিত...
               </p>
-              <div className="pt-2">
+              <div className="pt-2 border-t border-primary/10">
                 <h4 className="font-headline font-black text-xl text-primary leading-none uppercase">S.M EASMINUR RAHMAN LINKON</h4>
                 <p className="text-[10px] font-black text-accent uppercase tracking-widest mt-1">প্রধান শিক্ষক, গাবুরা জি.এল.এম. মাধ্যমিক বিদ্যালয়</p>
               </div>
@@ -49,22 +49,22 @@ export function PrincipalChairmanMessages() {
         {/* Chairman Message */}
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="order-2 lg:order-1 space-y-6 lg:pr-8">
-             <div className="space-y-3 text-right lg:text-left">
+             <div className="space-y-3 text-left">
               <span className="text-accent font-black uppercase tracking-[0.2em] text-[10px]">পরিচালনা পর্ষদ</span>
-              <h2 className="text-3xl lg:text-5xl font-headline font-black text-primary text-right lg:text-left">সভাপতির বার্তা</h2>
+              <h2 className="text-3xl lg:text-5xl font-headline font-black text-primary">সভাপতির বার্তা</h2>
             </div>
             <div className="glass-card p-8 space-y-4 bg-gradient-to-br from-white/60 to-accent/5">
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed font-medium line-clamp-4">
+              <p className="text-base md:text-lg text-slate-800 leading-relaxed font-bold line-clamp-4">
                 প্রতিষ্ঠানের পরিচালকবৃন্দ, শিক্ষকবৃন্দ, অভিভাবকবৃন্দ, শিক্ষার্থীদের ও সর্বোপরি এলাকাবাসীর সমন্বিত প্রচেষ্টার ফল। এলাকাবাসীর সেবার মনোভাব নিয়ে মান সম্পন্ন শিক্ষা প্রসারে এবং কৃতিত্বপূর্ণ ফল অর্জন করে এই প্রতিষ্ঠানটি ইতিমধ্যে একটি স্থান করে নিয়েছে। প্রতিষ্ঠানের সার্বিক ক্ষেত্রে সফলতার জন্য মানুষের মাঝে এক ধরনের চাহিদা সৃষ্টি হওয়ায়...
               </p>
-              <div className="pt-2 text-right lg:text-left">
+              <div className="pt-2 text-left border-t border-primary/10">
                 <h4 className="font-headline font-black text-xl text-primary leading-none uppercase">GAZI NAZRUL ISLAM</h4>
                 <div className="flex flex-col gap-0.5">
                   <p className="text-xs font-black text-primary uppercase tracking-wider mt-1">MP Satkhira 04</p>
                   <p className="text-[10px] font-black text-accent uppercase tracking-widest">সভাপতি, পরিচালনা পর্ষদ</p>
                 </div>
               </div>
-              <div className="flex justify-end lg:justify-start">
+              <div className="flex justify-start">
                 <Button size="lg" className="btn-pill btn-gradient-accent w-full md:w-auto h-12 active:scale-95 transition-transform" asChild>
                   <Link href="/about/chairman">সম্পূর্ণ গল্প</Link>
                 </Button>

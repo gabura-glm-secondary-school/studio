@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, use, useEffect } from "react";
@@ -26,12 +27,11 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Clear loading if session already exists
   useEffect(() => {
     if (!auth) return;
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Already logged in, redirect might be handled by middleware/layout
+        // Redirection handled by success callback in handleLogin
       }
     });
     return () => unsub();
@@ -48,7 +48,10 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!auth || !db) return;
+    if (!auth || !db) {
+      toast({ title: "System Error", description: "Firebase initialization failed.", variant: "destructive" });
+      return;
+    }
 
     setLoading(true);
     try {
@@ -60,37 +63,36 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
       const userData = userDoc.data();
 
       if (!userData) {
+        setLoading(false);
         throw new Error("User record not found in database. Please register first.");
       }
 
-      // Admin check logic
       const isUserAdmin = userData.role === 'admin' || userData.role === 'superadmin' || userData.adminApproved === true;
 
       if (userData.role !== role && !isUserAdmin) {
-        throw new Error(`This account is not authorized for the ${role} portal.`);
+        setLoading(false);
+        throw new Error(`This account is registered as ${userData.role}, not authorized for ${role} portal.`);
       }
 
       toast({ title: "Login Successful", description: "Redirecting to your dashboard..." });
       
-      // Navigate based on role
       if (isUserAdmin) {
         router.push("/admin");
       } else {
         router.push("/dashboard");
       }
     } catch (error: any) {
+      setLoading(false);
       console.error("Login error:", error);
-      let message = "Invalid credentials. Please try again.";
+      let message = error.message || "Invalid credentials. Please try again.";
       if (error.code === 'auth/user-not-found') message = "No account found with this ID.";
       if (error.code === 'auth/wrong-password') message = "Incorrect password.";
-      if (error.code === 'auth/network-request-failed') message = "Network error. Please check your connection.";
       
       toast({ 
         title: "Login Failed", 
-        description: error.message || message, 
+        description: message, 
         variant: "destructive" 
       });
-      setLoading(false); // Ensure loading is stopped on error
     }
   };
 
@@ -125,7 +127,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
               <Lock size={24} />
             </div>
             <CardTitle className="text-3xl font-headline font-black text-primary">{config.title}</CardTitle>
-            <CardDescription className="font-medium">Enter your credentials to access your dashboard.</CardDescription>
+            <CardDescription className="font-bold text-muted-foreground">Enter your credentials to access your dashboard.</CardDescription>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
@@ -137,7 +139,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
                 required 
                 value={idNumber}
                 onChange={(e) => setIdNumber(e.target.value)}
-                className="h-12 rounded-xl border-primary/20 bg-white/50 font-bold"
+                className="h-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
               />
             </div>
             <div className="space-y-2">
@@ -154,7 +156,7 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
                   required 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 pr-12 rounded-xl border-primary/20 bg-white/50 font-bold"
+                  className="h-12 pr-12 rounded-xl border-primary/20 bg-white/50 font-black text-primary"
                 />
                 <button
                   type="button"
