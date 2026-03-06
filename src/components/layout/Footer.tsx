@@ -1,15 +1,16 @@
+
 import Link from "next/link";
 import Image from "next/image";
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, ChevronRight } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-primary text-white pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-        {/* About */}
-        <div className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="relative w-12 h-12 bg-white rounded-full p-1">
+    <footer className="bg-primary text-white pt-20 pb-8">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
+        {/* About Section */}
+        <div className="space-y-8">
+          <div className="flex items-center gap-4">
+            <div className="relative w-16 h-16 bg-white rounded-full p-1 shadow-2xl border-4 border-white/20">
               <Image
                 src="https://i.postimg.cc/52gjwkTC/download-(3).jpg"
                 alt="Logo"
@@ -18,65 +19,99 @@ export function Footer() {
               />
             </div>
             <div>
-              <h3 className="font-headline font-bold text-lg">Gabura Gopal Laxmi</h3>
-              <p className="text-[10px] uppercase opacity-80 tracking-widest">Memorial Secondary School</p>
+              <h3 className="font-headline font-black text-xl leading-tight uppercase tracking-tighter">Gabura Gopal Laxmi</h3>
+              <p className="text-[10px] uppercase font-black text-accent tracking-[0.2em]">Memorial Secondary School</p>
             </div>
           </div>
-          <p className="text-sm text-white/70 leading-relaxed">
+          <p className="text-sm text-white leading-relaxed font-medium opacity-90 italic border-l-4 border-accent pl-4">
             “সুশিক্ষাই আমাদের অঙ্গীকার” - Dedicated to excellence in education for the students of Gabura and beyond.
           </p>
           <div className="flex gap-4">
-            <Link href="#" className="hover:text-accent transition-colors"><Facebook size={20}/></Link>
-            <Link href="#" className="hover:text-accent transition-colors"><Twitter size={20}/></Link>
-            <Link href="#" className="hover:text-accent transition-colors"><Instagram size={20}/></Link>
+            {[Facebook, Twitter, Instagram].map((Icon, i) => (
+              <Link key={i} href="#" className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center hover:bg-accent transition-all duration-300 group">
+                <Icon size={20} className="group-hover:scale-110 transition-transform" />
+              </Link>
+            ))}
           </div>
         </div>
 
         {/* Quick Links */}
         <div>
-          <h4 className="font-headline font-semibold text-lg mb-6 border-b border-white/10 pb-2">Quick Links</h4>
-          <ul className="space-y-4 text-sm text-white/70">
-            <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
-            <li><Link href="/notices" className="hover:text-white transition-colors">Notice Board</Link></li>
-            <li><Link href="/gallery" className="hover:text-white transition-colors">School Gallery</Link></li>
-            <li><Link href="/ssc-batches" className="hover:text-white transition-colors">SSC Batch Directory</Link></li>
-            <li><Link href="/complaints" className="hover:text-white transition-colors">Online Complaint</Link></li>
+          <h4 className="font-headline font-black text-lg mb-8 uppercase tracking-widest text-accent flex items-center gap-2">
+            <span className="w-8 h-1 bg-accent rounded-full"></span> Quick Links
+          </h4>
+          <ul className="space-y-4">
+            {[
+              { label: "About Us", href: "/about" },
+              { label: "Notice Board", href: "/notices" },
+              { label: "School Gallery", href: "/gallery" },
+              { label: "SSC Batch Directory", href: "/ssc-batches" },
+              { label: "Online Complaint", href: "/complaints" }
+            ].map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="text-sm font-bold flex items-center gap-2 hover:text-accent transition-colors group">
+                  <ChevronRight size={14} className="text-accent opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
-        {/* Academic */}
+        {/* Academic Section */}
         <div>
-          <h4 className="font-headline font-semibold text-lg mb-6 border-b border-white/10 pb-2">Academic</h4>
-          <ul className="space-y-4 text-sm text-white/70">
-            <li><Link href="/ssc-results" className="hover:text-white transition-colors">SSC Results</Link></li>
-            <li><Link href="/events" className="hover:text-white transition-colors">Upcoming Events</Link></li>
-            <li><Link href="/contact" className="hover:text-white transition-colors">Admission Info</Link></li>
-            <li><Link href="#" className="hover:text-white transition-colors">Student Portal</Link></li>
-            <li><Link href="/about/head-teachers" className="hover:text-white transition-colors">Administration</Link></li>
+          <h4 className="font-headline font-black text-lg mb-8 uppercase tracking-widest text-accent flex items-center gap-2">
+            <span className="w-8 h-1 bg-accent rounded-full"></span> Academic
+          </h4>
+          <ul className="space-y-4">
+            {[
+              { label: "SSC Results", href: "/ssc-results" },
+              { label: "Upcoming Events", href: "/events" },
+              { label: "Admission Info", href: "/contact" },
+              { label: "Student Portal", href: "/auth/portal" },
+              { label: "Administration", href: "/about/head-teachers" }
+            ].map((link) => (
+              <li key={link.label}>
+                <Link href={link.href} className="text-sm font-bold flex items-center gap-2 hover:text-accent transition-colors group">
+                  <ChevronRight size={14} className="text-accent opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
-        {/* Contact */}
+        {/* Contact Info */}
         <div>
-          <h4 className="font-headline font-semibold text-lg mb-6 border-b border-white/10 pb-2">Contact Us</h4>
-          <ul className="space-y-4 text-sm text-white/70">
-            <li className="flex gap-3">
-              <MapPin size={18} className="text-accent shrink-0" />
-              <span>Gabura, Shyamnagar, Satkhira, Bangladesh</span>
+          <h4 className="font-headline font-black text-lg mb-8 uppercase tracking-widest text-accent flex items-center gap-2">
+            <span className="w-8 h-1 bg-accent rounded-full"></span> Contact Us
+          </h4>
+          <ul className="space-y-6">
+            <li className="flex gap-4">
+              <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shrink-0 text-primary">
+                <MapPin size={20} />
+              </div>
+              <span className="text-sm font-bold leading-snug">Gabura, Shyamnagar, Satkhira, Bangladesh</span>
             </li>
-            <li className="flex gap-3">
-              <Phone size={18} className="text-accent shrink-0" />
-              <span>+880 1234 567890</span>
+            <li className="flex gap-4">
+              <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shrink-0 text-primary">
+                <Phone size={20} />
+              </div>
+              <span className="text-sm font-bold">+880 1234 567890</span>
             </li>
-            <li className="flex gap-3">
-              <Mail size={18} className="text-accent shrink-0" />
-              <span>info@gglmss.edu.bd</span>
+            <li className="flex gap-4">
+              <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shrink-0 text-primary">
+                <Mail size={20} />
+              </div>
+              <span className="text-sm font-bold">info@gglmss.edu.bd</span>
             </li>
           </ul>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-4 mt-16 pt-8 border-t border-white/10 text-center text-xs text-white/50">
-        <p>© {new Date().getFullYear()} Gabura Gopal Laxmi Memorial Secondary School. All rights reserved.</p>
+      
+      <div className="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+        <p>© {new Date().getFullYear()} Gabura Gopal Laxmi Memorial Secondary School.</p>
+        <p>Developed for Excellence</p>
       </div>
     </footer>
   );
