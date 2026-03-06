@@ -8,12 +8,13 @@ import {
   Briefcase, 
   GraduationCap, 
   ShieldAlert, 
-  ArrowUpRight, 
   Clock, 
   FileCheck,
   TrendingUp,
   AlertTriangle,
-  UserCheck
+  UserCheck,
+  Settings,
+  BarChart3
 } from "lucide-react";
 import { 
   BarChart, 
@@ -23,9 +24,9 @@ import {
   CartesianGrid, 
   Tooltip, 
   ResponsiveContainer,
-  LineChart,
-  Line
 } from "recharts";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const attendanceData = [
   { day: "Sun", attendance: 92 },
@@ -182,15 +183,14 @@ export default function AdminDashboard() {
                 </Link>
               ))}
             </div>
-            <Button className="w-full h-12 rounded-xl bg-accent text-primary hover:bg-accent/90 font-black shadow-xl">
-              School Website Settings
-            </Button>
+            <Link href="/admin/website" className="block w-full">
+              <Button className="w-full h-12 rounded-xl bg-accent text-primary hover:bg-accent/90 font-black shadow-xl">
+                School Website Settings
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
-
-import { BarChart3 } from "lucide-react";
-import { cn } from "@/lib/utils";
