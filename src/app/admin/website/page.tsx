@@ -13,16 +13,16 @@ import {
   Mail, 
   Globe, 
   Clock, 
-  Image as ImageIcon,
-  CheckCircle2,
-  Loader2,
-  Layout,
-  GraduationCap,
-  Briefcase,
-  Megaphone,
-  Plus,
-  Trash2,
-  BarChart3 as BarChartIcon
+  Image as ImageIcon, 
+  CheckCircle2, 
+  Loader2, 
+  Layout, 
+  GraduationCap, 
+  Briefcase, 
+  Megaphone, 
+  Plus, 
+  Trash2, 
+  BarChart3 as BarChartIcon 
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
@@ -35,6 +35,8 @@ export default function WebsiteSettings() {
     "Admission Open 2025 - Enrollment for the new academic session is now active for all classes.",
     "School Picnic Registration Open - Join us for the annual excursion to the Sundarbans Mangrove Forest."
   ]);
+
+  const logoUrl = "https://i.postimg.cc/rwjdJqQK/1000144744-removebg-preview-(1).png";
 
   const handleSave = () => {
     setSaving(true);
@@ -110,12 +112,12 @@ export default function WebsiteSettings() {
               <CardHeader><CardTitle>Identity & Assets</CardTitle></CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex items-center gap-6 p-6 bg-secondary/30 rounded-3xl border-2 border-dashed">
-                  <div className="w-20 h-20 relative bg-white rounded-2xl p-2 shadow-inner shrink-0">
-                    <Image src="https://i.postimg.cc/52gjwkTC/download-(3).jpg" alt="Logo" fill className="object-contain" />
+                  <div className="w-20 h-20 relative bg-white rounded-2xl p-2 shadow-inner shrink-0 overflow-hidden">
+                    <Image src={logoUrl} alt="Logo" fill className="object-contain" />
                   </div>
                   <div className="space-y-2">
                     <p className="font-bold text-sm text-primary leading-tight">School Official Logo</p>
-                    <p className="text-[10px] text-muted-foreground italic">Size: 512x512px preferred</p>
+                    <p className="text-[10px] text-muted-foreground font-black italic">Active Logo: New GGLMSS Design</p>
                     <Button variant="outline" size="sm" className="rounded-lg gap-2 h-8 border-2">
                       <ImageIcon size={14} /> Change Logo
                     </Button>

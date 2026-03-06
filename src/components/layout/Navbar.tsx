@@ -53,55 +53,56 @@ export function Navbar() {
     { title: "Chairman Message", href: "/about/chairman", icon: Star },
   ];
 
+  const logoUrl = "https://i.postimg.cc/rwjdJqQK/1000144744-removebg-preview-(1).png";
+
   return (
     <nav className="fixed top-2 left-0 right-0 z-50 transition-all duration-500 flex justify-center pointer-events-none px-4">
       <div 
         className={cn(
           "pointer-events-auto transition-all duration-500 ease-out flex items-center justify-between px-4 md:px-8",
-          "glass-navbar !bg-white/80",
+          "glass-navbar !bg-white/90",
           isScrolled 
-            ? "w-full md:w-[90%] lg:w-[65%] h-16 rounded-full py-1 shadow-2xl border-primary/30" 
-            : "w-full md:w-[95%] lg:w-[85%] h-20 rounded-full py-2 border-white/60 shadow-xl"
+            ? "w-full md:w-[95%] lg:w-[80%] h-16 rounded-full py-1 shadow-2xl border-primary/30" 
+            : "w-full md:w-[98%] lg:w-[90%] h-20 rounded-full py-2 border-white/60 shadow-xl"
         )}
       >
-        <NextLink href="/" className="flex items-center group active:scale-95 transition-transform shrink-0">
+        <NextLink href="/" className="flex items-center gap-3 md:gap-4 group active:scale-95 transition-transform shrink-0">
           <div className={cn(
-            "relative bg-white rounded-full p-1 shadow-2xl transition-all duration-500 overflow-hidden shrink-0 border-[3px] border-primary/20 group-hover:border-primary group-hover:rotate-[360deg]",
-            isScrolled ? "w-12 h-12" : "w-16 h-16"
+            "relative bg-white rounded-full p-1 shadow-xl transition-all duration-500 overflow-hidden shrink-0 border-[2px] border-primary/20 group-hover:border-primary",
+            isScrolled ? "w-12 h-12" : "w-14 h-14 md:w-16 md:h-16"
           )}>
             <Image
-              src="https://i.postimg.cc/52gjwkTC/download-(3).jpg"
+              src={logoUrl}
               alt="School Logo"
               fill
-              className="object-contain p-0.5 rounded-full"
+              className="object-contain"
             />
+          </div>
+          <div className="flex flex-col justify-center overflow-hidden">
+            <h1 className={cn(
+              "font-headline font-black text-primary leading-tight tracking-tight transition-all duration-500 whitespace-nowrap uppercase",
+              isScrolled ? "text-xs md:text-base" : "text-sm md:text-xl lg:text-2xl"
+            )}>
+              GABURA G.L.M <span className="text-accent">SECONDARY SCHOOL</span>
+            </h1>
+            <p className={cn(
+              "uppercase tracking-[0.1em] text-primary/80 font-black transition-all duration-500",
+              isScrolled ? "text-[7px] md:text-[8px] opacity-100" : "text-[8px] md:text-[10px] opacity-100"
+            )}>
+              সুশিক্ষাই আমাদের অঙ্গীকার
+            </p>
           </div>
         </NextLink>
 
-        <div className="flex flex-col items-center text-center px-4 overflow-hidden flex-1">
-          <h1 className={cn(
-            "font-headline font-black text-primary leading-none tracking-tight transition-all duration-500 whitespace-nowrap uppercase",
-            isScrolled ? "text-sm md:text-lg" : "text-base md:text-2xl"
-          )}>
-            GABURA G.L.M <span className="text-accent">SECONDARY SCHOOL</span>
-          </h1>
-          <p className={cn(
-            "uppercase tracking-[0.2em] text-primary font-black transition-all duration-500",
-            isScrolled ? "text-[8px] mt-1 opacity-100" : "text-[10px] mt-2 opacity-100"
-          )}>
-            সুশিক্ষাই আমাদের অঙ্গীকার
-          </p>
-        </div>
-
-        <div className="flex items-center shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className={cn(
               "flex items-center justify-center bg-primary text-white shadow-2xl rounded-full hover:bg-accent transition-all duration-300 active:scale-75 group",
-              isScrolled ? "w-11 h-11" : "w-14 h-14"
+              isScrolled ? "w-10 h-10" : "w-12 h-12 md:w-14 md:h-14"
             )}
           >
-            <LayoutGrid className={cn("transition-all group-hover:rotate-90", isScrolled ? "w-5 h-5" : "w-7 h-7")} />
+            <LayoutGrid className={cn("transition-all group-hover:rotate-90", isScrolled ? "w-5 h-5" : "w-6 h-6 md:w-7 md:h-7")} />
           </button>
         </div>
       </div>
@@ -125,7 +126,7 @@ export function Navbar() {
           <div className="p-8 border-b flex items-center justify-between bg-primary/5">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 relative bg-white rounded-2xl p-1.5 shadow-xl border border-primary/10">
-                <Image src="https://i.postimg.cc/52gjwkTC/download-(3).jpg" alt="Logo" fill className="object-contain" />
+                <Image src={logoUrl} alt="Logo" fill className="object-contain" />
               </div>
               <div>
                 <h2 className="font-headline font-black text-primary text-base leading-tight uppercase">GGLMSS Portal</h2>
@@ -170,7 +171,7 @@ export function Navbar() {
                 Portal Login <ArrowRight size={22} />
               </Button>
             </NextLink>
-            <p className="text-center text-[10px] text-primary/60 uppercase tracking-[0.2em] font-black">
+            <p className="text-center text-[10px] text-primary font-black uppercase tracking-[0.2em]">
               © {new Date().getFullYear()} Gabura G.L.M Secondary School
             </p>
           </div>

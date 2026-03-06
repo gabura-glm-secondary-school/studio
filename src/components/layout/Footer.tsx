@@ -1,21 +1,22 @@
-
 import Link from "next/link";
 import Image from "next/image";
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, ChevronRight } from "lucide-react";
 
 export function Footer() {
+  const logoUrl = "https://i.postimg.cc/rwjdJqQK/1000144744-removebg-preview-(1).png";
+
   return (
     <footer className="bg-primary text-white pt-20 pb-8">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
         {/* About Section */}
         <div className="space-y-8">
           <div className="flex items-center gap-4">
-            <div className="relative w-16 h-16 bg-white rounded-full p-1 shadow-2xl border-4 border-white/20">
+            <div className="relative w-16 h-16 bg-white rounded-full p-1 shadow-2xl border-4 border-white/20 overflow-hidden">
               <Image
-                src="https://i.postimg.cc/52gjwkTC/download-(3).jpg"
+                src={logoUrl}
                 alt="Logo"
                 fill
-                className="object-contain p-1"
+                className="object-contain"
               />
             </div>
             <div>
@@ -23,7 +24,7 @@ export function Footer() {
               <p className="text-[10px] uppercase font-black text-accent tracking-[0.2em]">Memorial Secondary School</p>
             </div>
           </div>
-          <p className="text-sm text-white leading-relaxed font-medium opacity-90 italic border-l-4 border-accent pl-4">
+          <p className="text-sm text-white leading-relaxed font-bold opacity-100 italic border-l-4 border-accent pl-4">
             “সুশিক্ষাই আমাদের অঙ্গীকার” - Dedicated to excellence in education for the students of Gabura and beyond.
           </p>
           <div className="flex gap-4">
@@ -49,7 +50,7 @@ export function Footer() {
               { label: "Online Complaint", href: "/complaints" }
             ].map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="text-sm font-bold flex items-center gap-2 hover:text-accent transition-colors group">
+                <Link href={link.href} className="text-sm font-black flex items-center gap-2 hover:text-accent transition-colors group">
                   <ChevronRight size={14} className="text-accent opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                   {link.label}
                 </Link>
@@ -72,7 +73,7 @@ export function Footer() {
               { label: "Administration", href: "/about/head-teachers" }
             ].map((link) => (
               <li key={link.label}>
-                <Link href={link.href} className="text-sm font-bold flex items-center gap-2 hover:text-accent transition-colors group">
+                <Link href={link.href} className="text-sm font-black flex items-center gap-2 hover:text-accent transition-colors group">
                   <ChevronRight size={14} className="text-accent opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                   {link.label}
                 </Link>
@@ -91,25 +92,25 @@ export function Footer() {
               <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shrink-0 text-primary">
                 <MapPin size={20} />
               </div>
-              <span className="text-sm font-bold leading-snug">Gabura, Shyamnagar, Satkhira, Bangladesh</span>
+              <span className="text-sm font-black leading-snug">Gabura, Shyamnagar, Satkhira, Bangladesh</span>
             </li>
             <li className="flex gap-4">
               <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shrink-0 text-primary">
                 <Phone size={20} />
               </div>
-              <span className="text-sm font-bold">+880 1234 567890</span>
+              <span className="text-sm font-black">+880 1234 567890</span>
             </li>
             <li className="flex gap-4">
               <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shrink-0 text-primary">
                 <Mail size={20} />
               </div>
-              <span className="text-sm font-bold">info@gglmss.edu.bd</span>
+              <span className="text-sm font-black">info@gglmss.edu.bd</span>
             </li>
           </ul>
         </div>
       </div>
       
-      <div className="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+      <div className="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/60">
         <p>© {new Date().getFullYear()} Gabura Gopal Laxmi Memorial Secondary School.</p>
         <p>Developed for Excellence</p>
       </div>

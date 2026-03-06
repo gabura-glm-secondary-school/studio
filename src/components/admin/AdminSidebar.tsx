@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -65,6 +64,7 @@ const menuItems = [
 
 export function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
   const pathname = usePathname();
+  const logoUrl = "https://i.postimg.cc/rwjdJqQK/1000144744-removebg-preview-(1).png";
 
   return (
     <aside className={cn(
@@ -76,7 +76,7 @@ export function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
         <div className="p-6 flex items-center justify-between border-b">
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="w-10 h-10 relative shrink-0">
-              <Image src="https://i.postimg.cc/52gjwkTC/download-(3).jpg" alt="Logo" fill className="object-contain" />
+              <Image src={logoUrl} alt="Logo" fill className="object-contain" />
             </div>
             {isOpen && (
               <div className="whitespace-nowrap">
