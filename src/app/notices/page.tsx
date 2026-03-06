@@ -105,7 +105,6 @@ export default function NoticeBoardPage() {
     const matchesClass = selectedClass === "all" || n.classes.includes(selectedClass);
     const matchesType = selectedType === "all" || n.type === selectedType;
     
-    // Student sees only their class
     if (user?.role === 'student' && user?.class) {
       return matchesSearch && matchesType && n.classes.includes(user.class);
     }
@@ -145,7 +144,7 @@ export default function NoticeBoardPage() {
               />
             </div>
             <Select value={selectedType} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-[140px] h-12 rounded-2xl bg-white border-border">
+              <SelectTrigger className="w-[140px] h-12 rounded-2xl bg-white border-border shadow-sm">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
@@ -159,34 +158,44 @@ export default function NoticeBoardPage() {
           </div>
         </div>
 
-        {/* Latest Important Notice Highlight */}
+        {/* Latest Important Notice Highlight - Fixed Contrast */}
         {pinnedNotice && (
-          <Card className="glass-card border-none bg-primary text-white overflow-hidden relative group">
-            <div className="absolute top-0 right-0 p-12 opacity-5 rotate-12 scale-150 group-hover:rotate-0 transition-transform duration-700">
-              <Sparkles size={120} />
+          <Card className="border-none bg-primary shadow-2xl rounded-[3rem] overflow-hidden relative group">
+            {/* Background pattern */}
+            <div className="absolute top-0 right-0 p-12 opacity-10 rotate-12 scale-150 group-hover:rotate-0 transition-transform duration-1000 pointer-events-none">
+              <Sparkles size={180} className="text-white" />
             </div>
-            <CardContent className="p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 relative z-10">
-              <div className="w-20 h-20 bg-accent text-primary rounded-[2rem] flex items-center justify-center shrink-0 shadow-xl shadow-black/20">
-                <Pin size={32} fill="currentColor" />
+            
+            <CardContent className="p-10 md:p-16 flex flex-col md:flex-row items-center gap-10 relative z-10">
+              <div className="w-24 h-24 bg-accent text-primary rounded-[2.5rem] flex items-center justify-center shrink-0 shadow-2xl group-hover:scale-110 transition-transform duration-500">
+                <Pin size={40} fill="currentColor" />
               </div>
-              <div className="flex-1 text-center md:text-left space-y-4">
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                  <Badge className="bg-accent text-primary font-black uppercase text-[10px] px-3">Latest Important Notice</Badge>
-                  <span className="text-[10px] font-bold opacity-60 uppercase tracking-widest">{pinnedNotice.date}</span>
+              
+              <div className="flex-1 text-center md:text-left space-y-6">
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                  <Badge className="bg-accent text-primary font-black uppercase text-[11px] px-4 py-1.5 rounded-full tracking-widest shadow-lg">
+                    Latest Important Notice
+                  </Badge>
+                  <span className="text-[11px] font-black text-white/80 uppercase tracking-[0.2em] flex items-center gap-2">
+                    <Calendar size={14} className="text-accent" /> {pinnedNotice.date}
+                  </span>
                 </div>
-                <h2 className="text-2xl md:text-4xl font-headline font-black leading-tight">
+                
+                <h2 className="text-3xl md:text-5xl font-headline font-black text-white leading-tight">
                   {pinnedNotice.title}
                 </h2>
-                <p className="text-white/70 text-sm md:text-base max-w-2xl line-clamp-2">
+                
+                <p className="text-white/90 text-base md:text-lg max-w-2xl leading-relaxed font-medium">
                   {pinnedNotice.description}
                 </p>
-                <div className="flex gap-4 justify-center md:justify-start pt-2">
-                  <Button asChild className="bg-white text-primary hover:bg-accent font-black rounded-xl px-8 h-12 shadow-lg">
-                    <Link href={`/notices/${pinnedNotice.id}`}>Read More</Link>
+                
+                <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
+                  <Button asChild className="bg-white text-primary hover:bg-accent hover:text-white font-black rounded-2xl px-10 h-14 text-base shadow-xl transition-all active:scale-95">
+                    <Link href={`/notices/${pinnedNotice.id}`}>Read Full Notice</Link>
                   </Button>
                   {pinnedNotice.hasAttachment && (
-                    <Button variant="outline" className="border-white/20 hover:bg-white/10 rounded-xl px-6 h-12">
-                      <Download size={18} className="mr-2" /> Download Routine
+                    <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 rounded-2xl px-8 h-14 text-base transition-all">
+                      <Download size={20} className="mr-2" /> Download Routine
                     </Button>
                   )}
                 </div>
@@ -196,17 +205,17 @@ export default function NoticeBoardPage() {
         )}
 
         <Tabs defaultValue="main" className="space-y-8">
-          <TabsList className="bg-white/50 p-1 border rounded-full h-auto flex gap-2 justify-start md:justify-center w-fit mx-auto shadow-sm">
-            <TabsTrigger value="main" className="rounded-full px-8 py-3 font-bold data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
+          <TabsList className="bg-white/50 p-1.5 border rounded-full h-auto flex gap-2 justify-start md:justify-center w-fit mx-auto shadow-sm backdrop-blur-md">
+            <TabsTrigger value="main" className="rounded-full px-10 py-3.5 font-black uppercase text-xs tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg transition-all active:scale-95">
               <LayoutGrid size={16} className="mr-2" /> Main Notice Board
             </TabsTrigger>
-            <TabsTrigger value="teacher" className="rounded-full px-8 py-3 font-bold data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
+            <TabsTrigger value="teacher" className="rounded-full px-10 py-3.5 font-black uppercase text-xs tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg transition-all active:scale-95">
               <User size={16} className="mr-2" /> Teacher Notices
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="main" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="grid gap-6">
+            <div className="grid gap-8">
               {filteredMain.map((notice) => (
                 <NoticeCard key={notice.id} notice={notice} />
               ))}
@@ -215,13 +224,13 @@ export default function NoticeBoardPage() {
           </TabsContent>
 
           <TabsContent value="teacher" className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                {user?.role === 'student' ? `Notices for Class ${user.class}` : "Class-specific academic updates"}
+            <div className="flex items-center justify-between px-4">
+              <p className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em]">
+                {user?.role === 'student' ? `Academic updates for Class ${user.class}` : "Class-specific announcements"}
               </p>
               {user?.role !== 'student' && (
                 <Select value={selectedClass} onValueChange={setSelectedClass}>
-                  <SelectTrigger className="w-[140px] h-10 rounded-xl bg-white border-border">
+                  <SelectTrigger className="w-[160px] h-11 rounded-xl bg-white border-border shadow-sm">
                     <SelectValue placeholder="Select Class" />
                   </SelectTrigger>
                   <SelectContent>
@@ -233,7 +242,7 @@ export default function NoticeBoardPage() {
                 </Select>
               )}
             </div>
-            <div className="grid gap-6">
+            <div className="grid gap-8">
               {filteredTeacher.map((notice) => (
                 <NoticeCard key={notice.id} notice={notice} isTeacher />
               ))}
@@ -249,58 +258,63 @@ export default function NoticeBoardPage() {
 function NoticeCard({ notice, isTeacher = false }: { notice: any, isTeacher?: boolean }) {
   return (
     <Link href={`/notices/${notice.id}`} className="group block">
-      <Card className="glass-card hover:border-accent transition-all duration-300 overflow-hidden border-2 border-transparent">
+      <Card className="glass-card hover:border-accent transition-all duration-500 overflow-hidden border-2 border-transparent shadow-md hover:shadow-2xl hover:-translate-y-1 active:translate-y-0">
         <CardContent className="p-0">
           <div className="flex flex-col sm:flex-row items-stretch">
-            <div className="p-6 sm:w-48 bg-primary/5 flex flex-col justify-center items-center text-center border-b sm:border-b-0 sm:border-r border-dashed border-primary/20">
-              <Calendar className="text-primary mb-2" size={24} />
-              <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest leading-tight">Published On</p>
-              <p className="font-bold text-primary text-sm">{notice.date}</p>
+            <div className="p-8 sm:w-56 bg-primary/5 flex flex-col justify-center items-center text-center border-b sm:border-b-0 sm:border-r border-dashed border-primary/20">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-primary shadow-sm mb-3">
+                <Calendar size={24} />
+              </div>
+              <p className="text-[10px] font-black uppercase text-muted-foreground tracking-[0.2em] leading-tight mb-1">Published</p>
+              <p className="font-black text-primary text-sm uppercase">{notice.date}</p>
             </div>
-            <div className="p-8 flex-1 space-y-4 relative">
+            <div className="p-10 flex-1 space-y-5 relative">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Badge className={cn(
-                    "uppercase font-black text-[9px] px-3",
-                    notice.type === 'important' ? 'bg-rose-500' : 
-                    notice.type === 'exam' ? 'bg-blue-500' : 'bg-accent text-primary'
+                    "uppercase font-black text-[10px] px-4 py-1 rounded-full tracking-widest shadow-sm",
+                    notice.type === 'important' ? 'bg-rose-500 text-white' : 
+                    notice.type === 'exam' ? 'bg-blue-500 text-white' : 'bg-accent text-primary'
                   )}>
                     {notice.type}
                   </Badge>
                   {isTeacher && notice.classes && (
-                    <div className="flex gap-1">
+                    <div className="flex gap-1.5">
                       {notice.classes.map((c: string) => (
-                        <Badge key={c} variant="outline" className="text-[9px] border-primary/20 text-primary">Cl {c}</Badge>
+                        <Badge key={c} variant="outline" className="text-[10px] font-black border-primary/20 text-primary bg-primary/5">Class {c}</Badge>
                       ))}
                     </div>
                   )}
                 </div>
                 {notice.hasAttachment && (
-                  <Badge variant="outline" className="border-dashed border-accent text-accent font-black text-[9px]">
-                    <FileText size={10} className="mr-1" /> Attachment
+                  <Badge variant="outline" className="border-dashed border-accent text-accent font-black text-[10px] px-3">
+                    <FileText size={12} className="mr-1.5" /> PDF Attached
                   </Badge>
                 )}
               </div>
-              <div className="space-y-1">
-                <h3 className="text-xl md:text-2xl font-headline font-bold text-primary group-hover:text-accent transition-colors leading-tight">
+              
+              <div className="space-y-2">
+                <h3 className="text-2xl md:text-3xl font-headline font-black text-primary group-hover:text-accent transition-colors leading-tight">
                   {notice.title}
                 </h3>
                 {isTeacher && (
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1">
-                    <User size={10} /> Posted by {notice.teacher}
+                  <p className="text-[11px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+                    <User size={12} className="text-accent" /> Posted by {notice.teacher}
                   </p>
                 )}
               </div>
-              <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed">
+              
+              <p className="text-muted-foreground text-base line-clamp-2 leading-relaxed font-medium">
                 {notice.description}
               </p>
-              <div className="flex items-center justify-between pt-2">
-                <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
-                  View Full Notice <ChevronRight size={14} />
+              
+              <div className="flex items-center justify-between pt-4">
+                <div className="flex items-center gap-2 text-primary font-black text-[11px] uppercase tracking-[0.2em] transition-all transform group-hover:translate-x-2">
+                  View Full Notice <ChevronRight size={16} className="text-accent" />
                 </div>
                 {notice.hasAttachment && (
-                  <Button variant="ghost" size="sm" className="h-8 rounded-lg text-xs font-black text-accent hover:bg-accent/10">
-                    <Download size={14} className="mr-2" /> PDF
+                  <Button variant="ghost" size="sm" className="h-10 rounded-xl text-xs font-black text-accent hover:bg-accent/10 uppercase tracking-widest">
+                    <Download size={16} className="mr-2" /> Download
                   </Button>
                 )}
               </div>
@@ -314,11 +328,11 @@ function NoticeCard({ notice, isTeacher = false }: { notice: any, isTeacher?: bo
 
 function EmptyNotices() {
   return (
-    <div className="py-24 text-center space-y-4 bg-white/30 rounded-[3rem] border-2 border-dashed border-muted-foreground/20">
-      <div className="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center mx-auto">
-        <FileText size={48} className="text-primary/20" />
+    <div className="py-32 text-center space-y-6 bg-white/30 rounded-[4rem] border-2 border-dashed border-muted-foreground/20">
+      <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center mx-auto">
+        <FileText size={56} className="text-primary/20" />
       </div>
-      <p className="text-muted-foreground font-bold uppercase tracking-widest text-xs">এই ট্যাবে কোনো নোটিশ পাওয়া যায়নি।</p>
+      <p className="text-muted-foreground font-black uppercase tracking-[0.3em] text-sm">নোটিশ পাওয়া যায়নি</p>
     </div>
   );
 }
