@@ -19,7 +19,7 @@ export default function ChairmanMessagePage() {
         <div className="grid lg:grid-cols-5 gap-12 items-start">
           {/* Chairman Image & Basic Info */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white animate-in fade-in zoom-in duration-500">
+            <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white animate-in fade-in zoom-in duration-300">
               <Image 
                 src="https://picsum.photos/seed/chairman1/600/750" 
                 alt="সভাপতি" 
@@ -30,13 +30,13 @@ export default function ChairmanMessagePage() {
             </div>
             <div className="glass-card p-6 text-center space-y-2">
               <h2 className="text-xl font-headline font-black text-primary">GAZI NAZRUL ISLAM</h2>
-              <p className="text-xs font-bold text-accent uppercase tracking-widest">সভাপতি</p>
-              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">পরিচালনা পর্ষদ</p>
+              <p className="text-xs font-bold text-accent uppercase tracking-widest">MP Satkhira 04</p>
+              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">সভাপতি, পরিচালনা পর্ষদ</p>
             </div>
           </div>
 
           {/* Detailed Message */}
-          <div className="lg:col-span-3 space-y-8 animate-in fade-in slide-in-from-right duration-500">
+          <div className="lg:col-span-3 space-y-8 animate-in fade-in slide-in-from-right duration-300">
             <div className="space-y-4">
               <span className="text-accent font-black uppercase tracking-[0.2em] text-[10px]">সভাপতির বাণী</span>
               <h1 className="text-4xl font-headline font-black text-primary leading-tight">সমন্বিত প্রচেষ্টায় উন্নত ভবিষ্যৎ</h1>
@@ -60,15 +60,15 @@ export default function ChairmanMessagePage() {
 
             {/* Strategic Pillars */}
             <div className="grid grid-cols-3 gap-4">
-              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default">
+              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default tap-effect">
                 <ShieldCheck className="mx-auto text-primary mb-2" size={24} />
                 <p className="text-[10px] font-black text-primary uppercase leading-tight">অটুট শৃঙ্খলা</p>
               </div>
-              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default">
+              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default tap-effect">
                 <Users className="mx-auto text-accent mb-2" size={24} />
                 <p className="text-[10px] font-black text-primary uppercase leading-tight">সমন্বয় সাধন</p>
               </div>
-              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default">
+              <div className="glass-card p-4 text-center space-y-1 hover:bg-white transition-colors cursor-default tap-effect">
                 <Target className="mx-auto text-primary mb-2" size={24} />
                 <p className="text-[10px] font-black text-primary uppercase leading-tight">বিরামহীন চেষ্টা</p>
               </div>

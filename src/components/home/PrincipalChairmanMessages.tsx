@@ -54,11 +54,14 @@ export function PrincipalChairmanMessages() {
             </div>
             <div className="glass-card p-8 space-y-4 bg-gradient-to-br from-white/60 to-accent/5">
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed font-medium line-clamp-4">
-                প্রতিষ্ঠানের পরিচালকবৃন্দ, শিক্ষকবৃন্দ, অভিভাবকবৃন্দ, শিক্ষার্থীদের ও সর্বোপরি এলাকাবাসীর সমন্বিত প্রচেষ্টার ফল। এলাকাবাসীর সেবার মনোভাব নিয়ে মান সম্পন্ন শিক্ষা প্রসারে এবং কৃতিত্বপূর্ণ ফল অর্জন করে এই প্রতিষ্ঠানটি ইতিমধ্যে একটি স্থান করে নিয়েছে। প্রতিষ্ঠানের সার্বিক ক্ষেত্রে সফলতার জন্য মানুষের মাঝে এক ধরনের চাহিদা সৃষ্টি হওয়ায়...
+                প্রতিষ্ঠানের পরিচালকবৃন্দ, শিক্ষকবৃন্দ, অভিভাবকবৃন্দ, শিক্ষার্থীদের ও সর্বোপরি এলাকাবাসীর সমন্বিত প্রচেষ্টার ফল। এলাকাবাসীর সেবার মনোভাব নিয়ে মান সম্পন্ন শিক্ষা প্রসারে এবং কৃতিত্বপূর্ণ ফল অর্জন করে এই প্রতিষ্ঠানটি ইতিমধ্যে একটি স্থান করে নিয়েছে। প্রতিষ্ঠানের সার্বিক ক্ষেত্রে সফলতার জন্য মানুষের মাঝে এক ধরনের চাহিদা সৃষ্টি হওয়ায়...
               </p>
               <div className="pt-2 text-right lg:text-left">
                 <h4 className="font-headline font-black text-xl text-primary leading-none uppercase">GAZI NAZRUL ISLAM</h4>
-                <p className="text-[10px] font-black text-accent uppercase tracking-widest mt-1">সভাপতি, পরিচালনা পর্ষদ</p>
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-xs font-black text-primary uppercase tracking-wider mt-1">MP Satkhira 04</p>
+                  <p className="text-[10px] font-black text-accent uppercase tracking-widest">সভাপতি, পরিচালনা পর্ষদ</p>
+                </div>
               </div>
               <div className="flex justify-end lg:justify-start">
                 <Button size="lg" className="btn-pill btn-gradient-accent w-full md:w-auto h-12 active:scale-95 transition-transform" asChild>
