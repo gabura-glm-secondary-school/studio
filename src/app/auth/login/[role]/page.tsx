@@ -12,9 +12,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Loader2, Lock, ArrowLeft, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
-import { useAuth, useFirestore, useUser } from "@/firebase";
+import { useAuth, useUser } from "@/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
 
 export default function LoginPage({ params }: { params: Promise<{ role: string }> }) {
   const { role } = use(params);
@@ -22,7 +21,6 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const { toast } = useToast();
   const { auth } = useAuth();
   const { user, loading: userLoading } = useUser();
-  const db = useFirestore();
 
   const [idNumber, setIdNumber] = useState("");
   const [password, setPassword] = useState("");
@@ -30,10 +28,10 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Instant Redirect if already logged in
+  // Guard: If user is already logged in, redirect them away from login page
   useEffect(() => {
     if (!userLoading && user) {
-      const isMasterAdmin = user.email === '71209026@gglmss.edu.bd' || user.idNumber === '71209026';
+      const isMasterAdmin = user.email?.includes('71209026') || user.ein === '71209026' || user.idNumber === '71209026';
       const isAdmin = user.role === 'admin' || user.role === 'superadmin' || user.adminApproved === true || isMasterAdmin;
       router.replace(isAdmin ? "/admin" : "/dashboard");
     }
@@ -48,8 +46,6 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
       setRememberMe(true);
     }
   }, [role]);
-
-  if (!userLoading && user) return null;
 
   const roleConfig: Record<string, any> = {
     student: { title: "Student Login", label: "Student ID", placeholder: "e.g. STU12345" },
@@ -70,8 +66,8 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
       const virtualEmail = `${cleanId}@gglmss.edu.bd`;
       const cleanPassword = password.trim();
 
-      // Sign in first
-      await signInWithEmailAndPassword(auth, virtualEmail, cleanPassword);
+      // Attempt Authentication
+      const userCredential = await signInWithEmailAndPassword(auth, virtualEmail, cleanPassword);
 
       if (rememberMe) {
         localStorage.setItem(`gglmss_id_${role}`, idNumber);
@@ -83,18 +79,28 @@ export default function LoginPage({ params }: { params: Promise<{ role: string }
         description: "স্বাগতম! ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে...", 
         variant: "success",
       });
+
+      // Immediate Redirect Logic for Speed
+      const isMasterAdmin = cleanId === '71209026';
       
-      // The useEffect will handle redirecting automatically
-      setLoading(false);
+      // Delay slightly to let the toast be seen, then force redirect
+      setTimeout(() => {
+        router.push(isMasterAdmin ? "/admin" : "/dashboard");
+      }, 500);
+
     } catch (error: any) {
       setLoading(false);
       let message = "লগইন ব্যর্থ হয়েছে।";
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         message = "আপনার ID অথবা পাসওয়ার্ড ভুল।";
+      } else if (error.message?.includes('offline')) {
+        message = "ইন্টারনেট সংযোগ নেই অথবা সার্ভার ডাউন।";
       }
       toast({ title: "লগইন ব্যর্থ (UNSUCCESS)", description: message, variant: "destructive" });
     }
   };
+
+  if (!userLoading && user) return null;
 
   return (
     <div className="pt-48 pb-24 min-h-screen bg-secondary/5 flex flex-col items-center justify-center px-4">
