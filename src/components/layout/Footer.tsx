@@ -1,9 +1,17 @@
+
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, ChevronRight } from "lucide-react";
 
 export function Footer() {
+  const pathname = usePathname();
   const logoUrl = "https://i.postimg.cc/rwjdJqQK/1000144744-removebg-preview-(1).png";
+
+  // Hide global footer on admin pages
+  if (pathname?.startsWith('/admin')) return null;
 
   return (
     <footer className="bg-primary text-white pt-20 pb-8">

@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { 
   X, 
   LayoutGrid,
@@ -36,6 +37,10 @@ export function Navbar() {
   const { user } = useUser();
   const { auth } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Hide global navbar on admin pages to avoid overlap
+  if (pathname?.startsWith('/admin')) return null;
 
   useEffect(() => {
     const handleScroll = () => {

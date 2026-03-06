@@ -4,14 +4,11 @@
 import { useState, useEffect } from "react";
 import { Megaphone } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
-/**
- * NewsTicker Component
- * 
- * Slow motion scrolling for readability (60s duration).
- */
 export function NewsTicker() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +18,9 @@ export function NewsTicker() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Hide global ticker on admin pages
+  if (pathname?.startsWith('/admin')) return null;
 
   const notices = [
     "SSC 2025 Result Published - Students can now check their results through the student portal.",
