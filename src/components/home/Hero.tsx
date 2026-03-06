@@ -8,7 +8,7 @@ export function Hero() {
   const bg = PlaceHolderImages.find(img => img.id === 'hero-bg');
 
   return (
-    <section className="relative min-h-[95vh] flex items-center pt-24 pb-12 overflow-hidden px-4">
+    <section className="relative min-h-[90vh] flex items-center pt-24 pb-12 overflow-hidden px-4">
       {/* Background with Ambient Glow */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -23,8 +23,8 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto w-full">
-        <div className="glass-card p-8 md:p-16 grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom duration-1000">
+        <div className="glass-card p-8 md:p-12 grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom duration-500">
             <div className="inline-flex items-center gap-3 bg-white/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/40 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
               <p className="text-[10px] font-black uppercase tracking-widest text-primary">Admission Open 2025</p>
@@ -39,22 +39,22 @@ export function Hero() {
               Providing high-quality education since decades, we empower students to achieve excellence and contribute positively to society.
             </p>
 
-            <div className="flex flex-wrap gap-4 pt-4">
-              <Button size="lg" className="btn-pill btn-gradient-primary group">
+            <div className="flex flex-wrap gap-4 pt-2">
+              <Button size="lg" className="btn-pill btn-gradient-primary group h-14">
                 Apply Now <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline" className="btn-pill border-2 border-primary/20 bg-white/20 hover:bg-white/40">
+              <Button size="lg" variant="outline" className="btn-pill border-2 border-primary/20 bg-white/20 hover:bg-white/40 h-14">
                 Explore Programs
               </Button>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 pt-8">
+            <div className="grid grid-cols-3 gap-4 pt-6">
               {[
                 { icon: FileText, label: "Notices", href: "/notices" },
                 { icon: User, label: "Portal", href: "/auth/portal" },
                 { icon: Phone, label: "Contact", href: "/contact" }
               ].map((item, i) => (
-                <Link key={i} href={item.href} className="flex flex-col items-center gap-2 p-4 bg-white/30 backdrop-blur-lg rounded-3xl border border-white/40 hover:bg-white/50 transition-all group">
+                <Link key={i} href={item.href} className="flex flex-col items-center gap-2 p-4 bg-white/30 backdrop-blur-lg rounded-3xl border border-white/40 hover:bg-white/50 transition-all group active:scale-95">
                   <item.icon className="text-primary group-hover:scale-110 transition-transform" size={20} />
                   <span className="text-[10px] font-black uppercase tracking-widest text-primary">{item.label}</span>
                 </Link>
@@ -62,7 +62,7 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="hidden lg:block relative aspect-square animate-in fade-in zoom-in duration-1000 delay-300">
+          <div className="hidden lg:block relative aspect-square animate-in fade-in zoom-in duration-500 delay-150">
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-accent/20 rounded-[3rem] -rotate-6"></div>
             <div className="relative w-full h-full rounded-[3rem] overflow-hidden rotate-3 shadow-2xl border-4 border-white/60">
               <Image

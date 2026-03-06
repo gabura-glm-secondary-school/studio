@@ -61,33 +61,36 @@
   body {
     @apply bg-background text-foreground selection:bg-primary/20;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
 .glass-card {
-  @apply bg-white/65 backdrop-blur-[15px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.05)] rounded-[2.5rem];
+  @apply bg-white/65 backdrop-blur-[15px] border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.05)] rounded-[2.5rem] transition-all duration-200;
+  will-change: backdrop-filter, transform;
 }
 
 .glass-navbar {
-  @apply bg-white/70 backdrop-blur-[20px] border border-white/40 shadow-[0_10px_40px_rgba(0,0,0,0.08)];
+  @apply bg-white/70 backdrop-blur-[20px] border border-white/40 shadow-[0_10px_40px_rgba(0,0,0,0.08)] transition-all duration-300;
+  will-change: backdrop-filter, width, height;
 }
 
 .btn-pill {
-  @apply rounded-full px-8 py-6 font-bold transition-all duration-300 active:scale-95;
+  @apply rounded-full px-8 py-6 font-bold transition-all duration-200 active:scale-95;
 }
 
 .btn-gradient-primary {
-  @apply bg-gradient-to-r from-[#7c3aed] to-[#a855f7] text-white shadow-[0_10px_20px_-5px_rgba(124,58,237,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(124,58,237,0.6)] hover:-translate-y-1;
+  @apply bg-gradient-to-r from-[#7c3aed] to-[#a855f7] text-white shadow-[0_10px_20px_-5px_rgba(124,58,237,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(124,58,237,0.6)] hover:-translate-y-0.5 active:translate-y-0;
 }
 
 .btn-gradient-accent {
-  @apply bg-gradient-to-r from-[#14b8a6] to-[#2dd4bf] text-white shadow-[0_10px_20px_-5px_rgba(20,184,166,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(20,184,166,0.6)] hover:-translate-y-1;
+  @apply bg-gradient-to-r from-[#14b8a6] to-[#2dd4bf] text-white shadow-[0_10px_20px_-5px_rgba(20,184,166,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(20,184,166,0.6)] hover:-translate-y-0.5 active:translate-y-0;
 }
 
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 30s linear infinite;
+  animation: marquee 20s linear infinite;
 }
 
 @keyframes marquee {
@@ -100,5 +103,9 @@
 }
 
 .hover-lift {
-  @apply transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl;
+  @apply transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl active:translate-y-0 active:scale-[0.98];
+}
+
+.tap-effect {
+  @apply transition-transform duration-150 active:scale-95;
 }

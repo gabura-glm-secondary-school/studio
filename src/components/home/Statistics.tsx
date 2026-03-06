@@ -20,7 +20,7 @@ export function Statistics() {
       (entries) => {
         if (entries[0].isIntersecting && !hasAnimated) {
           setHasAnimated(true);
-          const duration = 2000;
+          const duration = 1000; // Snappier duration
           const frameDuration = 1000 / 60;
           const totalFrames = Math.round(duration / frameDuration);
 
@@ -47,18 +47,18 @@ export function Statistics() {
   }, [hasAnimated]);
 
   return (
-    <section ref={sectionRef} className="py-24 px-4 overflow-hidden">
+    <section ref={sectionRef} className="py-12 md:py-24 px-4 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {stats.map((stat, idx) => (
-            <div key={idx} className="glass-card p-8 text-center hover-lift group">
-              <div className="w-14 h-14 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:rotate-12 transition-transform">
-                <stat.icon size={28} className="text-primary" />
+            <div key={idx} className="glass-card p-6 md:p-8 text-center hover-lift group active:scale-95 transition-transform cursor-default">
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 md:mb-6 group-hover:rotate-12 transition-transform duration-200">
+                <stat.icon size={24} className="text-primary" />
               </div>
-              <h3 className="text-3xl md:text-5xl font-headline font-black text-primary mb-2">
+              <h3 className="text-2xl md:text-5xl font-headline font-black text-primary mb-1 md:mb-2">
                 {counts[idx]}{stat.suffix}
               </h3>
-              <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+              <p className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                 {stat.label}
               </p>
             </div>
