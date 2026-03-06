@@ -59,17 +59,17 @@ export function Navbar() {
     <nav className="fixed top-2 left-0 right-0 z-50 transition-all duration-500 flex justify-center pointer-events-none px-4">
       <div 
         className={cn(
-          "pointer-events-auto transition-all duration-500 ease-out flex items-center justify-between px-4 md:px-8",
-          "glass-navbar !bg-white/90",
+          "pointer-events-auto transition-all duration-500 ease-out flex items-center justify-between px-3 md:px-8",
+          "glass-navbar !bg-white/95",
           isScrolled 
             ? "w-full md:w-[95%] lg:w-[80%] h-16 rounded-full py-1 shadow-2xl border-primary/30" 
             : "w-full md:w-[98%] lg:w-[90%] h-20 rounded-full py-2 border-white/60 shadow-xl"
         )}
       >
-        <NextLink href="/" className="flex items-center gap-3 md:gap-4 group active:scale-95 transition-transform shrink-0">
+        <NextLink href="/" className="flex items-center gap-2 md:gap-4 group active:scale-95 transition-transform shrink min-w-0">
           <div className={cn(
             "relative bg-white rounded-full p-1 shadow-xl transition-all duration-500 overflow-hidden shrink-0 border-[2px] border-primary/20 group-hover:border-primary",
-            isScrolled ? "w-12 h-12" : "w-14 h-14 md:w-16 md:h-16"
+            isScrolled ? "w-10 h-10" : "w-12 h-12 md:w-16 md:h-16"
           )}>
             <Image
               src={logoUrl}
@@ -80,29 +80,29 @@ export function Navbar() {
           </div>
           <div className="flex flex-col justify-center overflow-hidden">
             <h1 className={cn(
-              "font-headline font-black text-primary leading-tight tracking-tight transition-all duration-500 whitespace-nowrap uppercase",
-              isScrolled ? "text-xs md:text-base" : "text-sm md:text-xl lg:text-2xl"
+              "font-headline font-black text-primary leading-tight tracking-tight transition-all duration-500 uppercase truncate",
+              isScrolled ? "text-[10px] md:text-base" : "text-[11px] md:text-xl lg:text-2xl"
             )}>
               GABURA G.L.M <span className="text-accent">SECONDARY SCHOOL</span>
             </h1>
             <p className={cn(
-              "uppercase tracking-[0.1em] text-primary/80 font-black transition-all duration-500",
-              isScrolled ? "text-[7px] md:text-[8px] opacity-100" : "text-[8px] md:text-[10px] opacity-100"
+              "uppercase tracking-[0.1em] text-primary/80 font-black transition-all duration-500 truncate",
+              isScrolled ? "text-[6px] md:text-[8px]" : "text-[7px] md:text-[10px]"
             )}>
               সুশিক্ষাই আমাদের অঙ্গীকার
             </p>
           </div>
         </NextLink>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center shrink-0 pl-2">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className={cn(
               "flex items-center justify-center bg-primary text-white shadow-2xl rounded-full hover:bg-accent transition-all duration-300 active:scale-75 group",
-              isScrolled ? "w-10 h-10" : "w-12 h-12 md:w-14 md:h-14"
+              isScrolled ? "w-9 h-9" : "w-11 h-11 md:w-14 md:h-14"
             )}
           >
-            <LayoutGrid className={cn("transition-all group-hover:rotate-90", isScrolled ? "w-5 h-5" : "w-6 h-6 md:w-7 md:h-7")} />
+            <LayoutGrid className={cn("transition-all group-hover:rotate-90", isScrolled ? "w-4 h-4" : "w-5 h-5 md:w-7 md:h-7")} />
           </button>
         </div>
       </div>
