@@ -3,80 +3,31 @@
   "entities": {
     "UserProfile": {
       "title": "User Profile",
-      "description": "Extended user information stored in Firestore.",
+      "description": "Main user account information.",
       "type": "object",
       "properties": {
         "uid": { "type": "string" },
-        "role": { "type": "string", "enum": ["student", "teacher", "staff", "external", "admin", "super_admin"] },
-        "status": { "type": "string", "enum": ["active", "inactive", "pending", "locked"] },
+        "role": { "type": "string", "enum": ["student", "teacher", "staff", "external", "admin", "superadmin"] },
         "displayName": { "type": "string" },
-        "idNumber": { "type": "string" },
-        "mobile": { "type": "string" },
         "email": { "type": "string" },
-        "photoUrl": { "type": "string" },
-        "class": { "type": "string" },
-        "section": { "type": "string" },
-        "rollNumber": { "type": "string" },
-        "isAdmin": { "type": "boolean" },
-        "homeworkRating": { "type": "number" },
-        "teacherAvgRating": { "type": "number" },
-        "finalRating": { "type": "number" }
+        "mobile": { "type": "string" },
+        "classId": { "type": "string" },
+        "assignedClasses": { "type": "array", "items": { "type": "string" } },
+        "adminApproved": { "type": "boolean" },
+        "disabled": { "type": "boolean" }
       },
-      "required": ["uid", "role", "status"]
+      "required": ["uid", "role"]
     },
-    "SchoolNotice": {
-      "title": "School Notice",
-      "description": "Notices for students and staff.",
+    "Notice": {
+      "title": "Notice",
       "type": "object",
       "properties": {
         "title": { "type": "string" },
         "description": { "type": "string" },
-        "content": { "type": "string" },
-        "type": { "type": "string", "enum": ["important", "exam", "holiday", "admission", "general"] },
-        "category": { "type": "string", "enum": ["main", "teacher"] },
         "publishedAt": { "type": "string", "format": "date-time" },
-        "isPinned": { "type": "boolean" },
-        "isActive": { "type": "boolean" },
-        "attachmentUrl": { "type": "string" },
-        "attachmentName": { "type": "string" },
-        "attachmentSize": { "type": "string" },
-        "authorName": { "type": "string" },
-        "authorId": { "type": "string" },
+        "type": { "type": "string", "enum": ["important", "exam", "holiday", "admission", "general"] },
+        "teacherUid": { "type": "string" },
         "targetClasses": { "type": "array", "items": { "type": "string" } }
-      },
-      "required": ["title", "type", "category", "publishedAt"]
-    },
-    "AttendanceRecord": {
-      "title": "Attendance Record",
-      "type": "object",
-      "properties": {
-        "class": { "type": "string" },
-        "date": { "type": "string", "format": "date" },
-        "presentStudents": { "type": "array", "items": { "type": "string" } },
-        "absentStudents": { "type": "array", "items": { "type": "string" } }
-      }
-    },
-    "Homework": {
-      "title": "Homework",
-      "type": "object",
-      "properties": {
-        "title": { "type": "string" },
-        "description": { "type": "string" },
-        "class": { "type": "string" },
-        "subject": { "type": "string" },
-        "deadline": { "type": "string", "format": "date-time" },
-        "attachmentUrl": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
-      }
-    },
-    "HomeworkStatus": {
-      "title": "Homework Status",
-      "type": "object",
-      "properties": {
-        "homeworkId": { "type": "string" },
-        "studentId": { "type": "string" },
-        "status": { "type": "string", "enum": ["done", "not_done"] },
-        "updatedAt": { "type": "string", "format": "date-time" }
       }
     }
   },
@@ -86,15 +37,31 @@
   "firestore": {
     "/users/{uid}": {
       "schema": { "$ref": "#/backend/entities/UserProfile" },
-      "description": "User profile data."
+      "description": "System user accounts."
     },
-    "/notices/{noticeId}": {
-      "schema": { "$ref": "#/backend/entities/SchoolNotice" },
-      "description": "Official school and teacher notices."
+    "/mainNotices/{noticeId}": {
+      "schema": { "$ref": "#/backend/entities/Notice" },
+      "description": "Official school-wide notices."
     },
-    "/attendance/{recordId}": {
-      "schema": { "$ref": "#/backend/entities/AttendanceRecord" },
-      "description": "Daily attendance logs."
+    "/teacherNotices/{noticeId}": {
+      "schema": { "$ref": "#/backend/entities/Notice" },
+      "description": "Class-specific notices from teachers."
+    },
+    "/slidingNotices/{docId}": {
+      "schema": { "type": "object" },
+      "description": "Notices for the homepage ticker."
+    },
+    "/complaints/{complaintId}": {
+      "schema": { "type": "object" },
+      "description": "Complaint box submissions."
+    },
+    "/studentProfiles/{uid}": {
+      "schema": { "type": "object" },
+      "description": "Detailed student academic records."
+    },
+    "/teacherProfiles/{uid}": {
+      "schema": { "type": "object" },
+      "description": "Detailed teacher professional records."
     }
   }
 }

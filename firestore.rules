@@ -1,0 +1,445 @@
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* =========================
+       Helper Functions
+    ========================= */
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userPath() {
+      return /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+
+    function userExists() {
+      return signedIn() && exists(userPath());
+    }
+
+    function userData() {
+      return get(userPath()).data;
+    }
+
+    function isActive() {
+      return userExists() && userData().disabled != true;
+    }
+
+    function role() {
+      return userExists() ? userData().role : null;
+    }
+
+    function isStudent() {
+      return isActive() && role() == "student";
+    }
+
+    function isTeacher() {
+      return isActive() && role() == "teacher";
+    }
+
+    function isStaff() {
+      return isActive() && role() == "staff";
+    }
+
+    function isExternal() {
+      return isActive() && role() == "external";
+    }
+
+    function isAdmin() {
+      return isActive() &&
+        (
+          role() == "admin" ||
+          role() == "superadmin" ||
+          userData().adminApproved == true
+        );
+    }
+
+    function isSuperAdmin() {
+      return isActive() && role() == "superadmin";
+    }
+
+    function sameUser(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function userClassId() {
+      return userExists() ? userData().classId : null;
+    }
+
+    function assignedClasses() {
+      return userExists() && userData().assignedClasses is list
+        ? userData().assignedClasses
+        : [];
+    }
+
+    function teacherAssignedToClass(classId) {
+      return isTeacher() && assignedClasses().hasAny([classId]);
+    }
+
+    function teacherOrAdminForClass(classId) {
+      return isAdmin() || teacherAssignedToClass(classId);
+    }
+
+    /* =========================
+       users
+    ========================= */
+    match /users/{uid} {
+      allow read: if isAdmin() || sameUser(uid);
+
+      allow create: if signedIn() && sameUser(uid);
+
+      allow update: if
+        isAdmin() ||
+        (
+          sameUser(uid) &&
+          !("role" in request.resource.data.diff(resource.data).changedKeys()) &&
+          !("adminApproved" in request.resource.data.diff(resource.data).changedKeys()) &&
+          !("disabled" in request.resource.data.diff(resource.data).changedKeys())
+        );
+
+      allow delete: if isSuperAdmin();
+    }
+
+    /* =========================
+       Public Site Content
+    ========================= */
+    match /siteSettings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /statistics/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /contacts/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /pages/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /headTeachers/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /teachersPublic/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /gallery/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    /* =========================
+       SSC Batches
+    ========================= */
+    match /sscBatches/{batchId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    /* =========================
+       Main Notices
+    ========================= */
+    match /mainNotices/{noticeId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    /* =========================
+       Sliding Notices
+    ========================= */
+    match /slidingNotices/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    /* =========================
+       Teacher Notices
+    ========================= */
+    match /teacherNotices/{noticeId} {
+      allow read: if true
+        || isAdmin()
+        || (isTeacher() && resource.data.teacherUid == request.auth.uid)
+        || (
+          isStudent() &&
+          resource.data.targetClasses is list &&
+          resource.data.targetClasses.hasAny([userClassId()])
+        );
+
+      allow create: if isTeacher() || isAdmin();
+
+      allow update, delete: if isAdmin() ||
+        (isTeacher() && resource.data.teacherUid == request.auth.uid);
+    }
+
+    /* =========================
+       Admission Applications
+    ========================= */
+    match /admissionApplications/{appId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    /* =========================
+       Complaints
+    ========================= */
+    match /complaints/{complaintId} {
+      allow create: if true;
+
+      allow read: if isAdmin() ||
+        (signedIn() && resource.data.createdByUid == request.auth.uid);
+
+      allow update, delete: if isAdmin();
+    }
+
+    /* =========================
+       Events
+    ========================= */
+    match /events/{eventId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /eventRegistrations/{regId} {
+      allow create: if signedIn();
+
+      allow read: if isAdmin() ||
+        (signedIn() && resource.data.userUid == request.auth.uid);
+
+      allow update, delete: if isAdmin();
+    }
+
+    /* =========================
+       Communities
+    ========================= */
+    match /communities/{communityId} {
+      allow read: if isAdmin()
+        || (isTeacher() && assignedClasses().hasAny([resource.data.classId]))
+        || (isStudent() && resource.data.classId == userClassId());
+
+      allow write: if isAdmin();
+    }
+
+    /* =========================
+       Library
+    ========================= */
+    match /library/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    /* =========================
+       Quizzes
+    ========================= */
+    match /quizzes/{quizId} {
+      allow read: if isAdmin() || isTeacher() || isStudent();
+      allow create, update, delete: if isAdmin() || isTeacher();
+    }
+
+    match /quizResults/{resultId} {
+      allow create: if isStudent();
+
+      allow read: if isAdmin()
+        || (isTeacher() && assignedClasses().hasAny([resource.data.classId]))
+        || (isStudent() && resource.data.studentUid == request.auth.uid);
+
+      allow update, delete: if isAdmin();
+    }
+
+    /* =========================
+       Routine
+    ========================= */
+    match /routines/{routineId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    /* =========================
+       Calendar
+    ========================= */
+    match /calendarEvents/{eventId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    /* =========================
+       Master Lists for Registration
+    ========================= */
+    match /studentMasterList/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /teacherMasterList/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /staffMasterList/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /externalMasterList/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    /* =========================
+       Student Profiles
+    ========================= */
+    match /studentProfiles/{uid} {
+      allow read: if isAdmin()
+        || (isTeacher())
+        || (isStudent() && (
+            uid == request.auth.uid ||
+            resource.data.classId == userClassId()
+          ));
+
+      allow create: if signedIn() && sameUser(uid);
+      allow update: if sameUser(uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    /* =========================
+       Teacher Profiles
+    ========================= */
+    match /teacherProfiles/{uid} {
+      allow read: if true;
+      allow create, update: if isAdmin() || (isTeacher() && sameUser(uid));
+      allow delete: if isAdmin();
+    }
+
+    /* =========================
+       Attendance
+    ========================= */
+    match /attendance/{attendanceId} {
+      allow read: if isAdmin()
+        || (isTeacher() && teacherAssignedToClass(resource.data.classId))
+        || (isStudent() && resource.data.studentUid == request.auth.uid);
+
+      allow create, update, delete: if teacherOrAdminForClass(request.resource.data.classId);
+    }
+
+    match /attendanceClassSummary/{docId} {
+      allow read: if isAdmin()
+        || (isTeacher() && teacherAssignedToClass(resource.data.classId))
+        || (isStudent() && resource.data.classId == userClassId());
+
+      allow write: if isAdmin() || isTeacher();
+    }
+
+    /* =========================
+       Homework
+    ========================= */
+    match /homework/{homeworkId} {
+      allow read: if isAdmin()
+        || isTeacher()
+        || (isStudent() && resource.data.classId == userClassId());
+
+      allow create, update, delete: if isTeacher() || isAdmin();
+    }
+
+    match /homeworkChecks/{checkId} {
+      allow read: if isAdmin()
+        || (isTeacher() && teacherAssignedToClass(resource.data.classId))
+        || (isStudent() && resource.data.studentUid == request.auth.uid);
+
+      allow create, update, delete: if isTeacher() || isAdmin();
+    }
+
+    /* =========================
+       Ratings
+    ========================= */
+    match /teacherRatings/{ratingId} {
+      allow read: if isAdmin()
+        || (isTeacher() && resource.data.teacherUid == request.auth.uid);
+
+      allow create, update: if
+        isAdmin() ||
+        (isTeacher() && request.resource.data.teacherUid == request.auth.uid);
+
+      allow delete: if isAdmin();
+    }
+
+    match /homeworkRatings/{docId} {
+      allow read: if isAdmin()
+        || (isTeacher() && teacherAssignedToClass(resource.data.classId))
+        || (isStudent() && resource.data.studentUid == request.auth.uid);
+
+      allow write: if isAdmin();
+    }
+
+    match /finalRatings/{docId} {
+      allow read: if isAdmin() || isTeacher() || isStudent();
+      allow write: if isAdmin();
+    }
+
+    /* =========================
+       Forgot Password Requests
+    ========================= */
+    match /forgotPasswordRequests/{reqId} {
+      allow create: if signedIn();
+
+      allow read: if isAdmin()
+        || (isTeacher() && assignedClasses().hasAny([resource.data.classId]))
+        || (signedIn() && resource.data.userUid == request.auth.uid);
+
+      allow update: if isAdmin()
+        || (isTeacher() && assignedClasses().hasAny([resource.data.classId]));
+
+      allow delete: if isAdmin();
+    }
+
+    /* =========================
+       Security Locks
+    ========================= */
+    match /securityLocks/{lockId} {
+      allow read: if isAdmin()
+        || (isTeacher() && assignedClasses().hasAny([resource.data.classId]))
+        || (signedIn() && resource.data.userUid == request.auth.uid);
+
+      allow create, update: if isAdmin()
+        || (isTeacher() && assignedClasses().hasAny([request.resource.data.classId]));
+
+      allow delete: if isAdmin()
+        || (isTeacher() && assignedClasses().hasAny([resource.data.classId]));
+    }
+
+    /* =========================
+       Notifications
+    ========================= */
+    match /notifications/{notificationId} {
+      allow read: if signedIn() && resource.data.targetUid == request.auth.uid;
+      allow create, update, delete: if isAdmin() || isTeacher();
+    }
+
+    /* =========================
+       Activity Logs
+    ========================= */
+    match /activityLogs/{logId} {
+      allow read, write: if isAdmin();
+    }
+
+    /* =========================
+       Exports
+    ========================= */
+    match /exports/{exportId} {
+      allow read, write: if isAdmin();
+    }
+
+    /* =========================
+       Default Deny
+    ========================= */
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
