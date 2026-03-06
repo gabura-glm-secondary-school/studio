@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Clock, ArrowRight } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, ArrowRight, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 export function ContactPreview() {
@@ -29,9 +29,18 @@ export function ContactPreview() {
               ))}
             </div>
 
-            <Link href="/contact" className="inline-flex items-center gap-3 text-primary font-black uppercase tracking-widest text-xs hover:text-accent transition-colors group">
-              Get detailed contact info <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
-            </Link>
+            <div className="flex flex-col gap-4">
+              <Link href="/contact" className="inline-flex items-center gap-3 text-primary font-black uppercase tracking-widest text-xs hover:text-accent transition-colors group">
+                Get detailed contact info <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+              </Link>
+              <Link 
+                href="https://maps.app.goo.gl/1jFDAVUPxMuXgDx69" 
+                target="_blank"
+                className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-accent hover:text-primary transition-colors"
+              >
+                <ExternalLink size={14} /> Open in Google Maps
+              </Link>
+            </div>
           </div>
           
           <div className="h-[450px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white/60 relative group">

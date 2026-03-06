@@ -5,8 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { MapPin, Phone, Mail, Clock, Send, Loader2 } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, Loader2, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
 
 export default function ContactPage() {
   const [loading, setLoading] = useState(false);
@@ -89,15 +90,24 @@ export default function ContactPage() {
               </CardContent>
             </Card>
             
-            <div className="mt-8 h-[400px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14757.99408226922!2d89.243004!3d22.254181!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a01ae746e50e181%3A0xc3f837e3d6467612!2sGabura!5e0!3m2!1sen!2sbd!4v1710000000000!5m2!1sen!2sbd"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen={true}
-                loading="lazy"
-              ></iframe>
+            <div className="mt-8 space-y-4">
+              <div className="h-[400px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14757.99408226922!2d89.243004!3d22.254181!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a01ae746e50e181%3A0xc3f837e3d6467612!2sGabura!5e0!3m2!1sen!2sbd!4v1710000000000!5m2!1sen!2sbd"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={true}
+                  loading="lazy"
+                ></iframe>
+              </div>
+              <Link 
+                href="https://maps.app.goo.gl/1jFDAVUPxMuXgDx69" 
+                target="_blank"
+                className="inline-flex items-center gap-2 text-primary font-bold hover:text-accent transition-colors"
+              >
+                <ExternalLink size={18} /> View on Google Maps
+              </Link>
             </div>
           </div>
         </div>

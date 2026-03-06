@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -17,9 +16,12 @@ import {
   Image as ImageIcon,
   CheckCircle2,
   Loader2,
-  Layout
+  Layout,
+  GraduationCap,
+  Briefcase
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 export default function WebsiteSettings() {
   const { toast } = useToast();
@@ -54,7 +56,7 @@ export default function WebsiteSettings() {
             <MapPin size={16} /> Contact Details
           </TabsTrigger>
           <TabsTrigger value="stats" className="rounded-xl gap-2 h-10 font-bold data-[state=active]:bg-primary data-[state=active]:text-white">
-            <BarChart3 size={16} /> Homepage Stats
+            <BarChartIcon size={16} /> Homepage Stats
           </TabsTrigger>
         </TabsList>
 
@@ -122,8 +124,8 @@ export default function WebsiteSettings() {
                   <Input defaultValue="Gabura, Shyamnagar, Satkhira, Bangladesh" className="rounded-xl" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="flex items-center gap-2"><Globe size={14} /> Google Maps Embed Link</Label>
-                  <Input defaultValue="https://www.google.com/maps/embed?..." className="rounded-xl font-mono text-xs" />
+                  <Label className="flex items-center gap-2"><Globe size={14} /> Google Maps Link</Label>
+                  <Input defaultValue="https://maps.app.goo.gl/1jFDAVUPxMuXgDx69" className="rounded-xl font-mono text-xs" />
                 </div>
               </div>
             </CardContent>
@@ -160,4 +162,3 @@ export default function WebsiteSettings() {
 }
 
 import { BarChart3 as BarChartIcon } from "lucide-react";
-import Image from "next/image";
