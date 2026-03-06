@@ -40,12 +40,16 @@ export function Hero() {
             </p>
 
             <div className="flex flex-wrap gap-5 pt-2">
-              <Button size="lg" className="btn-pill btn-gradient-primary group h-16 min-w-[200px] text-lg shadow-2xl">
-                Apply Now <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform" />
-              </Button>
-              <Button size="lg" variant="outline" className="btn-pill border-2 border-primary/30 bg-white/40 hover:bg-white/60 h-16 min-w-[200px] text-lg text-primary font-black">
-                Explore Programs
-              </Button>
+              <Link href="/contact" className="block">
+                <Button size="lg" className="btn-pill btn-gradient-primary group h-16 min-w-[200px] text-lg shadow-2xl">
+                  Apply Now <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform" />
+                </Button>
+              </Link>
+              <Link href="/ssc-batches" className="block">
+                <Button size="lg" variant="outline" className="btn-pill border-2 border-primary/30 bg-white/40 hover:bg-white/60 h-16 min-w-[200px] text-lg text-primary font-black">
+                  Explore Programs
+                </Button>
+              </Link>
             </div>
 
             <div className="grid grid-cols-3 gap-5 pt-8 border-t border-primary/10">
