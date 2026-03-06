@@ -4,7 +4,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ImageIcon, Filter, Maximize2, X } from "lucide-react";
+import { ArrowLeft, ImageIcon, Filter, Maximize2, X, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -43,7 +43,9 @@ export default function GalleryPage() {
               </Button>
             </Link>
             <div className="space-y-1">
-              <span className="text-accent font-black uppercase tracking-[0.2em] text-[10px]">Visual Journey</span>
+              <span className="text-accent font-black uppercase tracking-[0.2em] text-[10px] flex items-center gap-2">
+                <Sparkles size={12} /> Visual Journey
+              </span>
               <h1 className="text-4xl font-headline font-black text-primary">আমাদের গ্যালারি</h1>
             </div>
           </div>
@@ -56,8 +58,8 @@ export default function GalleryPage() {
                 variant={selectedCategory === cat ? "default" : "outline"}
                 onClick={() => setSelectedCategory(cat)}
                 className={cn(
-                  "rounded-full h-9 px-6 text-xs font-bold uppercase tracking-widest transition-all",
-                  selectedCategory === cat ? "shadow-lg bg-primary" : "bg-white/50 border-white/40"
+                  "rounded-full h-9 px-6 text-[10px] font-black uppercase tracking-widest transition-all",
+                  selectedCategory === cat ? "shadow-lg bg-primary border-primary" : "bg-white/50 border-white/40"
                 )}
               >
                 {cat}
@@ -71,23 +73,23 @@ export default function GalleryPage() {
           {filteredImages.map((image) => (
             <div
               key={image.id}
-              className="group relative glass-card !rounded-[2.5rem] overflow-hidden aspect-[4/3] cursor-pointer"
+              className="group relative glass-card !rounded-[2.5rem] overflow-hidden aspect-[4/3] cursor-pointer animate-in fade-in zoom-in duration-500"
               onClick={() => setSelectedImage(image)}
             >
               <Image
                 src={image.url}
                 alt={image.title}
                 fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                className="object-cover transition-transform duration-1000 group-hover:scale-110"
                 data-ai-hint={image.hint}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-8">
-                <Badge className="w-fit mb-2 bg-accent text-primary uppercase font-black text-[9px]">
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-8">
+                <Badge className="w-fit mb-3 bg-accent text-primary uppercase font-black text-[9px] px-3 py-1">
                   {image.category}
                 </Badge>
-                <h3 className="text-white font-bold text-xl">{image.title}</h3>
-                <div className="mt-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white scale-0 group-hover:scale-100 transition-transform delay-100">
-                  <Maximize2 size={18} />
+                <h3 className="text-white font-headline font-black text-2xl leading-tight">{image.title}</h3>
+                <div className="mt-4 w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white scale-0 group-hover:scale-100 transition-transform duration-500 delay-100 border border-white/30">
+                  <Maximize2 size={20} />
                 </div>
               </div>
             </div>
@@ -96,14 +98,14 @@ export default function GalleryPage() {
 
         {/* Lightbox */}
         {selectedImage && (
-          <div className="fixed inset-0 z-[100] bg-primary/95 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-300">
+          <div className="fixed inset-0 z-[100] bg-primary/98 backdrop-blur-2xl flex items-center justify-center p-4 animate-in fade-in duration-500">
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute top-8 right-8 text-white/60 hover:text-white transition-colors p-2"
+              className="absolute top-8 right-8 text-white/60 hover:text-white transition-colors p-3 bg-white/10 rounded-full active:scale-90"
             >
               <X size={32} />
             </button>
-            <div className="relative w-full max-w-5xl aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl animate-in zoom-in duration-300">
+            <div className="relative w-full max-w-5xl aspect-[4/3] rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] animate-in zoom-in duration-500 border-4 border-white/20">
               <Image
                 src={selectedImage.url}
                 alt={selectedImage.title}
@@ -111,11 +113,11 @@ export default function GalleryPage() {
                 className="object-cover"
                 unoptimized
               />
-              <div className="absolute bottom-0 left-0 right-0 p-12 bg-gradient-to-t from-black/80 to-transparent">
-                <Badge className="mb-4 bg-accent text-primary font-black uppercase">
+              <div className="absolute bottom-0 left-0 right-0 p-12 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                <Badge className="mb-4 bg-accent text-primary font-black uppercase px-4 py-1">
                   {selectedImage.category}
                 </Badge>
-                <h2 className="text-white text-3xl font-headline font-black">
+                <h2 className="text-white text-4xl md:text-5xl font-headline font-black leading-tight">
                   {selectedImage.title}
                 </h2>
               </div>
@@ -125,9 +127,14 @@ export default function GalleryPage() {
 
         {/* Empty State */}
         {filteredImages.length === 0 && (
-          <div className="py-32 text-center space-y-4">
-            <ImageIcon size={64} className="mx-auto text-muted-foreground/30" />
-            <p className="text-muted-foreground font-medium">এই ক্যাটাগরিতে কোনো ছবি পাওয়া যায়নি।</p>
+          <div className="py-32 text-center space-y-6 bg-white/30 rounded-[3rem] border-2 border-dashed border-primary/20">
+            <div className="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center mx-auto">
+              <ImageIcon size={48} className="text-primary/20" />
+            </div>
+            <p className="text-muted-foreground font-bold uppercase tracking-widest text-xs">এই ক্যাটাগরিতে কোনো ছবি পাওয়া যায়নি।</p>
+            <Button variant="link" onClick={() => setSelectedCategory("All")} className="text-primary font-black uppercase tracking-tighter">
+              ফিল্টার মুছুন
+            </Button>
           </div>
         )}
       </div>
